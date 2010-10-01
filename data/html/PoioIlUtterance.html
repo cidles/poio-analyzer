@@ -1,0 +1,68 @@
+<table>
+    <tr>
+        <td>
+            <div id="utterance-${id}" style="font-variant:small-caps;font-weight:bold;">
+            (${id})
+            </div>
+        </td>
+        <td colspan="${countwords*2-1}">
+            <div class="utterance" style="font-weight:bold;">
+            ${utterance}
+            </div>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <div style="font-variant:small-caps;color:#a0a0a0;">words</div>
+        </td>
+        $for{ile in ilElements}
+        <td>
+            <div id="word-${ile[0]}" style="font-variant:small-caps;">&nbsp;</div>
+        </td>
+        <td>
+            <div class="word" style="margin-left:0px; padding-left:0px;">${ile[1]}</div>
+        </td>
+        $rof
+    </tr>
+    <tr>
+        <td>
+            <div style="font-variant:small-caps;color:#a0a0a0;">morph</div>
+        </td>
+        $for{ile in ilElements}
+        <td>
+            <div id="morph-${ile[0]}" style="font-variant:small-caps;">&nbsp;</div>
+        </td>
+        <td>
+            <div class="morphemes" style="font-style:italic;margin-left:0px; padding-left:0px;">${ile[2]}</div>
+        </td>
+        $rof
+    </tr>
+    <tr>
+        <td>
+            <div style="font-variant:small-caps;color:#a0a0a0;">gloss</div>
+        </td>
+        $for{ile in ilElements}
+        <td>
+            <div id="gloss-${ile[0]}" style="font-variant:small-caps;">&nbsp;</div>
+        </td>
+        <td>
+            <div class="glosses" style="margin-left:0px;padding-left:0px;">${ile[3]}</div>
+        </td>
+        $rof
+    </tr>
+    $for{translation in translations}
+    <tr>
+        <!--<td>&nbsp;</td>-->
+        <td>
+            <div id="translation-${translation[0]}" style="font-variant:small-caps;color:#a0a0a0;">trans</div>
+        </td>
+        <td colspan="${countwords*2-1}">
+            <div class="utterance" style="font-style:italic;">
+            ${translation[1]}
+            </div>
+        </td>
+    </tr>
+    $rof
+</table>
+</span>
+</div>

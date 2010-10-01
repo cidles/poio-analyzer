@@ -1,0 +1,17 @@
+<RCC>
+  <qresource prefix="images" >
+    <file>pixmaps/projectnew.png</file>
+    <file>pixmaps/fileclose.png</file>
+    <file>pixmaps/projectopen.png</file>
+    <file>pixmaps/fileexport.png</file>
+    <file>pixmaps/delete.png</file>
+    <file>pixmaps/filenew.png</file>
+    <file>pixmaps/fileopen.png</file>
+    <file>pixmaps/filesave.png</file>
+    <file>pixmaps/filesaveas.png</file>
+    <file>pixmaps/insertutterance.png</file>
+    <file>pixmaps/insertword.png</file>
+    <file>pixmaps/removeutterance.png</file>
+    <file>pixmaps/removeword.png</file>
+  </qresource>
+</RCC>

@@ -1,0 +1,23 @@
+
+[Desktop Entry]
+Name=Kura Interlinear Editor
+GenericName=Annotation software for linguists
+GenericName[de]=Annotationssoftware für Linguisten
+Comment=Kura is an annotation and analyzation software for linguists. It allows to add morpho-syntactic annotations to language data.
+Exec=KuraILE
+Icon=KuraILE
+Terminal=false
+Type=Application
+Categories=Education;Qt
+
+
+[Desktop Entry]
+Name=Kura Analyzer
+GenericName=Analyzation software for linguists
+GenericName[de]=Analysesoftware für Linguisten
+Comment=Kura is an annotation and analyzation software for linguists. It allows to add morpho-syntactic annotations to language data.
+Exec=KuraAnalyzer
+Icon=KuraAnalyzer
+Terminal=false
+Type=Application
+Categories=Education;Qt
