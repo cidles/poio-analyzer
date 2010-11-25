@@ -22,7 +22,7 @@ class PoioILE(QtGui.QMainWindow):
         self.ui.setupUi(self)
         #self.ui.verticalLayoutMain.setStretch(2,1)
         self.initVars()
-        self.initSettings()
+        self.initConnects()
         self.initSignals()
         self.hideTiersWidgets()
         self.init = 0
@@ -43,7 +43,7 @@ class PoioILE(QtGui.QMainWindow):
         self.strGlossSepereator = unicode(settings.value("Ann/GlossSep",  QtCore.QVariant(":")).toString())
         self.strEmptyCharacter = unicode(settings.value("Ann/EmptyChar",  QtCore.QVariant("#")).toString())
         
-    def initSignals(self):
+    def initConnects(self):
         # Projects
         QtCore.QObject.connect(self.ui.actionNew, QtCore.SIGNAL("triggered()"), self.newProject)
         QtCore.QObject.connect(self.ui.actionOpen, QtCore.SIGNAL("triggered()"), self.openProject)

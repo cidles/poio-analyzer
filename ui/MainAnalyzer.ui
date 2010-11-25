@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>963</width>
+    <width>957</width>
     <height>838</height>
    </rect>
   </property>
@@ -171,7 +171,7 @@
        </widget>
       </item>
       <item row="7" column="2" colspan="3">
-       <widget class="QLineEdit" name="lineSearchTranslations">
+       <widget class="QLineEdit" name="lineeditSearchTranslations">
         <property name="sizeIncrement">
          <size>
           <width>2</width>
@@ -221,25 +221,6 @@
         </property>
         <property name="text">
          <string>Result:</string>
-        </property>
-       </widget>
-      </item>
-      <item row="11" column="1" colspan="2">
-       <widget class="QListWidget" name="listFiles">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="sizeIncrement">
-         <size>
-          <width>1</width>
-          <height>0</height>
-         </size>
-        </property>
-        <property name="selectionMode">
-         <enum>QAbstractItemView::ExtendedSelection</enum>
         </property>
        </widget>
       </item>
@@ -332,6 +313,38 @@
         </property>
        </widget>
       </item>
+      <item row="11" column="1" colspan="2">
+       <widget class="QListView" name="listFiles">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="sizeIncrement">
+         <size>
+          <width>1</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="selectionMode">
+         <enum>QAbstractItemView::ExtendedSelection</enum>
+        </property>
+       </widget>
+      </item>
+      <item row="12" column="4">
+       <widget class="QLineEdit" name="lineeditQuickSearch"/>
+      </item>
+      <item row="12" column="3">
+       <widget class="QLabel" name="label_9">
+        <property name="layoutDirection">
+         <enum>Qt::RightToLeft</enum>
+        </property>
+        <property name="text">
+         <string>Quick Search:</string>
+        </property>
+       </widget>
+      </item>
      </layout>
     </item>
    </layout>
@@ -342,7 +355,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>963</width>
+     <width>957</width>
      <height>23</height>
     </rect>
    </property>
@@ -366,6 +379,7 @@
     <addaction name="actionEditWordClasses"/>
     <addaction name="separator"/>
     <addaction name="actionSearches"/>
+    <addaction name="actionQuickSearch"/>
    </widget>
    <widget class="QMenu" name="menuAbout">
     <property name="title">
@@ -420,6 +434,14 @@
   <action name="actionAboutPoioAnalyzer">
    <property name="text">
     <string>About PoioAnalyzer...</string>
+   </property>
+  </action>
+  <action name="actionQuickSearch">
+   <property name="text">
+    <string>Quick Search</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+F</string>
    </property>
   </action>
  </widget>

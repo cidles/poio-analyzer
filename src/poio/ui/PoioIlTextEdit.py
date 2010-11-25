@@ -13,6 +13,9 @@ class PoioIlTextEdit(QtGui.QTextEdit):
         self.setLineWrapMode(QtGui.QTextEdit.NoWrap)
         self.setAcceptRichText(False)
         self.setUndoRedoEnabled(False)
+        palette = self.palette()
+        palette.setColor(QtGui.QPalette.Inactive, QtGui.QPalette.Highlight, QtGui.QColor("yellow"))
+        self.setPalette(palette)
         QtCore.QObject.connect(self, QtCore.SIGNAL("cursorPositionChanged()"), self.checkCursorPosition)
         settings = QtCore.QSettings()
         self.strEmptyCharacter = unicode(settings.value("Ann/EmptyChar",  QtCore.QVariant("#")).toString())
@@ -30,6 +33,8 @@ class PoioIlTextEdit(QtGui.QTextEdit):
         #QtGui.QTextEdit.insertFromMimeData(self, source)
         
     def checkCursorPosition(self):
+        if self.isReadOnly():
+            return
         c = self.textCursor()
         t = c.currentTable()
         if t == None or c.charFormat().fontCapitalization()==QtGui.QFont.SmallCaps:

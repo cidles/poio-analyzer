@@ -7,9 +7,12 @@ from PyQt4 import QtCore, QtGui
 from pyannotation.toolbox.data import ToolboxAnnotationFileObject
 from pyannotation.elan.data import EafAnnotationFileObject
 from pyannotation.data import AnnotationTree
+import pyannotation.data
 
 from poio.ui.Ui_MainAnalyzer import Ui_MainWindow
 from poio.ui.PoioIlTextEdit import PoioIlTextEdit
+
+from poio.poioproject import PoioProject
 
 
 class PoioAnalyzer(QtGui.QMainWindow):
@@ -19,12 +22,17 @@ class PoioAnalyzer(QtGui.QMainWindow):
         QtGui.QMainWindow.__init__(self, *args)
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
-        self.initSignals()
+        self.initConnects()
         self.initSettings()
+        self.project = PoioProject(os.getcwd())
+        self.ui.listFiles.setModel(self.project)
         
-    def initSignals(self):
+    def initConnects(self):
         QtCore.QObject.connect(self.ui.buttonAddFiles, QtCore.SIGNAL("pressed()"), self.addFiles)
         QtCore.QObject.connect(self.ui.buttonRemoveFiles, QtCore.SIGNAL("pressed()"), self.removeFiles)
+        QtCore.QObject.connect(self.ui.actionQuickSearch, QtCore.SIGNAL("triggered()"), self.ui.lineeditQuickSearch.setFocus)
+        QtCore.QObject.connect(self.ui.lineeditQuickSearch, QtCore.SIGNAL("textChanged(const QString &)"), self.find_from_start)
+        QtCore.QObject.connect(self.ui.lineeditQuickSearch, QtCore.SIGNAL("returnPressed()"), self.find_next)
 
     def initSettings(self):
         QtCore.QCoreApplication.setOrganizationName("Interdisciplinary Centre for Social and Language Documentation");
@@ -39,12 +47,12 @@ class PoioAnalyzer(QtGui.QMainWindow):
         pass
 
     def addFiles(self):
-        filepaths = QtGui.QFileDialog.getOpenFileNames(self, self.tr("Add Files"), "", self.tr("Toolbox files (*.txt);;Elan files (*.eaf);;All files (*.*)"))
-        self.ui.listFiles.addItems(filepaths)
+        filepaths = QtGui.QFileDialog.getOpenFileNames(self, self.tr("Add Files"), "", self.tr("Elan files (*.eaf);;Toolbox files (*.txt);;All files (*.*)"))
+        self.project.addFilePaths(filepaths)
         self.updateIlTextEdit()
             
     def openFile(self):
-        filepath = QtGui.QFileDialog.getOpenFileName(self, self.tr("Open File"), "", self.tr("Toolbox files (*.txt);;All files (*.*)"))
+        filepath = QtGui.QFileDialog.getOpenFileName(self, self.tr("Open File"), "", self.tr("Elan files (*.eaf);;Toolbox files (*.txt);;All files (*.*)"))
         filepath = unicode(filepath)
         if filepath != '':
             self.init = 1
@@ -61,23 +69,22 @@ class PoioAnalyzer(QtGui.QMainWindow):
         self.ui.texteditInterlinear.clear()
         #self.ui.texteditInterlinear.appendTitle(self.filename)
         idInScene = 1
-        itemsCount = self.ui.listFiles.count()
+        itemsCount = self.project.rowCount()
         progress = QtGui.QProgressDialog(self.tr("Loading Files..."), self.tr("Abort"), 0, itemsCount, self.parent())
         progress.setWindowModality(QtCore.Qt.WindowModal)
         for i in range(itemsCount):
-            item = self.ui.listFiles.item(i)
-            filepath = unicode(item.text())
+            poiofile = self.project.poioFileAt(i)
+            filepath = poiofile.filepath
             self.ui.texteditInterlinear.appendTitle(os.path.basename(filepath))
-            if re.search(r"\.eaf$", filepath):
+            if poiofile.type == pyannotation.data.EAF:
                 self.annotationFileObject = EafAnnotationFileObject(filepath)
-            elif re.search(r"\.txt$", filepath):
+            elif poiofile.type == pyannotation.data.TOOLBOX:
                 self.annotationFileObject = ToolboxAnnotationFileObject(filepath)
             self.annotationTierHandler = self.annotationFileObject.createTierHandler()
             self.annotationParser = self.annotationFileObject.createParser()
             self.annotationTree = AnnotationTree(self.annotationParser)
             self.initTierTypesFromSettings()
             self.annotationTree.parse()
-            #print self.annotationTree.tree
             utterancesIds = self.annotationTree.getUtteranceIds()
             for id in utterancesIds:
                 progress.setValue(idInScene - 1)
@@ -109,6 +116,7 @@ class PoioAnalyzer(QtGui.QMainWindow):
                 self.graphicssceneIlText.clear()
                 break
         progress.setValue(itemsCount)
+        self.ui.texteditInterlinear.setReadOnly(True)
 
     def initTierTypesFromSettings(self):
             settings = QtCore.QSettings()
@@ -123,3 +131,14 @@ class PoioAnalyzer(QtGui.QMainWindow):
             self.annotationTierHandler.setGlosstierType(arrGlossTierTypes)
             self.annotationTierHandler.setTranslationtierType(arrTranslationTierTypes)
 
+    def find_from_start(self, exp):
+        self.ui.texteditInterlinear.setTextCursor(QtGui.QTextCursor(self.ui.texteditInterlinear.document()))
+        if not self.ui.texteditInterlinear.find(exp) and exp != "":
+            self.statusBar().showMessage(self.tr("No match found."), 2000)
+        
+    def find_next(self):
+        found = self.ui.texteditInterlinear.find(self.ui.lineeditQuickSearch.text())
+        if not found:
+            self.statusBar().showMessage(self.tr("Restarting search from beginning of document."), 2000)
+            found = self.find_from_start(self.ui.lineeditQuickSearch.text())
+        return found

@@ -1,6 +1,9 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# (C) 2009 copyright by Peter Bouda
+# (C) 2010 copyright by Peter Bouda
+#
+# http://www.cidles.eu/ltml
+#
 
 import sys, os.path
 from PyQt4 import QtCore, QtGui
