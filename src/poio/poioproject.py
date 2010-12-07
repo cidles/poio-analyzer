@@ -10,6 +10,7 @@ class PoioProject(QtCore.QAbstractListModel):
         QtCore.QAbstractListModel.__init__(self, parent)
         self.projectfiles = []
         self.projectdir = projectdir
+        self.corpusreader = None
 
     def flags(self, index):
         return QtCore.Qt.ItemIsSelectable | QtCore.Qt.ItemIsEnabled

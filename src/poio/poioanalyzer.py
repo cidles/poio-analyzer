@@ -9,6 +9,8 @@ from pyannotation.elan.data import EafAnnotationFileObject
 from pyannotation.data import AnnotationTree
 import pyannotation.data
 
+from pyannotation.corpusreader import GlossCorpusReader
+
 from poio.ui.Ui_MainAnalyzer import Ui_MainWindow
 from poio.ui.PoioIlTextEdit import PoioIlTextEdit
 
@@ -26,6 +28,27 @@ class PoioAnalyzer(QtGui.QMainWindow):
         self.initSettings()
         self.project = PoioProject(os.getcwd())
         self.ui.listFiles.setModel(self.project)
+        self.initCorpusReader()
+        
+    def initCorpusReader(self):
+        self.corpusreader = GlossCorpusReader(utterancetierTypes = self.arrUtteranceTierTypes,
+                                              wordtierTypes = self.arrWordTierTypes,
+                                              translationtierTypes = self.arrTranslationTierTypes,
+                                              morphemetierTypes = self.arrMorphemeTierTypes,
+                                              glosstierTypes = self.arrGlossTierTypes)
+
+    def updateCorpusReader(self):
+        itemsCount = self.project.rowCount()
+        progress = QtGui.QProgressDialog(self.tr("Loading Files..."), self.tr("Abort"), 0, itemsCount, self.parent())
+        progress.setWindowModality(QtCore.Qt.WindowModal)
+        for i in range(itemsCount):
+            progress.setValue(i)
+            poiofile = self.project.poioFileAt(i)
+            self.corpusreader.addFile(poiofile.filepath, poiofile.type)
+            if (progress.wasCanceled()):
+                initCorpusReader()
+                break
+        progress.setValue(itemsCount)
         
     def initConnects(self):
         QtCore.QObject.connect(self.ui.buttonAddFiles, QtCore.SIGNAL("pressed()"), self.addFiles)
@@ -42,6 +65,11 @@ class PoioAnalyzer(QtGui.QMainWindow):
         self.strMorphemeSeperator = unicode(settings.value("Ann/MorphSep", QtCore.QVariant("-")).toString())
         self.strGlossSepereator = unicode(settings.value("Ann/GlossSep",  QtCore.QVariant(":")).toString())
         self.strEmptyCharacter = unicode(settings.value("Ann/EmptyChar",  QtCore.QVariant("#")).toString())
+        self.arrUtteranceTierTypes = unicode(settings.value("Ann/UttTierTypeRefs",  QtCore.QVariant(u"utterance|utterances|Äußerung|Äußerungen")).toString()).split("|")
+        self.arrWordTierTypes = unicode(settings.value("Ann/WordTierTypeRefs",  QtCore.QVariant(u"words|word|Wort|Worte|Wörter")).toString()).split("|")
+        self.arrMorphemeTierTypes = unicode(settings.value("Ann/MorphTierTypeRefs",  QtCore.QVariant(u"morpheme|morphemes|Morphem|Morpheme")).toString()).split("|")
+        self.arrGlossTierTypes = unicode(settings.value("Ann/GlossTierTypeRefs",  QtCore.QVariant(u"glosses|gloss|Glossen|Gloss|Glosse")).toString()).split("|")
+        self.arrTranslationTierTypes = unicode(settings.value("Ann/TransTierTypeRefs",  QtCore.QVariant(u"translation|translations|Übersetzung|Übersetzungen")).toString()).split("|")
 
     def removeFiles(self):
         pass
@@ -49,87 +77,43 @@ class PoioAnalyzer(QtGui.QMainWindow):
     def addFiles(self):
         filepaths = QtGui.QFileDialog.getOpenFileNames(self, self.tr("Add Files"), "", self.tr("Elan files (*.eaf);;Toolbox files (*.txt);;All files (*.*)"))
         self.project.addFilePaths(filepaths)
+        self.updateCorpusReader()
         self.updateIlTextEdit()
-            
-    def openFile(self):
-        filepath = QtGui.QFileDialog.getOpenFileName(self, self.tr("Open File"), "", self.tr("Elan files (*.eaf);;Toolbox files (*.txt);;All files (*.*)"))
-        filepath = unicode(filepath)
-        if filepath != '':
-            self.init = 1
-            self.annotationFileObject = ToolboxAnnotationFileObject(filepath)
-            self.annotationFileTiers = self.annotationFileObject.createTierHandler()
-            self.annotationFileParser = self.annotationFileObject.createParser()
-            self.annotationTree = AnnotationTree(self.annotationFileParser)
-            self.annotationTree.parse()
-            #print self.annotationTree.tree
-            self.utterancesIds = self.annotationTree.getUtteranceIdsInTier()
-            self.updateIlTextEdit()
 
     def updateIlTextEdit(self):
         self.ui.texteditInterlinear.clear()
-        #self.ui.texteditInterlinear.appendTitle(self.filename)
         idInScene = 1
         itemsCount = self.project.rowCount()
-        progress = QtGui.QProgressDialog(self.tr("Loading Files..."), self.tr("Abort"), 0, itemsCount, self.parent())
-        progress.setWindowModality(QtCore.Qt.WindowModal)
-        for i in range(itemsCount):
-            poiofile = self.project.poioFileAt(i)
-            filepath = poiofile.filepath
-            self.ui.texteditInterlinear.appendTitle(os.path.basename(filepath))
-            if poiofile.type == pyannotation.data.EAF:
-                self.annotationFileObject = EafAnnotationFileObject(filepath)
-            elif poiofile.type == pyannotation.data.TOOLBOX:
-                self.annotationFileObject = ToolboxAnnotationFileObject(filepath)
-            self.annotationTierHandler = self.annotationFileObject.createTierHandler()
-            self.annotationParser = self.annotationFileObject.createParser()
-            self.annotationTree = AnnotationTree(self.annotationParser)
-            self.initTierTypesFromSettings()
-            self.annotationTree.parse()
-            utterancesIds = self.annotationTree.getUtteranceIds()
+        for [filepath, annotationtree] in self.corpusreader.annotationtrees:
+            self.ui.texteditInterlinear.appendTitle(filepath)
+            utterancesIds = annotationtree.getUtteranceIds()
             for id in utterancesIds:
-                progress.setValue(idInScene - 1)
-                utterance = self.annotationTree.getUtteranceById(id)
-                translations = self.annotationTree.getTranslationsForUtterance(id)
+                utterance = annotationtree.getUtteranceById(id)
+                translations = annotationtree.getTranslationsForUtterance(id)
                 if len(translations) == 0:
-                    translationId = self.annotationTree.newTranslationForUtteranceId(id, "")
+                    translationId = annotationtree.newTranslationForUtteranceId(id, "")
                     translations = [ [translationId, self.strEmptyCharacter] ]
                 else:
                     for t in translations:
                         if t[1] == "":
                             t[1] = self.strEmptyCharacter
-                wordIds = self.annotationTree.getWordIdsForUtterance(id)
+                wordIds = annotationtree.getWordIdsForUtterance(id)
                 ilElements = []
                 for wid in wordIds:
-                    strWord = self.annotationTree.getWordById(wid)
+                    strWord = annotationtree.getWordById(wid)
                     if strWord == "":
                         strWord = self.strEmptyCharacter
-                    strMorphemes = self.annotationTree.getMorphemeStringForWord(wid)
+                    strMorphemes = annotationtree.getMorphemeStringForWord(wid)
                     if strMorphemes == "":
                         strMorphemes = strWord
-                    strGlosses = self.annotationTree.getGlossStringForWord(wid)
+                    strGlosses = annotationtree.getGlossStringForWord(wid)
                     if strGlosses == "":
                         strGlosses = self.strEmptyCharacter
                     ilElements.append([wid, strWord, strMorphemes, strGlosses])
                 self.ui.texteditInterlinear.appendUtterance(id,  utterance, ilElements, translations)
             idInScene = idInScene + 1
-            if (progress.wasCanceled()):
-                self.graphicssceneIlText.clear()
-                break
-        progress.setValue(itemsCount)
-        self.ui.texteditInterlinear.setReadOnly(True)
 
-    def initTierTypesFromSettings(self):
-            settings = QtCore.QSettings()
-            arrUtteranceTierTypes = unicode(settings.value("Ann/UttTierTypeRefs",  QtCore.QVariant(u"utterance|utterances|Äußerung|Äußerungen")).toString()).split("|")
-            arrWordTierTypes = unicode(settings.value("Ann/WordTierTypeRefs",  QtCore.QVariant(u"words|word|Wort|Worte|Wörter")).toString()).split("|")
-            arrMorphemeTierTypes = unicode(settings.value("Ann/MorphTierTypeRefs",  QtCore.QVariant(u"morpheme|morphemes|Morphem|Morpheme")).toString()).split("|")
-            arrGlossTierTypes = unicode(settings.value("Ann/GlossTierTypeRefs",  QtCore.QVariant(u"glosses|gloss|Glossen|Gloss|Glosse")).toString()).split("|")
-            arrTranslationTierTypes = unicode(settings.value("Ann/TransTierTypeRefs",  QtCore.QVariant(u"translation|translations|Übersetzung|Übersetzungen")).toString()).split("|")
-            self.annotationTierHandler.setUtterancetierType(arrUtteranceTierTypes)
-            self.annotationTierHandler.setWordtierType(arrWordTierTypes)
-            self.annotationTierHandler.setMorphemetierType(arrMorphemeTierTypes)
-            self.annotationTierHandler.setGlosstierType(arrGlossTierTypes)
-            self.annotationTierHandler.setTranslationtierType(arrTranslationTierTypes)
+        self.ui.texteditInterlinear.setReadOnly(True)
 
     def find_from_start(self, exp):
         self.ui.texteditInterlinear.setTextCursor(QtGui.QTextCursor(self.ui.texteditInterlinear.document()))
