@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 # (C) 2009 copyright by Peter Bouda
 
+import os
 from PyQt4 import QtCore
 from poio.poiofile import PoioFile
 
@@ -18,7 +19,7 @@ class PoioProject(QtCore.QAbstractListModel):
     def data(self, index, role = QtCore.Qt.DisplayRole):
         if role == QtCore.Qt.DisplayRole:
             if index.row() < len(self.projectfiles):
-                return self.projectfiles[index.row()].filepath
+                return os.path.basename(self.projectfiles[index.row()].filepath)
             else:
                 return QtCore.QVariant()
 

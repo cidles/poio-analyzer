@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'NewTier.ui'
 #
-# Created: Thu Nov 25 16:37:24 2010
+# Created: Tue Jan 25 16:50:21 2011
 #      by: PyQt4 UI code generator 4.7.4
 #
 # WARNING! All changes made in this file will be lost!
