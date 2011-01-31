@@ -50,8 +50,10 @@ class PoioProject(QtCore.QAbstractListModel):
             return False
         
     def addFilePath(self, poiofilepath):
-        #poiofile = PoioFile(poiofilepath)
-        #self.projectfiles.append(poiofile)
+        # does the file exist in the project?
+        for poiofile in self.projectfiles:
+            if poiofile.filepath == poiofilepath:
+                return True
         if self.insertRows(self.rowCount(), 1):
             self.setData(self.index(self.rowCount(), 0), poiofilepath)
             return True

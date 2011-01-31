@@ -119,10 +119,12 @@ class PoioIlTextEdit(QtGui.QTextEdit):
         c.removeSelectedText()
         utteranceId = re.sub(r"^utterance-", "", utteranceId)
         return utteranceId
-
+        
     def appendTitle(self, title):
         self.setDocumentTitle(title)
-        self.append("<div style=\"font-size:14pt;font-weight:bold;\" id=\"title\" class=\"title\">" + title + "</div>")
+        # margin is not working :-(
+        self.append("<div style=\"font-size:14pt;\">&nbsp;</div>")
+        self.append("<div style=\"font-size:14pt;font-weight:bold;text-decoration:underline;\" id=\"title\" class=\"title\">" + title + "</div>")
 
     def appendUtterance(self, id,  utterance, ilElements, translations):
         t = Template(os.path.abspath("html"), "PoioIlUtterance.html")

@@ -44,7 +44,9 @@ class PoioAnalyzer(QtGui.QMainWindow):
         for i in range(itemsCount):
             progress.setValue(i)
             poiofile = self.project.poioFileAt(i)
-            self.corpusreader.addFile(poiofile.filepath, poiofile.type)
+            if poiofile.isNew:
+                self.corpusreader.addFile(poiofile.filepath, poiofile.type)
+                poiofile.setIsNew(False)
             if (progress.wasCanceled()):
                 initCorpusReader()
                 break
@@ -82,7 +84,6 @@ class PoioAnalyzer(QtGui.QMainWindow):
 
     def updateIlTextEdit(self):
         self.ui.texteditInterlinear.clear()
-        idInScene = 1
         itemsCount = self.project.rowCount()
         for [filepath, annotationtree] in self.corpusreader.annotationtrees:
             self.ui.texteditInterlinear.appendTitle(filepath)
@@ -111,9 +112,10 @@ class PoioAnalyzer(QtGui.QMainWindow):
                         strGlosses = self.strEmptyCharacter
                     ilElements.append([wid, strWord, strMorphemes, strGlosses])
                 self.ui.texteditInterlinear.appendUtterance(id,  utterance, ilElements, translations)
-            idInScene = idInScene + 1
+            
 
         self.ui.texteditInterlinear.setReadOnly(True)
+        self.ui.texteditInterlinear.scrollToAnchor("#")
 
     def find_from_start(self, exp):
         self.ui.texteditInterlinear.setTextCursor(QtGui.QTextCursor(self.ui.texteditInterlinear.document()))
