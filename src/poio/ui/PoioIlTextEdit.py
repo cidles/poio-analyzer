@@ -129,7 +129,7 @@ class PoioIlTextEdit(QtGui.QTextEdit):
     def appendUtterance(self, id,  utterance, ilElements, translations):
         t = Template(os.path.abspath("html"), "PoioIlUtterance.html")
         countwords = len(ilElements)
-        text = t.evoque(vars())
+        text = t.evoque(vars(), quoting="str")
         self.append(text)
         
     def getAnnotationDict(self):

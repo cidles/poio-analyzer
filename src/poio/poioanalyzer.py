@@ -6,7 +6,7 @@ from PyQt4 import QtCore, QtGui
 
 from pyannotation.toolbox.data import ToolboxAnnotationFileObject
 from pyannotation.elan.data import EafAnnotationFileObject
-from pyannotation.data import AnnotationTree
+from pyannotation.data import AnnotationTree, AnnotationTreeFilter
 import pyannotation.data
 
 from pyannotation.corpusreader import GlossCorpusReader
@@ -29,6 +29,7 @@ class PoioAnalyzer(QtGui.QMainWindow):
         self.project = PoioProject(os.getcwd())
         self.ui.listFiles.setModel(self.project)
         self.initCorpusReader()
+        self.currentFilter = AnnotationTreeFilter()
         
     def initCorpusReader(self):
         self.corpusreader = GlossCorpusReader(utterancetierTypes = self.arrUtteranceTierTypes,
@@ -55,9 +56,10 @@ class PoioAnalyzer(QtGui.QMainWindow):
     def initConnects(self):
         QtCore.QObject.connect(self.ui.buttonAddFiles, QtCore.SIGNAL("pressed()"), self.addFiles)
         QtCore.QObject.connect(self.ui.buttonRemoveFiles, QtCore.SIGNAL("pressed()"), self.removeFiles)
+        QtCore.QObject.connect(self.ui.buttonSearch, QtCore.SIGNAL("pressed()"), self.applyFilter)
         QtCore.QObject.connect(self.ui.actionQuickSearch, QtCore.SIGNAL("triggered()"), self.ui.lineeditQuickSearch.setFocus)
-        QtCore.QObject.connect(self.ui.lineeditQuickSearch, QtCore.SIGNAL("textChanged(const QString &)"), self.find_from_start)
-        QtCore.QObject.connect(self.ui.lineeditQuickSearch, QtCore.SIGNAL("returnPressed()"), self.find_next)
+        QtCore.QObject.connect(self.ui.lineeditQuickSearch, QtCore.SIGNAL("textChanged(const QString &)"), self.findFromStart)
+        QtCore.QObject.connect(self.ui.lineeditQuickSearch, QtCore.SIGNAL("returnPressed()"), self.findNext)
 
     def initSettings(self):
         QtCore.QCoreApplication.setOrganizationName("Interdisciplinary Centre for Social and Language Documentation");
@@ -87,9 +89,19 @@ class PoioAnalyzer(QtGui.QMainWindow):
         itemsCount = self.project.rowCount()
         for [filepath, annotationtree] in self.corpusreader.annotationtrees:
             self.ui.texteditInterlinear.appendTitle(filepath)
-            utterancesIds = annotationtree.getUtteranceIds()
+            annotationtree.clearFilters()
+            self.currentFilter.resetMatchObject()
+            annotationtree.appendFilter(self.currentFilter)
+            utterancesIds = annotationtree.getFilteredUtteranceIds()
             for id in utterancesIds:
                 utterance = annotationtree.getUtteranceById(id)
+                if id in self.currentFilter.matchobject["utterance"]:
+                    offset = 0
+                    for g in self.currentFilter.matchobject["utterance"][id]:
+                        utterance = utterance[:g[0]+offset] + "<span style=\"color:green;\">" + utterance[g[0]+offset:]
+                        offset = offset + len("<span style=\"color:green;\">")
+                        utterance = utterance[:g[1]+offset] + "</span>" + utterance[g[1]+offset:]
+                        offset = offset + len("</span>")
                 translations = annotationtree.getTranslationsForUtterance(id)
                 if len(translations) == 0:
                     translationId = annotationtree.newTranslationForUtteranceId(id, "")
@@ -98,6 +110,13 @@ class PoioAnalyzer(QtGui.QMainWindow):
                     for t in translations:
                         if t[1] == "":
                             t[1] = self.strEmptyCharacter
+                        if t[0] in self.currentFilter.matchobject["translation"]:
+                            offset = 0
+                            for g in self.currentFilter.matchobject["translation"][t[0]]:
+                                t[1] = t[1][:g[0]+offset] + "<span style=\"color:green;\">" + t[1][g[0]+offset:]
+                                offset = offset + len("<span style=\"color:green;\">")
+                                t[1] = t[1][:g[1]+offset] + "</span>" + t[1][g[1]+offset:]
+                                offset = offset + len("</span>")
                 wordIds = annotationtree.getWordIdsForUtterance(id)
                 ilElements = []
                 for wid in wordIds:
@@ -110,21 +129,34 @@ class PoioAnalyzer(QtGui.QMainWindow):
                     strGlosses = annotationtree.getGlossStringForWord(wid)
                     if strGlosses == "":
                         strGlosses = self.strEmptyCharacter
-                    ilElements.append([wid, strWord, strMorphemes, strGlosses])
+
+                    markWord = False
+                    if wid in self.currentFilter.matchobject["word"]:
+                        markWord = True
+                    ilElements.append([wid, strWord, strMorphemes, strGlosses, markWord])
+
                 self.ui.texteditInterlinear.appendUtterance(id,  utterance, ilElements, translations)
             
 
         self.ui.texteditInterlinear.setReadOnly(True)
         self.ui.texteditInterlinear.scrollToAnchor("#")
 
-    def find_from_start(self, exp):
+    def findFromStart(self, exp):
         self.ui.texteditInterlinear.setTextCursor(QtGui.QTextCursor(self.ui.texteditInterlinear.document()))
         if not self.ui.texteditInterlinear.find(exp) and exp != "":
             self.statusBar().showMessage(self.tr("No match found."), 2000)
         
-    def find_next(self):
+    def findNext(self):
         found = self.ui.texteditInterlinear.find(self.ui.lineeditQuickSearch.text())
         if not found:
             self.statusBar().showMessage(self.tr("Restarting search from beginning of document."), 2000)
-            found = self.find_from_start(self.ui.lineeditQuickSearch.text())
+            found = self.findFromStart(self.ui.lineeditQuickSearch.text())
         return found
+    
+    def applyFilter(self):
+        self.currentFilter.setUtteranceFilter(unicode(self.ui.lineeditSearchUtterances.text()))
+        self.currentFilter.setTranslationFilter(unicode(self.ui.lineeditSearchTranslations.text()))
+        self.currentFilter.setWordFilter(unicode(self.ui.lineeditSearchWords.text()))
+        self.currentFilter.setMorphemeFilter(unicode(self.ui.lineeditSearchMorphemes.text()))
+        self.currentFilter.setGlossFilter(unicode(self.ui.lineeditSearchGlosses.text()))
+        self.updateIlTextEdit()
