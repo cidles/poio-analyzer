@@ -105,7 +105,7 @@
        </widget>
       </item>
       <item row="3" column="2">
-       <widget class="QPushButton" name="pushButton">
+       <widget class="QPushButton" name="buttonClearAllSearches">
         <property name="sizePolicy">
          <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
           <horstretch>0</horstretch>
@@ -137,7 +137,7 @@
        </widget>
       </item>
       <item row="3" column="3">
-       <widget class="QPushButton" name="buttonSaveSearch">
+       <widget class="QPushButton" name="buttonSaveSearches">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
           <horstretch>1</horstretch>
@@ -200,6 +200,9 @@
         </property>
         <property name="text">
          <string>Quick Search:</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
         </property>
        </widget>
       </item>
@@ -394,7 +397,7 @@
               </property>
               <layout class="QVBoxLayout" name="verticalLayout_4">
                <item>
-                <widget class="QRadioButton" name="radioButton">
+                <widget class="QRadioButton" name="radiobuttonAnd">
                  <property name="text">
                   <string>AND</string>
                  </property>
@@ -404,16 +407,23 @@
                 </widget>
                </item>
                <item>
-                <widget class="QRadioButton" name="radioButton_2">
+                <widget class="QRadioButton" name="radiobuttonOr">
                  <property name="text">
                   <string>OR</string>
                  </property>
                 </widget>
                </item>
                <item>
-                <widget class="QCheckBox" name="checkBox">
+                <widget class="QCheckBox" name="checkboxInvert">
                  <property name="text">
                   <string>NOT</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QCheckBox" name="checkboxContained">
+                 <property name="text">
+                  <string>contained matches</string>
                  </property>
                 </widget>
                </item>
@@ -491,7 +501,7 @@
        </widget>
       </item>
       <item row="3" column="1">
-       <widget class="QPushButton" name="pushButton_2">
+       <widget class="QPushButton" name="buttonClearThisSearch">
         <property name="sizePolicy">
          <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
           <horstretch>0</horstretch>
@@ -610,6 +620,29 @@
    <header>PoioIlTextEdit.h</header>
   </customwidget>
  </customwidgets>
+ <tabstops>
+  <tabstop>tabWidget</tabstop>
+  <tabstop>lineeditSearchUtterances</tabstop>
+  <tabstop>lineeditSearchWords</tabstop>
+  <tabstop>lineeditSearchMorphemes</tabstop>
+  <tabstop>lineeditSearchGlosses</tabstop>
+  <tabstop>lineeditSearchTranslations</tabstop>
+  <tabstop>radiobuttonAnd</tabstop>
+  <tabstop>radiobuttonOr</tabstop>
+  <tabstop>checkboxInvert</tabstop>
+  <tabstop>checkboxContained</tabstop>
+  <tabstop>buttonClearThisSearch</tabstop>
+  <tabstop>buttonClearAllSearches</tabstop>
+  <tabstop>buttonSaveSearches</tabstop>
+  <tabstop>buttonSearch</tabstop>
+  <tabstop>listFiles</tabstop>
+  <tabstop>texteditInterlinear</tabstop>
+  <tabstop>buttonAlignLeft</tabstop>
+  <tabstop>buttonAlignCenter</tabstop>
+  <tabstop>buttonAddFiles</tabstop>
+  <tabstop>buttonRemoveFiles</tabstop>
+  <tabstop>lineeditQuickSearch</tabstop>
+ </tabstops>
  <resources>
   <include location="poioanalyzer.qrc"/>
  </resources>

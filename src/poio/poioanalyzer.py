@@ -2,6 +2,7 @@
 # (C) 2009 copyright by Peter Bouda
 
 import sys, os.path, re
+import time
 from PyQt4 import QtCore, QtGui
 
 from pyannotation.toolbox.data import ToolboxAnnotationFileObject
@@ -38,6 +39,11 @@ class PoioAnalyzer(QtGui.QMainWindow):
                                               morphemetierTypes = self.arrMorphemeTierTypes,
                                               glosstierTypes = self.arrGlossTierTypes)
 
+    def updateCorpusReaderFilter(self):
+        self.currentFilter.resetMatchObject()
+        for [filepath, annotationtree] in self.corpusreader.annotationtrees:
+            annotationtree.updateLastFilter(self.currentFilter)
+        
     def updateCorpusReader(self):
         itemsCount = self.project.rowCount()
         progress = QtGui.QProgressDialog(self.tr("Loading Files..."), self.tr("Abort"), 0, itemsCount, self.parent())
@@ -52,11 +58,21 @@ class PoioAnalyzer(QtGui.QMainWindow):
                 initCorpusReader()
                 break
         progress.setValue(itemsCount)
+        self.updateCorpusReaderFilter()
         
     def initConnects(self):
         QtCore.QObject.connect(self.ui.buttonAddFiles, QtCore.SIGNAL("pressed()"), self.addFiles)
         QtCore.QObject.connect(self.ui.buttonRemoveFiles, QtCore.SIGNAL("pressed()"), self.removeFiles)
+        
+        # Filter and Search
         QtCore.QObject.connect(self.ui.buttonSearch, QtCore.SIGNAL("pressed()"), self.applyFilter)
+        QtCore.QObject.connect(self.ui.lineeditSearchUtterances, QtCore.SIGNAL("returnPressed()"), self.applyFilter)
+        QtCore.QObject.connect(self.ui.lineeditSearchWords, QtCore.SIGNAL("returnPressed()"), self.applyFilter)
+        QtCore.QObject.connect(self.ui.lineeditSearchMorphemes, QtCore.SIGNAL("returnPressed()"), self.applyFilter)
+        QtCore.QObject.connect(self.ui.lineeditSearchGlosses, QtCore.SIGNAL("returnPressed()"), self.applyFilter)
+        QtCore.QObject.connect(self.ui.lineeditSearchTranslations, QtCore.SIGNAL("returnPressed()"), self.applyFilter)
+        
+        # Quick Search
         QtCore.QObject.connect(self.ui.actionQuickSearch, QtCore.SIGNAL("triggered()"), self.ui.lineeditQuickSearch.setFocus)
         QtCore.QObject.connect(self.ui.lineeditQuickSearch, QtCore.SIGNAL("textChanged(const QString &)"), self.findFromStart)
         QtCore.QObject.connect(self.ui.lineeditQuickSearch, QtCore.SIGNAL("returnPressed()"), self.findNext)
@@ -81,17 +97,20 @@ class PoioAnalyzer(QtGui.QMainWindow):
     def addFiles(self):
         filepaths = QtGui.QFileDialog.getOpenFileNames(self, self.tr("Add Files"), "", self.tr("Elan files (*.eaf);;Toolbox files (*.txt);;All files (*.*)"))
         self.project.addFilePaths(filepaths)
+        start = time.time()
         self.updateCorpusReader()
+        end = time.time()
+        print "Time elapsed = ", end - start, "seconds"
+        start = time.time()
         self.updateIlTextEdit()
+        end = time.time()
+        print "Time elapsed = ", end - start, "seconds"
 
     def updateIlTextEdit(self):
         self.ui.texteditInterlinear.clear()
         itemsCount = self.project.rowCount()
         for [filepath, annotationtree] in self.corpusreader.annotationtrees:
-            self.ui.texteditInterlinear.appendTitle(filepath)
-            annotationtree.clearFilters()
-            self.currentFilter.resetMatchObject()
-            annotationtree.appendFilter(self.currentFilter)
+            self.ui.texteditInterlinear.appendTitle(os.path.basename(filepath))
             utterancesIds = annotationtree.getFilteredUtteranceIds()
             for id in utterancesIds:
                 utterance = annotationtree.getUtteranceById(id)
@@ -107,16 +126,23 @@ class PoioAnalyzer(QtGui.QMainWindow):
                     translationId = annotationtree.newTranslationForUtteranceId(id, "")
                     translations = [ [translationId, self.strEmptyCharacter] ]
                 else:
+                    new_translations = []
                     for t in translations:
                         if t[1] == "":
-                            t[1] = self.strEmptyCharacter
+                            new_t = self.strEmptyCharacter
+                            new_translations.append = [t[0], new_t]
                         if t[0] in self.currentFilter.matchobject["translation"]:
                             offset = 0
+                            new_t = t[1]
                             for g in self.currentFilter.matchobject["translation"][t[0]]:
-                                t[1] = t[1][:g[0]+offset] + "<span style=\"color:green;\">" + t[1][g[0]+offset:]
+                                new_t = new_t[:g[0]+offset] + "<span style=\"color:green;\">" + new_t[g[0]+offset:]
                                 offset = offset + len("<span style=\"color:green;\">")
-                                t[1] = t[1][:g[1]+offset] + "</span>" + t[1][g[1]+offset:]
+                                new_t = new_t[:g[1]+offset] + "</span>" + new_t[g[1]+offset:]
                                 offset = offset + len("</span>")
+                            new_translations.append([t[0], new_t])
+                        else:
+                            new_translations.append([t[0], t[1]])
+                        translations = new_translations
                 wordIds = annotationtree.getWordIdsForUtterance(id)
                 ilElements = []
                 for wid in wordIds:
@@ -159,4 +185,14 @@ class PoioAnalyzer(QtGui.QMainWindow):
         self.currentFilter.setWordFilter(unicode(self.ui.lineeditSearchWords.text()))
         self.currentFilter.setMorphemeFilter(unicode(self.ui.lineeditSearchMorphemes.text()))
         self.currentFilter.setGlossFilter(unicode(self.ui.lineeditSearchGlosses.text()))
+        
+        self.currentFilter.setInvertedFilter(self.ui.checkboxInvert.isChecked())
+        self.currentFilter.setContainedMatches(self.ui.checkboxContained.isChecked())
+        
+        if self.ui.radiobuttonAnd.isChecked():
+            self.currentFilter.setBooleanOperation(AnnotationTreeFilter.AND)
+        elif self.ui.radiobuttonOr.isChecked():
+            self.currentFilter.setBooleanOperation(AnnotationTreeFilter.OR)
+
+        self.updateCorpusReaderFilter()
         self.updateIlTextEdit()

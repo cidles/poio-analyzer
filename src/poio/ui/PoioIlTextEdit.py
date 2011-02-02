@@ -13,6 +13,7 @@ class PoioIlTextEdit(QtGui.QTextEdit):
         self.setLineWrapMode(QtGui.QTextEdit.NoWrap)
         self.setAcceptRichText(False)
         self.setUndoRedoEnabled(False)
+        self.setStyleSheet(".match { color:green; }")
         palette = self.palette()
         palette.setColor(QtGui.QPalette.Inactive, QtGui.QPalette.Highlight, QtGui.QColor("yellow"))
         self.setPalette(palette)
