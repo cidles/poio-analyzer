@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # (C) 2009 copyright by Peter Bouda
 
-import sys, os.path, re
+import sys, os.path, re, copy
 import time
 from PyQt4 import QtCore, QtGui
 
@@ -42,7 +42,8 @@ class PoioAnalyzer(QtGui.QMainWindow):
     def updateCorpusReaderFilter(self):
         self.currentFilter.resetMatchObject()
         for [filepath, annotationtree] in self.corpusreader.annotationtrees:
-            annotationtree.updateLastFilter(self.currentFilter)
+            new_filter = copy.deepcopy(self.currentFilter)
+            annotationtree.updateLastFilter(new_filter)
         
     def updateCorpusReader(self):
         itemsCount = self.project.rowCount()
@@ -112,11 +113,12 @@ class PoioAnalyzer(QtGui.QMainWindow):
         for [filepath, annotationtree] in self.corpusreader.annotationtrees:
             self.ui.texteditInterlinear.appendTitle(os.path.basename(filepath))
             utterancesIds = annotationtree.getFilteredUtteranceIds()
+            filter = annotationtree.lastFilter()
             for id in utterancesIds:
                 utterance = annotationtree.getUtteranceById(id)
-                if id in self.currentFilter.matchobject["utterance"]:
+                if id in filter.matchobject["utterance"]:
                     offset = 0
-                    for g in self.currentFilter.matchobject["utterance"][id]:
+                    for g in filter.matchobject["utterance"][id]:
                         utterance = utterance[:g[0]+offset] + "<span style=\"color:green;\">" + utterance[g[0]+offset:]
                         offset = offset + len("<span style=\"color:green;\">")
                         utterance = utterance[:g[1]+offset] + "</span>" + utterance[g[1]+offset:]
@@ -131,10 +133,10 @@ class PoioAnalyzer(QtGui.QMainWindow):
                         if t[1] == "":
                             new_t = self.strEmptyCharacter
                             new_translations.append = [t[0], new_t]
-                        if t[0] in self.currentFilter.matchobject["translation"]:
+                        if t[0] in filter.matchobject["translation"]:
                             offset = 0
                             new_t = t[1]
-                            for g in self.currentFilter.matchobject["translation"][t[0]]:
+                            for g in filter.matchobject["translation"][t[0]]:
                                 new_t = new_t[:g[0]+offset] + "<span style=\"color:green;\">" + new_t[g[0]+offset:]
                                 offset = offset + len("<span style=\"color:green;\">")
                                 new_t = new_t[:g[1]+offset] + "</span>" + new_t[g[1]+offset:]
@@ -157,7 +159,7 @@ class PoioAnalyzer(QtGui.QMainWindow):
                         strGlosses = self.strEmptyCharacter
 
                     markWord = False
-                    if wid in self.currentFilter.matchobject["word"]:
+                    if wid in filter.matchobject["word"]:
                         markWord = True
                     ilElements.append([wid, strWord, strMorphemes, strGlosses, markWord])
 
