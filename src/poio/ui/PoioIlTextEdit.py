@@ -127,6 +127,12 @@ class PoioIlTextEdit(QtGui.QTextEdit):
         self.append("<div style=\"font-size:14pt;\">&nbsp;</div>")
         self.append("<div style=\"font-size:14pt;font-weight:bold;text-decoration:underline;\" id=\"title\" class=\"title\">" + title + "</div>")
 
+
+    def appendUtterances(self, utterances):
+        t = Template(os.path.abspath("html"), "PoioIlUtterances.html")
+        text = t.evoque(vars(), quoting="str")
+        self.append(text)
+
     def appendUtterance(self, id,  utterance, ilElements, translations):
         t = Template(os.path.abspath("html"), "PoioIlUtterance.html")
         countwords = len(ilElements)

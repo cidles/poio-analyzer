@@ -25,6 +25,8 @@ class PoioAnalyzer(QtGui.QMainWindow):
         QtGui.QMainWindow.__init__(self, *args)
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
+        self.ui.texteditInterlinear.setReadOnly(True)
+
         self.initConnects()
         self.initSettings()
         self.project = PoioProject(os.getcwd())
@@ -109,6 +111,7 @@ class PoioAnalyzer(QtGui.QMainWindow):
 
     def updateIlTextEdit(self):
         self.ui.texteditInterlinear.clear()
+        self.ui.texteditInterlinear.setReadOnly(True)
         itemsCount = self.project.rowCount()
         for [filepath, annotationtree] in self.corpusreader.annotationtrees:
             self.ui.texteditInterlinear.appendTitle(os.path.basename(filepath))
@@ -162,11 +165,9 @@ class PoioAnalyzer(QtGui.QMainWindow):
                     if wid in filter.matchobject["word"]:
                         markWord = True
                     ilElements.append([wid, strWord, strMorphemes, strGlosses, markWord])
-
+                    
                 self.ui.texteditInterlinear.appendUtterance(id,  utterance, ilElements, translations)
             
-
-        self.ui.texteditInterlinear.setReadOnly(True)
         self.ui.texteditInterlinear.scrollToAnchor("#")
 
     def findFromStart(self, exp):
