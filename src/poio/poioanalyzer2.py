@@ -39,7 +39,7 @@ class PoioAnalyzer(QtGui.QMainWindow):
         context = self.ui.declarativeviewResult.rootContext()
         context.setContextProperty("resultModel", [])
 
-        self.ui.declarativeviewResult.setSource(QtCore.QUrl.fromLocalFile("PoioIlView.qml"))
+        self.ui.declarativeviewResult.setSource(QtCore.QUrl.fromLocalFile("qml/PoioIlView.qml"))
         
     def initCorpusReader(self):
         self.corpusreader = GlossCorpusReader(utterancetierTypes = self.arrUtteranceTierTypes,
@@ -118,10 +118,11 @@ class PoioAnalyzer(QtGui.QMainWindow):
 
     def updateIlTextEdit(self):
         itemsCount = self.project.rowCount()
-        utterances = []
+        files = []
         for [filepath, annotationtree] in self.corpusreader.annotationtrees:
             utterancesIds = annotationtree.getFilteredUtteranceIds()
             filter = annotationtree.lastFilter()
+            utterances = []
             for id in utterancesIds:
                 utterance = annotationtree.getUtteranceById(id)
                 if id in filter.matchobject["utterance"]:
@@ -172,9 +173,9 @@ class PoioAnalyzer(QtGui.QMainWindow):
                     ilElements.append([wid, strWord, strMorphemes, strGlosses, markWord])
                     
                 utterances.append({ "id" : id,  "utterance" : utterance, "ilElements" : ilElements, "translations" : translations })
-        
+            files.append({ "filename" : os.path.basename(filepath), "utterances" : utterances})
         context = self.ui.declarativeviewResult.rootContext()
-        context.setContextProperty("resultModel", utterances)
+        context.setContextProperty("resultModel", files)
         #print utterances
         #self.ui.texteditInterlinear.scrollToAnchor("#")
 

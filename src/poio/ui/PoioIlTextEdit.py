@@ -138,7 +138,92 @@ class PoioIlTextEdit(QtGui.QTextEdit):
         countwords = len(ilElements)
         text = t.evoque(vars(), quoting="str")
         self.append(text)
+
+        return
+    
+        c = self.textCursor()
+        c.movePosition(QtGui.QTextCursor.End)
         
+        # create table
+        table = c.insertTable(4, countwords*2+1)
+        table.mergeCells(0, 1, 1, countwords*2)
+        format = table.format()
+        format.setBorder(0)
+        table.setFormat(format)
+        
+        # add utterace
+        utteranceCell = table.cellAt(0, 0)
+        utteranceCell.firstCursorPosition().insertText(id)
+        format = utteranceCell.format()
+        format.setFontCapitalization(QtGui.QFont.SmallCaps)
+        format.setFontWeight(QtGui.QFont.Bold)
+        format.setAnchorNames([id])
+        utteranceCell.setFormat(format)
+        
+        utteranceCell = table.cellAt(0, 1)
+        utteranceCell.firstCursorPosition().insertText(utterance)
+        format = utteranceCell.format()
+        format.setFontWeight(QtGui.QFont.Bold)
+        format.setAnchorNames([id])
+        utteranceCell.setFormat(format)
+        
+        elementCell = table.cellAt(1, 0)
+        elementCell.firstCursorPosition().insertText("words")
+        format = elementCell.format()
+        format.setFontCapitalization(QtGui.QFont.SmallCaps)
+        elementCell.setFormat(format)
+        elementCell = table.cellAt(2, 0)
+        elementCell.firstCursorPosition().insertText("morphemes")
+        format = elementCell.format()
+        format.setFontCapitalization(QtGui.QFont.SmallCaps)
+        elementCell.setFormat(format)
+        elementCell = table.cellAt(3, 0)
+        elementCell.firstCursorPosition().insertText("glosses")
+        format = elementCell.format()
+        format.setFontCapitalization(QtGui.QFont.SmallCaps)
+        elementCell.setFormat(format)
+        
+        for i in range(countwords):
+            # add word
+            elementCell = table.cellAt(1, i*2+1)
+            format = elementCell.format()
+            format.setAnchorNames([ilElements[i][0]])
+            elementCell.setFormat(format)
+            
+            elementCell = table.cellAt(1, i*2+2)
+            elementCell.firstCursorPosition().insertText(ilElements[i][1])
+            if ilElements[i][4]:
+                format = elementCell.format()
+                format.setForeground(QGui.QBrush(0,1,0))
+                elementCell.setFormat(format)
+        
+            # add morphemes
+            elementCell = table.cellAt(2, i*2+1)
+            format = elementCell.format()
+            format.setAnchorNames([ilElements[i][0]])
+            elementCell.setFormat(format)
+            
+            elementCell = table.cellAt(2, i*2+2)
+            elementCell.firstCursorPosition().insertText(ilElements[i][2])
+            if ilElements[i][4]:
+                format = elementCell.format()
+                format.setForeground(QGui.QBrush(0,1,0))
+                elementCell.setFormat(format)
+
+            # add glosses
+            elementCell = table.cellAt(3, i*2+1)
+            format = elementCell.format()
+            format.setAnchorNames([ilElements[i][0]])
+            elementCell.setFormat(format)
+            
+            elementCell = table.cellAt(3, i*2+2)
+            elementCell.firstCursorPosition().insertText(ilElements[i][3])
+            if ilElements[i][4]:
+                format = elementCell.format()
+                format.setForeground(QGui.QBrush(0,1,0))
+                elementCell.setFormat(format)
+
+
     def getAnnotationDict(self):
         root = self.document().rootFrame()
         stringDocumenttext = unicode(self.document().toPlainText())

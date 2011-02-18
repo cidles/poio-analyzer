@@ -5,14 +5,11 @@ Rectangle {
     color: "#ffffff"
     
     Component {
-        id: viewDelegate
-        Item {
-            height: utterance.height + words.height + translations.height + 10
-
-            Rectangle {
+        id: utterancesDelegate
+        Column {
+            Row {
                 id: utterance
-                height: utt.height
-                width: preUtt.width + utt.width
+                spacing: 10
                 Text {
                     id: preUtt
                     text: modelData.id
@@ -22,20 +19,17 @@ Rectangle {
                 }
                 Text {
                     id: utt
-                    anchors.left: preUtt.right
                     anchors.margins: 5
+                    font.weight: Font.Bold
                     text: modelData.utterance
                 }
             }
 
             Row {
                 id: words
-                anchors.top: utterance.bottom
-                spacing: 10
+                spacing: 20
                 
-                Rectangle {
-                    height: word.height + morpheme.height + gloss.height
-                    width: Math.max(word.width, morpheme.width, gloss.width) + 10
+                Column {
                     Text {
                         id: word
                         text: "words"
@@ -44,24 +38,20 @@ Rectangle {
                     }
                     Text {
                         id: morpheme
-                        anchors.top: word.bottom
                         text: "morph"
                         font.capitalization: Font.SmallCaps
                         color: "#a0a0a0"
                     }
                     Text {
                         id: gloss
-                        anchors.top: morpheme.bottom
                         text: "gloss"
                         font.capitalization: Font.SmallCaps
                         color: "#a0a0a0"
                     }
                 }
-                
+            
                 Repeater { model: modelData.ilElements
-                    Rectangle {
-                        height: word.height + morpheme.height + gloss.height
-                        width: Math.max(word.width, morpheme.width, gloss.width)
+                    Column {
                         Text {
                             id: word
                             text: modelData[1]
@@ -69,39 +59,32 @@ Rectangle {
                         }
                         Text {
                             id: morpheme
-                            anchors.top: word.bottom
                             text: modelData[2]
                             font.italic: true
                             color: modelData[4] ? "green" : "black"
                         }
                         Text {
                             id: gloss
-                            anchors.top: morpheme.bottom
                             text: modelData[3]
                             color: modelData[4] ? "green" : "black"
                         }
                     }
                 }
             }
-            
+    
             Column {
                 id: translations
-                anchors.top: words.bottom
                 Repeater { model: modelData.translations
-                    Rectangle {
-                        height: trans.height
-                        width: preTrans.width + trans.width
+                    Row {
+                        spacing: 20
                         Text {
                             id: preTrans
                             text: "trans"
-                            anchors.margins: 5
                             color: "#a0a0a0"
                             font.capitalization: Font.SmallCaps
                         }
                         Text {
                             id: trans
-                            anchors.left: preTrans.right
-                            anchors.margins: 5
                             font.italic: true
                             text: modelData[1]
                         }
@@ -110,12 +93,29 @@ Rectangle {
             }
         }
     }
-        
+
     ListView {
         anchors.fill: parent
-        orientation: ListView.Vertical
-        
+        spacing: 10
+        anchors.margins: 10
+
         model: resultModel
-        delegate: viewDelegate
+        delegate:
+            Column {
+                spacing: 10
+                Text {
+                    font.underline: true
+                    font.weight: Font.Bold
+                    font.pointSize: 14
+                    text: modelData.filename
+                }
+                Column {
+                    spacing: 10
+                    Repeater {
+                        model: modelData.utterances
+                        delegate: utterancesDelegate
+                    }
+                }
+            }
     }
 }
