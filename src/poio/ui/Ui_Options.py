@@ -2,36 +2,43 @@
 
 # Form implementation generated from reading ui file 'Options.ui'
 #
-# Created: Wed Mar  2 14:42:44 2011
-#      by: PySide uic UI code generator
+# Created: Wed Mar 02 16:05:01 2011
+#      by: PyQt4 UI code generator 4.8.3
 #
 # WARNING! All changes made in this file will be lost!
 
-from PySide import QtCore, QtGui
+from PyQt4 import QtCore, QtGui
+
+try:
+    _fromUtf8 = QtCore.QString.fromUtf8
+except AttributeError:
+    _fromUtf8 = lambda s: s
 
 class Ui_DialogOptions(object):
     def setupUi(self, DialogOptions):
-        DialogOptions.setObjectName("DialogOptions")
+        DialogOptions.setObjectName(_fromUtf8("DialogOptions"))
         DialogOptions.setWindowModality(QtCore.Qt.ApplicationModal)
         DialogOptions.resize(750, 550)
+        DialogOptions.setLocale(QtCore.QLocale(QtCore.QLocale.English, QtCore.QLocale.UnitedStates))
         DialogOptions.setModal(True)
         self.buttonBox = QtGui.QDialogButtonBox(DialogOptions)
         self.buttonBox.setGeometry(QtCore.QRect(390, 500, 341, 32))
         self.buttonBox.setOrientation(QtCore.Qt.Horizontal)
         self.buttonBox.setStandardButtons(QtGui.QDialogButtonBox.Cancel|QtGui.QDialogButtonBox.Ok)
-        self.buttonBox.setObjectName("buttonBox")
+        self.buttonBox.setObjectName(_fromUtf8("buttonBox"))
         self.horizontalLayoutWidget = QtGui.QWidget(DialogOptions)
         self.horizontalLayoutWidget.setGeometry(QtCore.QRect(9, 9, 731, 481))
-        self.horizontalLayoutWidget.setObjectName("horizontalLayoutWidget")
+        self.horizontalLayoutWidget.setObjectName(_fromUtf8("horizontalLayoutWidget"))
         self.horizontalLayout = QtGui.QHBoxLayout(self.horizontalLayoutWidget)
-        self.horizontalLayout.setObjectName("horizontalLayout")
+        self.horizontalLayout.setMargin(0)
+        self.horizontalLayout.setObjectName(_fromUtf8("horizontalLayout"))
         self.treeviewOptionAreas = KuraOptionsTreeView(self.horizontalLayoutWidget)
         sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Fixed, QtGui.QSizePolicy.Expanding)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.treeviewOptionAreas.sizePolicy().hasHeightForWidth())
         self.treeviewOptionAreas.setSizePolicy(sizePolicy)
-        self.treeviewOptionAreas.setObjectName("treeviewOptionAreas")
+        self.treeviewOptionAreas.setObjectName(_fromUtf8("treeviewOptionAreas"))
         self.horizontalLayout.addWidget(self.treeviewOptionAreas)
         self.widgetCurrentOptions = QtGui.QWidget(self.horizontalLayoutWidget)
         sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Preferred, QtGui.QSizePolicy.Preferred)
@@ -39,12 +46,12 @@ class Ui_DialogOptions(object):
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.widgetCurrentOptions.sizePolicy().hasHeightForWidth())
         self.widgetCurrentOptions.setSizePolicy(sizePolicy)
-        self.widgetCurrentOptions.setObjectName("widgetCurrentOptions")
+        self.widgetCurrentOptions.setObjectName(_fromUtf8("widgetCurrentOptions"))
         self.horizontalLayout.addWidget(self.widgetCurrentOptions)
 
         self.retranslateUi(DialogOptions)
-        QtCore.QObject.connect(self.buttonBox, QtCore.SIGNAL("accepted()"), DialogOptions.accept)
-        QtCore.QObject.connect(self.buttonBox, QtCore.SIGNAL("rejected()"), DialogOptions.reject)
+        QtCore.QObject.connect(self.buttonBox, QtCore.SIGNAL(_fromUtf8("accepted()")), DialogOptions.accept)
+        QtCore.QObject.connect(self.buttonBox, QtCore.SIGNAL(_fromUtf8("rejected()")), DialogOptions.reject)
         QtCore.QMetaObject.connectSlotsByName(DialogOptions)
 
     def retranslateUi(self, DialogOptions):

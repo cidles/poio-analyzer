@@ -2,7 +2,7 @@
 # (C) 2009 copyright by Peter Bouda
 
 import os
-from PySide import QtCore
+from PyQt4 import QtCore
 from poio.poiofile import PoioFile
 
 class PoioProject(QtCore.QAbstractListModel):

@@ -3,8 +3,7 @@
 
 import sys, os.path, re, copy
 import time
-from PySide import QtCore, QtGui
-from PySide.QtDeclarative import QDeclarativeView
+from PyQt4 import QtCore, QtGui
 
 from pyannotation.toolbox.data import ToolboxAnnotationFileObject
 from pyannotation.elan.data import EafAnnotationFileObject
@@ -13,11 +12,10 @@ import pyannotation.data
 
 from pyannotation.corpusreader import GlossCorpusReader
 
-from poio.ui.Ui_MainAnalyzerQML import Ui_MainWindow
-#from poio.ui.PoioIlTextEdit import PoioIlTextEdit
-from poio.ui.Ui_TabWidgetSearch import Ui_TabWidgetSearch
+from poio.ui.Ui_MainAnalyzer import Ui_MainWindow
+from poio.ui.PoioIlTextEdit import PoioIlTextEdit
 
-from poio.poioproject2 import PoioProject
+from poio.poioproject import PoioProject
 
 
 class PoioAnalyzer(QtGui.QMainWindow):
@@ -27,6 +25,7 @@ class PoioAnalyzer(QtGui.QMainWindow):
         QtGui.QMainWindow.__init__(self, *args)
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
+        self.ui.texteditInterlinear.setReadOnly(True)
 
         self.initConnects()
         self.initSettings()
@@ -34,15 +33,6 @@ class PoioAnalyzer(QtGui.QMainWindow):
         self.ui.listFiles.setModel(self.project)
         self.initCorpusReader()
         self.currentFilter = AnnotationTreeFilter()
-        
-        # init DeclarativeView
-        self.ui.declarativeviewResult.setResizeMode(QDeclarativeView.SizeRootObjectToView)
-        context = self.ui.declarativeviewResult.rootContext()
-        context.setContextProperty("resultModel", [])
-
-        self.ui.declarativeviewResult.setSource(QtCore.QUrl.fromLocalFile("qml/PoioIlView.qml"))
-
-        self.addSearchTab()
         
     def initCorpusReader(self):
         self.corpusreader = GlossCorpusReader(utterancetierTypes = self.arrUtteranceTierTypes,
@@ -79,36 +69,36 @@ class PoioAnalyzer(QtGui.QMainWindow):
         
         # Filter and Search
         QtCore.QObject.connect(self.ui.buttonSearch, QtCore.SIGNAL("pressed()"), self.applyFilter)
-        #QtCore.QObject.connect(self.ui.lineeditSearchUtterances, QtCore.SIGNAL("returnPressed()"), self.applyFilter)
-        #QtCore.QObject.connect(self.ui.lineeditSearchWords, QtCore.SIGNAL("returnPressed()"), self.applyFilter)
-        #QtCore.QObject.connect(self.ui.lineeditSearchMorphemes, QtCore.SIGNAL("returnPressed()"), self.applyFilter)
-        #QtCore.QObject.connect(self.ui.lineeditSearchGlosses, QtCore.SIGNAL("returnPressed()"), self.applyFilter)
-        #QtCore.QObject.connect(self.ui.lineeditSearchTranslations, QtCore.SIGNAL("returnPressed()"), self.applyFilter)
+        QtCore.QObject.connect(self.ui.lineeditSearchUtterances, QtCore.SIGNAL("returnPressed()"), self.applyFilter)
+        QtCore.QObject.connect(self.ui.lineeditSearchWords, QtCore.SIGNAL("returnPressed()"), self.applyFilter)
+        QtCore.QObject.connect(self.ui.lineeditSearchMorphemes, QtCore.SIGNAL("returnPressed()"), self.applyFilter)
+        QtCore.QObject.connect(self.ui.lineeditSearchGlosses, QtCore.SIGNAL("returnPressed()"), self.applyFilter)
+        QtCore.QObject.connect(self.ui.lineeditSearchTranslations, QtCore.SIGNAL("returnPressed()"), self.applyFilter)
         
         # Quick Search
-        #QtCore.QObject.connect(self.ui.actionQuickSearch, QtCore.SIGNAL("triggered()"), self.ui.lineeditQuickSearch.setFocus)
-        #QtCore.QObject.connect(self.ui.lineeditQuickSearch, QtCore.SIGNAL("textChanged(const QString &)"), self.findFromStart)
-        #QtCore.QObject.connect(self.ui.lineeditQuickSearch, QtCore.SIGNAL("returnPressed()"), self.findNext)
+        QtCore.QObject.connect(self.ui.actionQuickSearch, QtCore.SIGNAL("triggered()"), self.ui.lineeditQuickSearch.setFocus)
+        QtCore.QObject.connect(self.ui.lineeditQuickSearch, QtCore.SIGNAL("textChanged(const QString &)"), self.findFromStart)
+        QtCore.QObject.connect(self.ui.lineeditQuickSearch, QtCore.SIGNAL("returnPressed()"), self.findNext)
 
     def initSettings(self):
         QtCore.QCoreApplication.setOrganizationName("Interdisciplinary Centre for Social and Language Documentation");
         QtCore.QCoreApplication.setOrganizationDomain("cidles.eu");
         QtCore.QCoreApplication.setApplicationName("PoioAnalyzer");
         settings = QtCore.QSettings()
-        self.strMorphemeSeperator = unicode(settings.value("Ann/MorphSep", "-"))
-        self.strGlossSepereator = unicode(settings.value("Ann/GlossSep",  ":"))
-        self.strEmptyCharacter = unicode(settings.value("Ann/EmptyChar",  "#"))
-        self.arrUtteranceTierTypes = unicode(settings.value("Ann/UttTierTypeRefs", u"utterance|utterances|Äußerung|Äußerungen")).split("|")
-        self.arrWordTierTypes = unicode(settings.value("Ann/WordTierTypeRefs", u"words|word|Wort|Worte|Wörter")).split("|")
-        self.arrMorphemeTierTypes = unicode(settings.value("Ann/MorphTierTypeRefs", u"morpheme|morphemes|Morphem|Morpheme")).split("|")
-        self.arrGlossTierTypes = unicode(settings.value("Ann/GlossTierTypeRefs",  u"glosses|gloss|Glossen|Gloss|Glosse")).split("|")
-        self.arrTranslationTierTypes = unicode(settings.value("Ann/TransTierTypeRefs", u"translation|translations|Übersetzung|Übersetzungen")).split("|")
+        self.strMorphemeSeperator = unicode(settings.value("Ann/MorphSep", QtCore.QVariant("-")).toString())
+        self.strGlossSepereator = unicode(settings.value("Ann/GlossSep",  QtCore.QVariant(":")).toString())
+        self.strEmptyCharacter = unicode(settings.value("Ann/EmptyChar",  QtCore.QVariant("#")).toString())
+        self.arrUtteranceTierTypes = unicode(settings.value("Ann/UttTierTypeRefs",  QtCore.QVariant(u"utterance|utterances|Äußerung|Äußerungen")).toString()).split("|")
+        self.arrWordTierTypes = unicode(settings.value("Ann/WordTierTypeRefs",  QtCore.QVariant(u"words|word|Wort|Worte|Wörter")).toString()).split("|")
+        self.arrMorphemeTierTypes = unicode(settings.value("Ann/MorphTierTypeRefs",  QtCore.QVariant(u"morpheme|morphemes|Morphem|Morpheme")).toString()).split("|")
+        self.arrGlossTierTypes = unicode(settings.value("Ann/GlossTierTypeRefs",  QtCore.QVariant(u"glosses|gloss|Glossen|Gloss|Glosse")).toString()).split("|")
+        self.arrTranslationTierTypes = unicode(settings.value("Ann/TransTierTypeRefs",  QtCore.QVariant(u"translation|translations|Übersetzung|Übersetzungen")).toString()).split("|")
 
     def removeFiles(self):
         pass
 
     def addFiles(self):
-        filepaths, types = QtGui.QFileDialog.getOpenFileNames(self, self.tr("Add Files"), "", self.tr("Elan files (*.eaf);;Toolbox files (*.txt);;All files (*.*)"))
+        filepaths = QtGui.QFileDialog.getOpenFileNames(self, self.tr("Add Files"), "", self.tr("Elan files (*.eaf);;Toolbox files (*.txt);;All files (*.*)"))
         self.project.addFilePaths(filepaths)
         start = time.time()
         self.updateCorpusReader()
@@ -120,12 +110,13 @@ class PoioAnalyzer(QtGui.QMainWindow):
         print "Time elapsed = ", end - start, "seconds"
 
     def updateIlTextEdit(self):
+        self.ui.texteditInterlinear.clear()
+        self.ui.texteditInterlinear.setReadOnly(True)
         itemsCount = self.project.rowCount()
-        files = []
         for [filepath, annotationtree] in self.corpusreader.annotationtrees:
+            self.ui.texteditInterlinear.appendTitle(os.path.basename(filepath))
             utterancesIds = annotationtree.getFilteredUtteranceIds()
             filter = annotationtree.lastFilter()
-            utterances = []
             for id in utterancesIds:
                 utterance = annotationtree.getUtteranceById(id)
                 if id in filter.matchobject["utterance"]:
@@ -175,24 +166,21 @@ class PoioAnalyzer(QtGui.QMainWindow):
                         markWord = True
                     ilElements.append([wid, strWord, strMorphemes, strGlosses, markWord])
                     
-                utterances.append({ "id" : id,  "utterance" : utterance, "ilElements" : ilElements, "translations" : translations })
-            files.append({ "filename" : os.path.basename(filepath), "utterances" : utterances})
-        context = self.ui.declarativeviewResult.rootContext()
-        context.setContextProperty("resultModel", files)
-        #print utterances
-        #self.ui.texteditInterlinear.scrollToAnchor("#")
+                self.ui.texteditInterlinear.appendUtterance(id,  utterance, ilElements, translations)
+            
+        self.ui.texteditInterlinear.scrollToAnchor("#")
 
-    #def findFromStart(self, exp):
-    #    self.ui.texteditInterlinear.setTextCursor(QtGui.QTextCursor(self.ui.texteditInterlinear.document()))
-    #    if not self.ui.texteditInterlinear.find(exp) and exp != "":
-    #        self.statusBar().showMessage(self.tr("No match found."), 2000)
+    def findFromStart(self, exp):
+        self.ui.texteditInterlinear.setTextCursor(QtGui.QTextCursor(self.ui.texteditInterlinear.document()))
+        if not self.ui.texteditInterlinear.find(exp) and exp != "":
+            self.statusBar().showMessage(self.tr("No match found."), 2000)
         
-    #def findNext(self):
-    #    found = self.ui.texteditInterlinear.find(self.ui.lineeditQuickSearch.text())
-    #    if not found:
-    #        self.statusBar().showMessage(self.tr("Restarting search from beginning of document."), 2000)
-    #        found = self.findFromStart(self.ui.lineeditQuickSearch.text())
-    #    return found
+    def findNext(self):
+        found = self.ui.texteditInterlinear.find(self.ui.lineeditQuickSearch.text())
+        if not found:
+            self.statusBar().showMessage(self.tr("Restarting search from beginning of document."), 2000)
+            found = self.findFromStart(self.ui.lineeditQuickSearch.text())
+        return found
     
     def applyFilter(self):
         self.currentFilter.setUtteranceFilter(unicode(self.ui.lineeditSearchUtterances.text()))
@@ -211,18 +199,3 @@ class PoioAnalyzer(QtGui.QMainWindow):
 
         self.updateCorpusReaderFilter()
         self.updateIlTextEdit()
-        
-    def addSearchTab(self):
-        nrOfNewTab = self.ui.tabWidget.count()
-        widgetSearch = QtGui.QWidget()
-        ui = Ui_TabWidgetSearch()
-        ui.setupUi(widgetSearch)
-        print "%s_%i" % (widgetSearch.objectName(), nrOfNewTab)
-        widgetSearch.setObjectName("%s_%i" % (widgetSearch.objectName(), nrOfNewTab))
-        for childWidget in widgetSearch.findChildren(QtGui.QWidget, "lineeditSearchUtterances"):
-            print "%s_%i" % (childWidget.objectName(), nrOfNewTab)
-            childWidget.setObjectName("%s_%i" % (childWidget.objectName(), nrOfNewTab))
-        print self.ui.tabWidget.insertTab(nrOfNewTab - 1, widgetSearch, "Search %i" % nrOfNewTab)
-            
-        
-        

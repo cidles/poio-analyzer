@@ -6,7 +6,7 @@
 #
 
 import sys, os.path
-from PySide import QtCore, QtGui
+from PyQt4 import QtCore, QtGui
 
 def main():
     poio_script = sys.argv[0]
@@ -29,7 +29,7 @@ def main():
         os.chdir(share_dir)
 
     # now load the main class
-    from poio.poioanalyzer2 import PoioAnalyzer
+    from poio.poioanalyzer import PoioAnalyzer
 
     app = QtGui.QApplication(sys.argv)
 
