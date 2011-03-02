@@ -2,12 +2,12 @@
 
 # Form implementation generated from reading ui file 'MainAnalyzer.ui'
 #
-# Created: Wed Feb  2 17:03:18 2011
-#      by: PyQt4 UI code generator 4.7.4
+# Created: Wed Mar  2 14:42:43 2011
+#      by: PySide uic UI code generator
 #
 # WARNING! All changes made in this file will be lost!
 
-from PyQt4 import QtCore, QtGui
+from PySide import QtCore, QtGui
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -133,7 +133,6 @@ class Ui_MainWindow(object):
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.tabWidget.sizePolicy().hasHeightForWidth())
         self.tabWidget.setSizePolicy(sizePolicy)
-        self.tabWidget.setLocale(QtCore.QLocale(QtCore.QLocale.English, QtCore.QLocale.UnitedStates))
         self.tabWidget.setObjectName("tabWidget")
         self.tab = QtGui.QWidget()
         self.tab.setObjectName("tab")
@@ -251,7 +250,6 @@ class Ui_MainWindow(object):
         self.buttonAlignCenter.setObjectName("buttonAlignCenter")
         self.gridLayout.addWidget(self.buttonAlignCenter, 12, 6, 1, 1)
         self.buttonAlignLeft = QtGui.QToolButton(self.centralWidget)
-        self.buttonAlignLeft.setLocale(QtCore.QLocale(QtCore.QLocale.English, QtCore.QLocale.UnitedStates))
         icon1 = QtGui.QIcon()
         icon1.addPixmap(QtGui.QPixmap(":/images/pixmaps/alignleft.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.buttonAlignLeft.setIcon(icon1)

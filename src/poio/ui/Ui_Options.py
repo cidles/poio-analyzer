@@ -2,19 +2,18 @@
 
 # Form implementation generated from reading ui file 'Options.ui'
 #
-# Created: Wed Feb  2 17:03:18 2011
-#      by: PyQt4 UI code generator 4.7.4
+# Created: Wed Mar  2 14:42:44 2011
+#      by: PySide uic UI code generator
 #
 # WARNING! All changes made in this file will be lost!
 
-from PyQt4 import QtCore, QtGui
+from PySide import QtCore, QtGui
 
 class Ui_DialogOptions(object):
     def setupUi(self, DialogOptions):
         DialogOptions.setObjectName("DialogOptions")
         DialogOptions.setWindowModality(QtCore.Qt.ApplicationModal)
         DialogOptions.resize(750, 550)
-        DialogOptions.setLocale(QtCore.QLocale(QtCore.QLocale.English, QtCore.QLocale.UnitedStates))
         DialogOptions.setModal(True)
         self.buttonBox = QtGui.QDialogButtonBox(DialogOptions)
         self.buttonBox.setGeometry(QtCore.QRect(390, 500, 341, 32))

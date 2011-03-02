@@ -2,18 +2,17 @@
 
 # Form implementation generated from reading ui file 'MainWindow.ui'
 #
-# Created: Wed Feb  2 17:03:18 2011
-#      by: PyQt4 UI code generator 4.7.4
+# Created: Wed Mar  2 14:42:43 2011
+#      by: PySide uic UI code generator
 #
 # WARNING! All changes made in this file will be lost!
 
-from PyQt4 import QtCore, QtGui
+from PySide import QtCore, QtGui
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(977, 747)
-        MainWindow.setLocale(QtCore.QLocale(QtCore.QLocale.English, QtCore.QLocale.UnitedStates))
         self.centralWidget = QtGui.QWidget(MainWindow)
         self.centralWidget.setObjectName("centralWidget")
         self.verticalLayout = QtGui.QVBoxLayout(self.centralWidget)
@@ -149,7 +148,6 @@ class Ui_MainWindow(object):
         self.texteditInterlinear.setObjectName("texteditInterlinear")
         self.horizontalLayoutEditArea.addWidget(self.texteditInterlinear)
         self.verticalLayoutMain.addLayout(self.horizontalLayoutEditArea)
-        self.verticalLayoutMain.setStretch(2, 1)
         self.verticalLayout.addLayout(self.verticalLayoutMain)
         MainWindow.setCentralWidget(self.centralWidget)
         self.statusBar = QtGui.QStatusBar(MainWindow)
@@ -167,7 +165,7 @@ class Ui_MainWindow(object):
         MainWindow.setMenuBar(self.menuBar)
         self.toolBar = QtGui.QToolBar(MainWindow)
         self.toolBar.setObjectName("toolBar")
-        MainWindow.addToolBar(QtCore.Qt.ToolBarArea(QtCore.Qt.TopToolBarArea), self.toolBar)
+        MainWindow.addToolBar(QtCore.Qt.TopToolBarArea, self.toolBar)
         self.actionOpen = QtGui.QAction(MainWindow)
         icon4 = QtGui.QIcon()
         icon4.addPixmap(QtGui.QPixmap(":/images/pixmaps/projectopen.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)

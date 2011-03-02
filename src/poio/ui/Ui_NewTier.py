@@ -2,18 +2,17 @@
 
 # Form implementation generated from reading ui file 'NewTier.ui'
 #
-# Created: Wed Feb  2 17:03:18 2011
-#      by: PyQt4 UI code generator 4.7.4
+# Created: Wed Mar  2 14:42:43 2011
+#      by: PySide uic UI code generator
 #
 # WARNING! All changes made in this file will be lost!
 
-from PyQt4 import QtCore, QtGui
+from PySide import QtCore, QtGui
 
 class Ui_DialogNewTier(object):
     def setupUi(self, DialogNewTier):
         DialogNewTier.setObjectName("DialogNewTier")
         DialogNewTier.resize(414, 251)
-        DialogNewTier.setLocale(QtCore.QLocale(QtCore.QLocale.English, QtCore.QLocale.UnitedStates))
         self.buttonBox = QtGui.QDialogButtonBox(DialogNewTier)
         self.buttonBox.setGeometry(QtCore.QRect(60, 200, 341, 32))
         self.buttonBox.setOrientation(QtCore.Qt.Horizontal)
@@ -43,7 +42,6 @@ class Ui_DialogNewTier(object):
         self.label_4.setObjectName("label_4")
         self.gridLayout.addWidget(self.label_4, 3, 0, 1, 1)
         self.labelParentTier = QtGui.QLabel(self.gridLayoutWidget)
-        self.labelParentTier.setText("")
         self.labelParentTier.setObjectName("labelParentTier")
         self.gridLayout.addWidget(self.labelParentTier, 0, 1, 1, 1)
         self.lineeditDefaultLocale = QtGui.QLineEdit(self.gridLayoutWidget)

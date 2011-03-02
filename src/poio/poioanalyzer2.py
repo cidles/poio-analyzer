@@ -14,7 +14,8 @@ import pyannotation.data
 from pyannotation.corpusreader import GlossCorpusReader
 
 from poio.ui.Ui_MainAnalyzerQML import Ui_MainWindow
-from poio.ui.PoioIlTextEdit import PoioIlTextEdit
+#from poio.ui.PoioIlTextEdit import PoioIlTextEdit
+from poio.ui.Ui_TabWidgetSearch import Ui_TabWidgetSearch
 
 from poio.poioproject2 import PoioProject
 
@@ -40,6 +41,8 @@ class PoioAnalyzer(QtGui.QMainWindow):
         context.setContextProperty("resultModel", [])
 
         self.ui.declarativeviewResult.setSource(QtCore.QUrl.fromLocalFile("qml/PoioIlView.qml"))
+
+        self.addSearchTab()
         
     def initCorpusReader(self):
         self.corpusreader = GlossCorpusReader(utterancetierTypes = self.arrUtteranceTierTypes,
@@ -76,11 +79,11 @@ class PoioAnalyzer(QtGui.QMainWindow):
         
         # Filter and Search
         QtCore.QObject.connect(self.ui.buttonSearch, QtCore.SIGNAL("pressed()"), self.applyFilter)
-        QtCore.QObject.connect(self.ui.lineeditSearchUtterances, QtCore.SIGNAL("returnPressed()"), self.applyFilter)
-        QtCore.QObject.connect(self.ui.lineeditSearchWords, QtCore.SIGNAL("returnPressed()"), self.applyFilter)
-        QtCore.QObject.connect(self.ui.lineeditSearchMorphemes, QtCore.SIGNAL("returnPressed()"), self.applyFilter)
-        QtCore.QObject.connect(self.ui.lineeditSearchGlosses, QtCore.SIGNAL("returnPressed()"), self.applyFilter)
-        QtCore.QObject.connect(self.ui.lineeditSearchTranslations, QtCore.SIGNAL("returnPressed()"), self.applyFilter)
+        #QtCore.QObject.connect(self.ui.lineeditSearchUtterances, QtCore.SIGNAL("returnPressed()"), self.applyFilter)
+        #QtCore.QObject.connect(self.ui.lineeditSearchWords, QtCore.SIGNAL("returnPressed()"), self.applyFilter)
+        #QtCore.QObject.connect(self.ui.lineeditSearchMorphemes, QtCore.SIGNAL("returnPressed()"), self.applyFilter)
+        #QtCore.QObject.connect(self.ui.lineeditSearchGlosses, QtCore.SIGNAL("returnPressed()"), self.applyFilter)
+        #QtCore.QObject.connect(self.ui.lineeditSearchTranslations, QtCore.SIGNAL("returnPressed()"), self.applyFilter)
         
         # Quick Search
         #QtCore.QObject.connect(self.ui.actionQuickSearch, QtCore.SIGNAL("triggered()"), self.ui.lineeditQuickSearch.setFocus)
@@ -179,17 +182,17 @@ class PoioAnalyzer(QtGui.QMainWindow):
         #print utterances
         #self.ui.texteditInterlinear.scrollToAnchor("#")
 
-    def findFromStart(self, exp):
-        self.ui.texteditInterlinear.setTextCursor(QtGui.QTextCursor(self.ui.texteditInterlinear.document()))
-        if not self.ui.texteditInterlinear.find(exp) and exp != "":
-            self.statusBar().showMessage(self.tr("No match found."), 2000)
+    #def findFromStart(self, exp):
+    #    self.ui.texteditInterlinear.setTextCursor(QtGui.QTextCursor(self.ui.texteditInterlinear.document()))
+    #    if not self.ui.texteditInterlinear.find(exp) and exp != "":
+    #        self.statusBar().showMessage(self.tr("No match found."), 2000)
         
-    def findNext(self):
-        found = self.ui.texteditInterlinear.find(self.ui.lineeditQuickSearch.text())
-        if not found:
-            self.statusBar().showMessage(self.tr("Restarting search from beginning of document."), 2000)
-            found = self.findFromStart(self.ui.lineeditQuickSearch.text())
-        return found
+    #def findNext(self):
+    #    found = self.ui.texteditInterlinear.find(self.ui.lineeditQuickSearch.text())
+    #    if not found:
+    #        self.statusBar().showMessage(self.tr("Restarting search from beginning of document."), 2000)
+    #        found = self.findFromStart(self.ui.lineeditQuickSearch.text())
+    #    return found
     
     def applyFilter(self):
         self.currentFilter.setUtteranceFilter(unicode(self.ui.lineeditSearchUtterances.text()))
@@ -208,3 +211,18 @@ class PoioAnalyzer(QtGui.QMainWindow):
 
         self.updateCorpusReaderFilter()
         self.updateIlTextEdit()
+        
+    def addSearchTab(self):
+        nrOfNewTab = self.ui.tabWidget.count()
+        widgetSearch = QtGui.QWidget()
+        ui = Ui_TabWidgetSearch()
+        ui.setupUi(widgetSearch)
+        print "%s_%i" % (widgetSearch.objectName(), nrOfNewTab)
+        widgetSearch.setObjectName("%s_%i" % (widgetSearch.objectName(), nrOfNewTab))
+        for childWidget in widgetSearch.findChildren(QtGui.QWidget, "lineeditSearchUtterances"):
+            print "%s_%i" % (childWidget.objectName(), nrOfNewTab)
+            childWidget.setObjectName("%s_%i" % (childWidget.objectName(), nrOfNewTab))
+        print self.ui.tabWidget.insertTab(nrOfNewTab - 1, widgetSearch, "Search %i" % nrOfNewTab)
+            
+        
+        
