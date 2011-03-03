@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# (C) 2009 copyright by Peter Bouda
+# (C) 2011 copyright by Peter Bouda
 
 import sys, os.path, re, copy
 import time
@@ -99,14 +99,14 @@ class PoioAnalyzer(QtGui.QMainWindow):
         QtCore.QCoreApplication.setOrganizationDomain("cidles.eu");
         QtCore.QCoreApplication.setApplicationName("PoioAnalyzer");
         settings = QtCore.QSettings()
-        self.strMorphemeSeperator = unicode(settings.value("Ann/MorphSep", "-"))
-        self.strGlossSepereator = unicode(settings.value("Ann/GlossSep",  ":"))
-        self.strEmptyCharacter = unicode(settings.value("Ann/EmptyChar",  "#"))
-        self.arrUtteranceTierTypes = unicode(settings.value("Ann/UttTierTypeRefs", u"utterance|utterances|Äußerung|Äußerungen")).split("|")
-        self.arrWordTierTypes = unicode(settings.value("Ann/WordTierTypeRefs", u"words|word|Wort|Worte|Wörter")).split("|")
-        self.arrMorphemeTierTypes = unicode(settings.value("Ann/MorphTierTypeRefs", u"morpheme|morphemes|Morphem|Morpheme")).split("|")
-        self.arrGlossTierTypes = unicode(settings.value("Ann/GlossTierTypeRefs",  u"glosses|gloss|Glossen|Gloss|Glosse")).split("|")
-        self.arrTranslationTierTypes = unicode(settings.value("Ann/TransTierTypeRefs", u"translation|translations|Übersetzung|Übersetzungen")).split("|")
+        self.strMorphemeSeperator = unicode(settings.value("Ann/MorphSep", "-").toString())
+        self.strGlossSepereator = unicode(settings.value("Ann/GlossSep",  ":").toString())
+        self.strEmptyCharacter = unicode(settings.value("Ann/EmptyChar",  "#").toString())
+        self.arrUtteranceTierTypes = unicode(settings.value("Ann/UttTierTypeRefs", u"utterance|utterances|Äußerung|Äußerungen").toString()).split("|")
+        self.arrWordTierTypes = unicode(settings.value("Ann/WordTierTypeRefs", u"words|word|Wort|Worte|Wörter").toString()).split("|")
+        self.arrMorphemeTierTypes = unicode(settings.value("Ann/MorphTierTypeRefs", u"morpheme|morphemes|Morphem|Morpheme").toString()).split("|")
+        self.arrGlossTierTypes = unicode(settings.value("Ann/GlossTierTypeRefs",  u"glosses|gloss|Glossen|Gloss|Glosse").toString()).split("|")
+        self.arrTranslationTierTypes = unicode(settings.value("Ann/TransTierTypeRefs", u"translation|translations|Übersetzung|Übersetzungen").toString()).split("|")
 
     def removeFiles(self):
         countRemoved = 0
@@ -123,6 +123,7 @@ class PoioAnalyzer(QtGui.QMainWindow):
         #filepaths, types = QtGui.QFileDialog.getOpenFileNames(self, self.tr("Add Files"), "", self.tr("Elan files (*.eaf);;Toolbox files (*.txt);;All files (*.*)"))
         # PyQt version
         filepaths = QtGui.QFileDialog.getOpenFileNames(self, self.tr("Add Files"), "", self.tr("Elan files (*.eaf);;Toolbox files (*.txt);;All files (*.*)"))
+        #filepaths = QtGui.QFileDialog.getOpenFileNames(self, self.tr("Add Files"), "", self.tr("Elan files (*.eaf);;Toolbox files (*.txt);;Kura files (*.xml);;All files (*.*)"))
         self.project.addFilePaths(filepaths)
         start = time.time()
         self.updateCorpusReader()
@@ -158,7 +159,7 @@ class PoioAnalyzer(QtGui.QMainWindow):
                     for t in translations:
                         if t[1] == "":
                             new_t = self.strEmptyCharacter
-                            new_translations.append = [t[0], new_t]
+                            new_translations.append([t[0], new_t])
                         if t[0] in filter.matchobject["translation"]:
                             offset = 0
                             new_t = t[1]
@@ -178,25 +179,27 @@ class PoioAnalyzer(QtGui.QMainWindow):
                     if strWord == "":
                         strWord = self.strEmptyCharacter
                     strMorphemes = annotationtree.getMorphemeStringForWord(wid)
+                    #print strMorphemes
                     if strMorphemes == "":
                         strMorphemes = strWord
                     strGlosses = annotationtree.getGlossStringForWord(wid)
                     if strGlosses == "":
                         strGlosses = self.strEmptyCharacter
-
+                        
                     markWord = False
                     if wid in filter.matchobject["word"]:
                         markWord = True
                     ilElements.append([wid, strWord, strMorphemes, strGlosses, markWord])
                     
+                if len(ilElements) == 0:
+                    ilElements = [['None', self.strEmptyCharacter, self.strEmptyCharacter, self.strEmptyCharacter, self.strEmptyCharacter, False]]
                 utterances.append({ "id" : id,  "utterance" : utterance, "ilElements" : ilElements, "translations" : translations })
+
             if utterances == []:
                 utterances = None
             files.append({ "filename" : os.path.basename(filepath), "utterances" : utterances})
         context = self.ui.declarativeviewResult.rootContext()
         context.setContextProperty("resultModel", files)
-        #print utterances
-        #self.ui.texteditInterlinear.scrollToAnchor("#")
 
     #def findFromStart(self, exp):
     #    self.ui.texteditInterlinear.setTextCursor(QtGui.QTextCursor(self.ui.texteditInterlinear.document()))

@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# (C) 2009 copyright by Peter Bouda
+# (C) 2011 copyright by Peter Bouda
 
 import re
 import pyannotation.data
@@ -9,6 +9,7 @@ class PoioFile(object):
     def __init__(self, filepath = ""):
         self.filepath = filepath
         self.isNew = True
+        self.type = None
         if re.search(r"\.eaf$", filepath):
             f = open(filepath)
             data = f.read()
@@ -19,6 +20,8 @@ class PoioFile(object):
             f.close()
         elif re.search(r"\.txt$", filepath):
             self.type = pyannotation.data.TOOLBOX
+        elif re.search(r"\.txt$", filepath):
+            self.type = pyannotation.data.KURA
 
     def setIsNew(self, value = True):
         self.isNew = value

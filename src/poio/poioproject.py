@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# (C) 2009 copyright by Peter Bouda
+# (C) 2011 copyright by Peter Bouda
 
 import os
 from PyQt4 import QtCore
