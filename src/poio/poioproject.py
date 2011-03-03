@@ -48,6 +48,16 @@ class PoioProject(QtCore.QAbstractListModel):
             return True
         else:
             return False
+
+    def removeRows(self, row, count, parent = QtCore.QModelIndex()):
+        if row >= 0 and (row+count)<=self.rowCount():
+            self.beginRemoveRows(parent, row, row+count)
+            for i in range(0,count):
+                self.projectfiles.pop(row)
+            self.endRemoveRows()
+            return True
+        else:
+            return False
         
     def addFilePath(self, poiofilepath):
         # does the file exist in the project?
@@ -63,8 +73,15 @@ class PoioProject(QtCore.QAbstractListModel):
         for filepath in poiofilepaths:
             self.addFilePath(unicode(filepath))
 
+    def removeFilePathAt(self, index):
+        self.removeRows(index, 1)
+        
     def poioFileAt(self, row):
         if row < self.rowCount():
             return self.projectfiles[row]
         else:
             return None
+
+    def setAllFilesAsNew(self):
+        for file in self.projectfiles:
+            file.setIsNew(True)

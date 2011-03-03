@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'TabWidgetSearch.ui'
 #
-# Created: Wed Mar 02 16:05:01 2011
+# Created: Thu Mar 03 12:11:12 2011
 #      by: PyQt4 UI code generator 4.8.3
 #
 # WARNING! All changes made in this file will be lost!

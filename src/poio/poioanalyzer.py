@@ -49,6 +49,7 @@ class PoioAnalyzer(QtGui.QMainWindow):
                                               translationtierTypes = self.arrTranslationTierTypes,
                                               morphemetierTypes = self.arrMorphemeTierTypes,
                                               glosstierTypes = self.arrGlossTierTypes)
+        itemsCount = self.project.rowCount()
         
     def updateCorpusReader(self):
         itemsCount = self.project.rowCount()
@@ -67,12 +68,19 @@ class PoioAnalyzer(QtGui.QMainWindow):
         #self.updateCorpusReaderFilter()
         
     def initConnects(self):
+
+        # Menu buttons
+        QtCore.QObject.connect(self.ui.actionQuit, QtCore.SIGNAL("triggered()"), self.close)
+        QtCore.QObject.connect(self.ui.actionAboutPoioAnalyzer, QtCore.SIGNAL("triggered()"), self.aboutDialog)
+        
+        # Push Buttons
         QtCore.QObject.connect(self.ui.buttonAddFiles, QtCore.SIGNAL("pressed()"), self.addFiles)
         QtCore.QObject.connect(self.ui.buttonRemoveFiles, QtCore.SIGNAL("pressed()"), self.removeFiles)
         
         # Filter and Search
         QtCore.QObject.connect(self.ui.buttonSearch, QtCore.SIGNAL("pressed()"), self.applyFilter)
         QtCore.QObject.connect(self.ui.buttonCloseThisSearch, QtCore.SIGNAL("pressed()"), self.searchTabClosed)
+        QtCore.QObject.connect(self.ui.buttonClearThisSearch, QtCore.SIGNAL("pressed()"), self.searchTabCleared)
         QtCore.QObject.connect(self.ui.tabWidget, QtCore.SIGNAL("currentChanged(int)"), self.searchTabChanged)
         
         #QtCore.QObject.connect(self.ui.lineeditSearchUtterances, QtCore.SIGNAL("returnPressed()"), self.applyFilter)
@@ -101,7 +109,14 @@ class PoioAnalyzer(QtGui.QMainWindow):
         self.arrTranslationTierTypes = unicode(settings.value("Ann/TransTierTypeRefs", u"translation|translations|Übersetzung|Übersetzungen")).split("|")
 
     def removeFiles(self):
-        pass
+        countRemoved = 0
+        for i in self.ui.listFiles.selectedIndexes():
+            self.project.removeFilePathAt(i.row()-countRemoved)
+            countRemoved = countRemoved + 1
+        self.initCorpusReader()
+        self.project.setAllFilesAsNew()
+        self.updateCorpusReader()
+        self.updateIlTextEdit()
 
     def addFiles(self):
         # PySide version
@@ -249,17 +264,44 @@ class PoioAnalyzer(QtGui.QMainWindow):
             childWidget.setObjectName("%s_%i" % (childWidget.objectName(), nrOfNewTab))
         self.ui.tabWidget.insertTab(nrOfNewTab - 1, widgetSearch, "Search %i" % nrOfNewTab)
         self.ui.tabWidget.setCurrentIndex(nrOfNewTab - 1)    
-        
+
+    def updateSearchTabWidgetNames(self):
+        for i in range(0, self.ui.tabWidget.count()-1):
+            widget = self.ui.tabWidget.widget(i)
+            for childWidget in widget.findChildren(QtGui.QWidget):
+                childWidget.setObjectName("%s_%i" % (childWidget.objectName()[:-2], i+1))
+            self.ui.tabWidget.setTabText(i, "Search %i" % (i+1))
+            
     def searchTabClosed(self):
         # always leave at least one Search tab open
         if self.ui.tabWidget.indexOf(self.ui.tabNewSearch) < 2:
             return
         currentIndex = self.ui.tabWidget.currentIndex()
-        print currentIndex
+        if currentIndex < 1:
+            return
         widgetSearch = self.ui.tabWidget.currentWidget()
+        self.ui.tabWidget.setCurrentIndex(currentIndex-1)
         self.ui.tabWidget.removeTab(currentIndex)
         widgetSearch.close()
         widgetSearch.deleteLater()
         del widgetSearch
-        self.ui.tabWidget.update()
-        print "removed"
+        self.updateSearchTabWidgetNames()
+
+    def searchTabCleared(self):
+        widget = self.ui.tabWidget.currentWidget()
+        for childWidget in widget.findChildren(QtGui.QWidget):
+            if re.match(u"lineeditSearch", childWidget.objectName()):
+                childWidget.setText("")
+        self.applyFilter()
+        
+    def aboutDialog(self):
+        QtGui.QMessageBox.about(self,
+            "Poio Analyzer",
+            """<b>Poio Analyzer v0.1</b><br><br>
+                Linguistic Analyzation Tool for interlinear data,
+                developed by Peter Bouda at the<br>
+                <b><a href=\"http://www.cidles.eu/ltll/poio\">
+                Interdisciplinary Centre for Social and Language Documentation</a></b><br><br>
+                Please send bug reports and comments to <b><a href=\"mailto:pbouda@cidles.eu\">
+                pbouda@cidles.eu</a></b>."""
+        )

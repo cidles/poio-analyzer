@@ -49,19 +49,6 @@
         </property>
        </widget>
       </item>
-      <item row="14" column="1">
-       <widget class="QPushButton" name="buttonAddFiles">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="text">
-         <string>Add files...</string>
-        </property>
-       </widget>
-      </item>
       <item row="14" column="2">
        <widget class="QPushButton" name="buttonRemoveFiles">
         <property name="sizePolicy">
@@ -96,24 +83,14 @@
       </item>
       <item row="14" column="5" colspan="3">
        <widget class="QLineEdit" name="lineeditQuickSearch">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
         <property name="sizePolicy">
          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
           <horstretch>4</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
-        </property>
-       </widget>
-      </item>
-      <item row="3" column="2">
-       <widget class="QPushButton" name="buttonClearAllSearches">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="text">
-         <string>Clear All Searches</string>
         </property>
        </widget>
       </item>
@@ -162,6 +139,9 @@
       </item>
       <item row="12" column="7">
        <widget class="QToolButton" name="buttonAlignCenter">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
         <property name="text">
          <string>...</string>
         </property>
@@ -185,6 +165,9 @@
       </item>
       <item row="12" column="6">
        <widget class="QToolButton" name="buttonAlignLeft">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
         <property name="locale">
          <locale language="English" country="UnitedStates"/>
         </property>
@@ -238,8 +221,24 @@
         </property>
        </widget>
       </item>
-      <item row="3" column="4">
+      <item row="3" column="2">
+       <widget class="QPushButton" name="buttonCloseThisSearch">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="text">
+         <string>Close This Search</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="3">
        <widget class="QPushButton" name="buttonSaveSearches">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
         <property name="sizePolicy">
          <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
           <horstretch>1</horstretch>
@@ -248,38 +247,6 @@
         </property>
         <property name="text">
          <string>Save Searches...</string>
-        </property>
-       </widget>
-      </item>
-      <item row="14" column="4">
-       <widget class="QLabel" name="label_9">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
-          <horstretch>1</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="layoutDirection">
-         <enum>Qt::RightToLeft</enum>
-        </property>
-        <property name="text">
-         <string>Quick Search:</string>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-        </property>
-       </widget>
-      </item>
-      <item row="3" column="3">
-       <widget class="QPushButton" name="buttonCloseThisSearch">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-          <horstretch>1</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="text">
-         <string>Close This Search</string>
         </property>
        </widget>
       </item>
@@ -299,6 +266,38 @@
         </property>
         <property name="text">
          <string>Result:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="14" column="3">
+       <widget class="QLabel" name="label_9">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+          <horstretch>1</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="layoutDirection">
+         <enum>Qt::RightToLeft</enum>
+        </property>
+        <property name="text">
+         <string>Quick Search:</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item row="14" column="1">
+       <widget class="QPushButton" name="buttonAddFiles">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="text">
+         <string>Add files...</string>
         </property>
        </widget>
       </item>
@@ -322,16 +321,14 @@
     </property>
     <addaction name="actionNewProject"/>
     <addaction name="actionSaveProject"/>
-    <addaction name="actionSaveProjectAs"/>
     <addaction name="separator"/>
+    <addaction name="actionSaveProjectAs"/>
     <addaction name="actionQuit"/>
    </widget>
    <widget class="QMenu" name="menuEdit">
     <property name="title">
      <string>Edit</string>
     </property>
-    <addaction name="actionAddFiles"/>
-    <addaction name="actionRemoveFiles"/>
     <addaction name="separator"/>
     <addaction name="actionEditWordClasses"/>
     <addaction name="separator"/>
@@ -352,40 +349,54 @@
    <property name="text">
     <string>Quit</string>
    </property>
-  </action>
-  <action name="actionAddFiles">
-   <property name="text">
-    <string>Add Files...</string>
-   </property>
-  </action>
-  <action name="actionRemoveFiles">
-   <property name="text">
-    <string>Remove Files</string>
+   <property name="shortcut">
+    <string>Ctrl+Q</string>
    </property>
   </action>
   <action name="actionNewProject">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="text">
     <string>New Project</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+N</string>
+   </property>
   </action>
   <action name="actionSaveProject">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="text">
     <string>Save Project</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+S</string>
+   </property>
   </action>
   <action name="actionSaveProjectAs">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="text">
     <string>Save Project As...</string>
    </property>
   </action>
   <action name="actionEditWordClasses">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="text">
     <string>Edit Word Classes...</string>
    </property>
   </action>
   <action name="actionSearches">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="text">
-    <string>Searches...</string>
+    <string>Saved Searches...</string>
    </property>
   </action>
   <action name="actionAboutPoioAnalyzer">
@@ -394,6 +405,9 @@
    </property>
   </action>
   <action name="actionQuickSearch">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="text">
     <string>Quick Search</string>
    </property>
@@ -412,8 +426,6 @@
  <tabstops>
   <tabstop>tabWidget</tabstop>
   <tabstop>buttonClearThisSearch</tabstop>
-  <tabstop>buttonClearAllSearches</tabstop>
-  <tabstop>buttonSaveSearches</tabstop>
   <tabstop>buttonSearch</tabstop>
   <tabstop>listFiles</tabstop>
   <tabstop>buttonAlignLeft</tabstop>
