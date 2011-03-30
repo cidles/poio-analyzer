@@ -36,6 +36,7 @@ class PoioAnalyzer(QtGui.QMainWindow):
         
         # init DeclarativeView
         self.ui.declarativeviewResult.setResizeMode(QDeclarativeView.SizeRootObjectToView)
+        #self.ui.declarativeviewResult.setResizeMode(QDeclarativeView.SizeViewToRootObject)
         context = self.ui.declarativeviewResult.rootContext()
         context.setContextProperty("resultModel", [])
 
@@ -68,10 +69,12 @@ class PoioAnalyzer(QtGui.QMainWindow):
         #self.updateCorpusReaderFilter()
         
     def initConnects(self):
-
+        
         # Menu buttons
-        QtCore.QObject.connect(self.ui.actionQuit, QtCore.SIGNAL("triggered()"), self.close)
-        QtCore.QObject.connect(self.ui.actionAboutPoioAnalyzer, QtCore.SIGNAL("triggered()"), self.aboutDialog)
+        #QtCore.QObject.connect(self.ui.actionQuit, QtCore.SIGNAL("triggered()"), self.close)
+        self.ui.actionQuit.triggered.connect(self.close)
+        #QtCore.QObject.connect(self.ui.actionAboutPoioAnalyzer, QtCore.SIGNAL("triggered()"), self.aboutDialog)
+        self.ui.actionAboutPoioAnalyzer.triggered.connect(self.aboutDialog)
         
         # Push Buttons
         QtCore.QObject.connect(self.ui.buttonAddFiles, QtCore.SIGNAL("pressed()"), self.addFiles)
@@ -82,6 +85,8 @@ class PoioAnalyzer(QtGui.QMainWindow):
         QtCore.QObject.connect(self.ui.buttonCloseThisSearch, QtCore.SIGNAL("pressed()"), self.searchTabClosed)
         QtCore.QObject.connect(self.ui.buttonClearThisSearch, QtCore.SIGNAL("pressed()"), self.searchTabCleared)
         QtCore.QObject.connect(self.ui.tabWidget, QtCore.SIGNAL("currentChanged(int)"), self.searchTabChanged)
+        
+        self.ui.listFiles.activated.connect(self.setCurrentFileInIlEdit)
         
         #QtCore.QObject.connect(self.ui.lineeditSearchUtterances, QtCore.SIGNAL("returnPressed()"), self.applyFilter)
         #QtCore.QObject.connect(self.ui.lineeditSearchWords, QtCore.SIGNAL("returnPressed()"), self.applyFilter)
@@ -134,6 +139,9 @@ class PoioAnalyzer(QtGui.QMainWindow):
         end = time.time()
         print "Time elapsed = ", end - start, "seconds"
 
+    def setCurrentFileInIlEdit(self, modelIndex):
+        self.ui.declarativeviewResult.rootObject().setProperty("currentFileIndex", modelIndex.row())
+        
     def updateIlTextEdit(self):
         itemsCount = self.project.rowCount()
         files = []
