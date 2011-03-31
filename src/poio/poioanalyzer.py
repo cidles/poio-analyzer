@@ -25,6 +25,9 @@ class PoioAnalyzer(QtGui.QMainWindow):
 
     def __init__(self, *args):
         QtGui.QMainWindow.__init__(self, *args)
+
+        self.verticalPositionOfFile = {}        
+
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
 
@@ -33,16 +36,23 @@ class PoioAnalyzer(QtGui.QMainWindow):
         self.project = PoioProject(os.getcwd())
         self.ui.listFiles.setModel(self.project)
         self.initCorpusReader()
+        self.initDeclarativeView()
         
+        self.addSearchTab()
+        
+    def initDeclarativeView(self):
         # init DeclarativeView
-        self.ui.declarativeviewResult.setResizeMode(QDeclarativeView.SizeRootObjectToView)
-        #self.ui.declarativeviewResult.setResizeMode(QDeclarativeView.SizeViewToRootObject)
+        #self.ui.declarativeviewResult.setResizeMode(QDeclarativeView.SizeRootObjectToView)
+        self.ui.declarativeviewResult.setResizeMode(QDeclarativeView.SizeViewToRootObject)
+        self.ui.declarativeviewResult.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOn)
+        self.ui.declarativeviewResult.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOn)
         context = self.ui.declarativeviewResult.rootContext()
         context.setContextProperty("resultModel", [])
 
         self.ui.declarativeviewResult.setSource(QtCore.QUrl.fromLocalFile("qml/PoioIlView.qml"))
 
-        self.addSearchTab()
+        #obj = self.ui.declarativeviewResult.rootObject()
+        #QtCore.QObject.connect(obj, QtCore.SIGNAL("fileAdded(QString, int)"), self.upateVerticalPositionOfFile)
         
     def initCorpusReader(self):
         self.corpusreader = GlossCorpusReader(utterancetierTypes = self.arrUtteranceTierTypes,
@@ -140,7 +150,15 @@ class PoioAnalyzer(QtGui.QMainWindow):
         print "Time elapsed = ", end - start, "seconds"
 
     def setCurrentFileInIlEdit(self, modelIndex):
-        self.ui.declarativeviewResult.rootObject().setProperty("currentFileIndex", modelIndex.row())
+        obj = self.ui.declarativeviewResult.rootObject()
+        # find my column items
+        filenameObjects = obj.children()[0].children()
+        # file items begin form index 1 in children()
+        index = modelIndex.row() + 1
+        if index < len(filenameObjects):
+            yPosFilename = filenameObjects[index].mapToItem(None, 0, 0).y()
+            self.ui.declarativeviewResult.verticalScrollBar().setValue(yPosFilename)
+        #pass
         
     def updateIlTextEdit(self):
         itemsCount = self.project.rowCount()
@@ -208,6 +226,7 @@ class PoioAnalyzer(QtGui.QMainWindow):
             files.append({ "filename" : os.path.basename(filepath), "utterances" : utterances})
         context = self.ui.declarativeviewResult.rootContext()
         context.setContextProperty("resultModel", files)
+        size = self.ui.declarativeviewResult.sceneRect()
 
     #def findFromStart(self, exp):
     #    self.ui.texteditInterlinear.setTextCursor(QtGui.QTextCursor(self.ui.texteditInterlinear.document()))

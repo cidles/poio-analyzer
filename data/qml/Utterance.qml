@@ -1,6 +1,7 @@
 import Qt 4.7
 
 Column {
+    
     Row {
         id: utterance
         spacing: 10
