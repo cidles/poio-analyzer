@@ -322,6 +322,8 @@
     <addaction name="actionNewProject"/>
     <addaction name="actionSaveProject"/>
     <addaction name="separator"/>
+    <addaction name="actionExportSearchResult"/>
+    <addaction name="separator"/>
     <addaction name="actionSaveProjectAs"/>
     <addaction name="actionQuit"/>
    </widget>
@@ -413,6 +415,14 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+F</string>
+   </property>
+  </action>
+  <action name="actionExportSearchResult">
+   <property name="text">
+    <string>Export Search Result...</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+E</string>
    </property>
   </action>
  </widget>

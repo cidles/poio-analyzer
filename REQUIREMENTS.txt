@@ -8,7 +8,7 @@ h1. User stories:
 * It is possible to search for the cooccurrence of two or more lexical or grammatical forms F1 and F2, or of construction C1 and C2 in one specific tier x1 or across different tiers x1-n within a linguistic context defined by the level of syntagmatic complexity/grammatical level (ab "within" versteh ichs nicht)
 * Between the linguistic items (i.e. forms/constructions) F1-2/C1-2 which are searched for in this search type – on a single tier x1 (!) - a logical operation can be defined such F1 {AND, OR, AND NOT etc.} F2, or F1 {AND, OR, AND NOT etc.} C1-C1, and so forth
 * Between the linguistic items F1 in tier x1 and F2 in tier x2 or C1 in tier x1 and C2 in tier x2, and so forth, which are searched for in this search type, a logical operation can be defined such that F1 in tier 1 {AND, OR, AND NOT etc.} F2 in tier x2, or C1-C1 in tier x1 {AND, OR, AND NOT etc.} C2-C2 in tier x2, and so forth
-* After a search the user has access to a frequency view of the hits (wie funktioniert das in ELAN genau?)
+* After a search the user has access to a frequency view of the hits (wie funktioniert das in ELAN genau?) (see also Other Stories)
 
 h2. Semasiological search
 
@@ -29,7 +29,23 @@ h3. Identifictation of grammatical units
 * It is possible to search over word boundaries on gl/mo tiers, (for example search "V-kje" and then "heesge" right of it) without specifying how many words are between
 
 h3. Prase level analysis
-* 
+* It is possible to search for list of words, for example from a lexicon (as lexicon specifies POS, and it may be possible to find phrases by searching for POS information)
+* It is possible to search for elements of phrases, for example DET or "one" for NPs (problem: both have other functions, and there are NPs without DET)
+* It is possible to search for proper noun markers ("-ga" in Hocank)
+* It is possible to search for first n nouns/verbs/... of a frequency list
+* It is possible to search across tiers, for example "'ee" on mo tier and not "say" on gl tier (as "'ee" is both free pronomina and "say")
+* It is possible to search for prepositions in ft tier (to find PP in Hocank)
 
-h2. Other stories
+h3. Clause level analysis
+* It is possible to search for question words in ft tier
+* It is possible to search for puctuation (in tx and ft tier)
+* It is possible to search for elements on gl tier with logical operation (gl tier has "item1" AND "item2", see User story above)
+* It is possible to search for semantic classes of verbs on gl and mo tier (for Hocank there is a (Toolbox) lexicon which contains information about semantic classes of verbs)
+* It is possible to search for elements on different tiers with logical operations (gl tier as "item1" AND ft tier has "item2")
+
+h2. General stories
 * After each search a summary of hits, hits by ovarall items, etc. (frequency lists) is available. Those are simple lists that can be copy and pasted.
+* It is possible to add a POS tier semi-automatically (via word lists, lexicon?)
+* It is possible to search define word lists and search for word lists
+* It is possible to extract word lists from Toolbox lexicon (and other source data like wordlists from fieldwork; maybe Copy&Paste is enough for the latter...)
+* It is possible to do some analysis on the ft tier (POS, syntactic tree, morphemes with glosses, ...) and to search that additional information (for example, after morpho-syntactical tagging of the english translation it is possible to search for comparatives)

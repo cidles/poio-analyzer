@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # (C) 2011 copyright by Peter Bouda
 
-import sys, os.path, re, copy
+import sys, os.path, re, copy, codecs
 import time
 from PyQt4 import QtCore, QtGui
 from PyQt4.QtDeclarative import QDeclarativeView
@@ -70,6 +70,7 @@ class PoioAnalyzer(QtGui.QMainWindow):
             progress.setValue(i)
             poiofile = self.project.poioFileAt(i)
             if poiofile.isNew:
+                #print poiofile.filepath
                 self.corpusreader.addFile(poiofile.filepath, poiofile.type)
                 poiofile.setIsNew(False)
             if (progress.wasCanceled()):
@@ -87,8 +88,8 @@ class PoioAnalyzer(QtGui.QMainWindow):
         self.ui.actionAboutPoioAnalyzer.triggered.connect(self.aboutDialog)
         
         # Push Buttons
-        QtCore.QObject.connect(self.ui.buttonAddFiles, QtCore.SIGNAL("pressed()"), self.addFiles)
-        QtCore.QObject.connect(self.ui.buttonRemoveFiles, QtCore.SIGNAL("pressed()"), self.removeFiles)
+        QtCore.QObject.connect(self.ui.buttonAddFiles, QtCore.SIGNAL("pressed()"), self.add_files)
+        QtCore.QObject.connect(self.ui.buttonRemoveFiles, QtCore.SIGNAL("pressed()"), self.remove_files)
         
         # Filter and Search
         QtCore.QObject.connect(self.ui.buttonSearch, QtCore.SIGNAL("pressed()"), self.applyFilter)
@@ -96,7 +97,8 @@ class PoioAnalyzer(QtGui.QMainWindow):
         QtCore.QObject.connect(self.ui.buttonClearThisSearch, QtCore.SIGNAL("pressed()"), self.searchTabCleared)
         QtCore.QObject.connect(self.ui.tabWidget, QtCore.SIGNAL("currentChanged(int)"), self.searchTabChanged)
         
-        self.ui.listFiles.activated.connect(self.setCurrentFileInIlEdit)
+        self.ui.listFiles.activated.connect(self.set_current_file_in_il_edit)
+        self.ui.actionExportSearchResult.triggered.connect(self.export_search_results)
         
         #QtCore.QObject.connect(self.ui.lineeditSearchUtterances, QtCore.SIGNAL("returnPressed()"), self.applyFilter)
         #QtCore.QObject.connect(self.ui.lineeditSearchWords, QtCore.SIGNAL("returnPressed()"), self.applyFilter)
@@ -123,7 +125,7 @@ class PoioAnalyzer(QtGui.QMainWindow):
         self.arrGlossTierTypes = unicode(settings.value("Ann/GlossTierTypeRefs",  u"glosses|gloss|Glossen|Gloss|Glosse").toString()).split("|")
         self.arrTranslationTierTypes = unicode(settings.value("Ann/TransTierTypeRefs", u"translation|translations|Übersetzung|Übersetzungen").toString()).split("|")
 
-    def removeFiles(self):
+    def remove_files(self):
         countRemoved = 0
         for i in self.ui.listFiles.selectedIndexes():
             self.project.removeFilePathAt(i.row()-countRemoved)
@@ -133,7 +135,7 @@ class PoioAnalyzer(QtGui.QMainWindow):
         self.updateCorpusReader()
         self.updateIlTextEdit()
 
-    def addFiles(self):
+    def add_files(self):
         # PySide version
         #filepaths, types = QtGui.QFileDialog.getOpenFileNames(self, self.tr("Add Files"), "", self.tr("Elan files (*.eaf);;Toolbox files (*.txt);;All files (*.*)"))
         # PyQt version
@@ -149,7 +151,7 @@ class PoioAnalyzer(QtGui.QMainWindow):
         end = time.time()
         print "Time elapsed = ", end - start, "seconds"
 
-    def setCurrentFileInIlEdit(self, modelIndex):
+    def set_current_file_in_il_edit(self, modelIndex):
         obj = self.ui.declarativeviewResult.rootObject()
         # find my column items
         filenameObjects = obj.children()[0].children()
@@ -335,3 +337,57 @@ class PoioAnalyzer(QtGui.QMainWindow):
                 Please send bug reports and comments to <b><a href=\"mailto:pbouda@cidles.eu\">
                 pbouda@cidles.eu</a></b>."""
         )
+    
+    def export_search_results(self):
+        export_file =  QtGui.QFileDialog.getSaveFileName(self, self.tr("Export Search Result"), "", self.tr("Text file UTF-8 (*.txt)"))
+        export_file = unicode(export_file)
+        OUT  = codecs.open(export_file, "w", "utf-8")
+        for [filepath, annotationtree] in self.corpusreader.annotationtrees:
+            OUT.write(filepath + "\n\n")
+            utterancesIds = annotationtree.getFilteredUtteranceIds()
+            filter = annotationtree.lastFilter()
+            utterances = []
+            for id in utterancesIds:
+                utterance = annotationtree.getUtteranceById(id)
+
+                OUT.write(id + "\n")
+                OUT.write(utterance + "\n")
+
+                word_ids = annotationtree.getWordIdsForUtterance(id)
+                line_words = ""
+                line_morphemes = ""
+                line_glosses = ""
+                for wid in word_ids:
+                    str_word = annotationtree.getWordById(wid)
+                    if str_word == "":
+                        str_word = self.strEmptyCharacter
+                    str_morphemes = annotationtree.getMorphemeStringForWord(wid)
+                    #print strMorphemes
+                    if str_morphemes == "":
+                        str_morphemes = str_word
+                    str_glosses = annotationtree.getGlossStringForWord(wid)
+                    if str_glosses == "":
+                        str_glosses = self.strEmptyCharacter
+                        
+                    line_words += str_word + " "
+                    line_morphemes += str_morphemes + " "
+                    line_glosses += str_glosses + " "
+
+                line_words = line_words.rstrip()
+                line_morphemes = line_morphemes.rstrip()
+                line_glosses = line_glosses.rstrip()
+                OUT.write(line_words + "\n")
+                OUT.write(line_morphemes + "\n")
+                OUT.write(line_glosses + "\n")
+                    
+                translations = annotationtree.getTranslationsForUtterance(id)
+                if len(translations) == 0:
+                    translationId = annotationtree.newTranslationForUtteranceId(id, "")
+                    translations = [ [translationId, self.strEmptyCharacter] ]
+                    
+                for t in translations:
+                    OUT.write(t[1] +"\n")
+                    
+                OUT.write("\n")
+            OUT.write("\n")
+        OUT.close

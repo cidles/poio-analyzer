@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'MainAnalyzerQML.ui'
 #
-# Created: Thu Mar 03 12:11:12 2011
+# Created: Mon Aug 01 10:31:01 2011
 #      by: PyQt4 UI code generator 4.8.3
 #
 # WARNING! All changes made in this file will be lost!
@@ -210,8 +210,12 @@ class Ui_MainWindow(object):
         self.actionQuickSearch = QtGui.QAction(MainWindow)
         self.actionQuickSearch.setEnabled(False)
         self.actionQuickSearch.setObjectName(_fromUtf8("actionQuickSearch"))
+        self.actionExportSearchResult = QtGui.QAction(MainWindow)
+        self.actionExportSearchResult.setObjectName(_fromUtf8("actionExportSearchResult"))
         self.menuFiel.addAction(self.actionNewProject)
         self.menuFiel.addAction(self.actionSaveProject)
+        self.menuFiel.addSeparator()
+        self.menuFiel.addAction(self.actionExportSearchResult)
         self.menuFiel.addSeparator()
         self.menuFiel.addAction(self.actionSaveProjectAs)
         self.menuFiel.addAction(self.actionQuit)
@@ -266,6 +270,8 @@ class Ui_MainWindow(object):
         self.actionAboutPoioAnalyzer.setText(QtGui.QApplication.translate("MainWindow", "About PoioAnalyzer...", None, QtGui.QApplication.UnicodeUTF8))
         self.actionQuickSearch.setText(QtGui.QApplication.translate("MainWindow", "Quick Search", None, QtGui.QApplication.UnicodeUTF8))
         self.actionQuickSearch.setShortcut(QtGui.QApplication.translate("MainWindow", "Ctrl+F", None, QtGui.QApplication.UnicodeUTF8))
+        self.actionExportSearchResult.setText(QtGui.QApplication.translate("MainWindow", "Export Search Result...", None, QtGui.QApplication.UnicodeUTF8))
+        self.actionExportSearchResult.setShortcut(QtGui.QApplication.translate("MainWindow", "Ctrl+E", None, QtGui.QApplication.UnicodeUTF8))
 
 from PyQt4 import QtDeclarative
 import poioanalyzer_rc
