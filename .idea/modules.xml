@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/Poio.iml" filepath="$PROJECT_DIR$/.idea/Poio.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../pyannotation/.idea/pyannotation.iml" filepath="$PROJECT_DIR$/../pyannotation/.idea/pyannotation.iml" />
     </modules>
   </component>
 </project>

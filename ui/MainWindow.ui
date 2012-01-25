@@ -23,47 +23,16 @@
       <item>
        <layout class="QHBoxLayout" name="horizontalLayout">
         <item>
-         <layout class="QVBoxLayout" name="verticalLayoutTierWords">
-          <item>
-           <widget class="QLabel" name="labelWords">
-            <property name="text">
-             <string>Word tier</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QListWidget" name="listwidgetWords">
-            <property name="maximumSize">
-             <size>
-              <width>16777215</width>
-              <height>150</height>
-             </size>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QPushButton" name="pushbuttonNewTierWords">
-            <property name="text">
-             <string>New</string>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </item>
-        <item>
          <layout class="QVBoxLayout" name="verticalLayoutUtterances">
           <item>
            <widget class="QLabel" name="labelUtterances">
             <property name="text">
-             <string>Utterances tier</string>
+             <string>Utterance tiers</string>
             </property>
            </widget>
           </item>
           <item>
            <widget class="QListWidget" name="listwidgetUtterances">
-            <property name="enabled">
-             <bool>true</bool>
-            </property>
             <property name="maximumSize">
              <size>
               <width>16777215</width>
@@ -82,11 +51,42 @@
          </layout>
         </item>
         <item>
+         <layout class="QVBoxLayout" name="verticalLayoutWords">
+          <item>
+           <widget class="QLabel" name="labelWords">
+            <property name="text">
+             <string>Word tiers</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QListWidget" name="listwidgetWords">
+            <property name="enabled">
+             <bool>true</bool>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>16777215</width>
+              <height>150</height>
+             </size>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="pushbuttonNewTierWords">
+            <property name="text">
+             <string>New</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
          <layout class="QVBoxLayout" name="verticalLayoutMorphemes">
           <item>
            <widget class="QLabel" name="labelMorphemes">
             <property name="text">
-             <string>Morpheme tier</string>
+             <string>Morpheme tiers</string>
             </property>
            </widget>
           </item>
@@ -120,7 +120,7 @@
           <item>
            <widget class="QLabel" name="labelFunctions">
             <property name="text">
-             <string>Gloss tier</string>
+             <string>Gloss tiers</string>
             </property>
            </widget>
           </item>
@@ -148,7 +148,7 @@
           <item>
            <widget class="QLabel" name="labelTranslations">
             <property name="text">
-             <string>Translation tier</string>
+             <string>Translation tiers</string>
             </property>
            </widget>
           </item>
@@ -310,7 +310,7 @@
      <x>0</x>
      <y>0</y>
      <width>977</width>
-     <height>25</height>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">

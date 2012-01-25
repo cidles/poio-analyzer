@@ -20,11 +20,10 @@ class PoioILE(QtGui.QMainWindow):
         QtGui.QMainWindow.__init__(self, *args)
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
-        #self.ui.verticalLayoutMain.setStretch(2,1)
         self.initVars()
         self.initConnects()
-        self.initSignals()
-        self.hideTiersWidgets()
+        self.initSettings()
+        #self.hideTiersWidgets()
         self.init = 0
         
     def initVars(self):
@@ -128,7 +127,7 @@ class PoioILE(QtGui.QMainWindow):
         about = QtGui.QMessageBox(self)
         about.setTextFormat(QtCore.Qt.RichText)
         about.setWindowTitle(self.tr("About PoioILE"))
-        about.setText(self.tr("<b>PoioILE 0.2.0a</b><br/>Poio Interlinear Editor by the <a href=\"http://cidles.eu\">Interdisciplinary Centre for Social and Language Documentation</a>.<br/><br/>All rights reserved. See LICENSE file for details.<br/><br/>For more information visit the website:<br/><a href=\"http://ltml.cidles.eu/poio\">http://ltml.cidles.eu/poio</a>"))
+        about.setText(self.tr("<b>PoioILE 0.2.1</b><br/>Poio Interlinear Editor by the <a href=\"http://cidles.eu\">Interdisciplinary Centre for Social and Language Documentation</a>.<br/><br/>All rights reserved. See LICENSE file for details.<br/><br/>For more information visit the website:<br/><a href=\"http://ltml.cidles.eu/poio\">http://ltml.cidles.eu/poio</a>"))
         about.exec_()
 
     def lineeditValidate(self, input):
@@ -164,16 +163,21 @@ class PoioILE(QtGui.QMainWindow):
             wordIds = self.eafTree.getWordIdsForUtterance(id)
             ilElements = []
             for wid in wordIds:
-                strWord = self.eafTree.getWordById(wid)
-                if strWord == "":
+                if wid == "":
                     strWord = self.strEmptyCharacter
-                strMorphemes = self.eafTree.getMorphemeStringForWord(wid)
-                if strMorphemes == "":
-                    strMorphemes = strWord
-                strGlosses = self.eafTree.getGlossStringForWord(wid)
-                if strGlosses == "":
+                    strMorphemes = self.strEmptyCharacter
                     strGlosses = self.strEmptyCharacter
-                ilElements.append([wid, strWord, strMorphemes, strGlosses])
+                else:
+                    strWord = self.eafTree.getWordById(wid)
+                    if strWord == "":
+                        strWord = self.strEmptyCharacter
+                    strMorphemes = self.eafTree.getMorphemeStringForWord(wid)
+                    if strMorphemes == "":
+                        strMorphemes = strWord
+                    strGlosses = self.eafTree.getGlossStringForWord(wid)
+                    if strGlosses == "":
+                        strGlosses = self.strEmptyCharacter
+                ilElements.append([wid, strWord, strMorphemes, strGlosses, False])
             self.ui.texteditInterlinear.appendUtterance(id,  utterance, ilElements, translations)
             idInScene = idInScene + 1
             if (progress.wasCanceled()):
@@ -248,7 +252,7 @@ class PoioILE(QtGui.QMainWindow):
                 QtGui.QMessageBox.critical(self, self.tr("Please define tiers"), self.tr("Please create and choose all tiers before saving the data to a file."), QtGui.QMessageBox.Ok)
                 return
             self.updateEafTreeFromTexteditInterlinear()
-            xml = self.eafTree.getAsEafXml(self.tierUtterances, self.tierWords, self.tierMorphemes, self.tierFunctions, self.tierTranslations)
+            xml = self.eafTree.getFile(self.tierUtterances, self.tierWords, self.tierMorphemes, self.tierFunctions, self.tierTranslations)
             file = open(self.filepath, "w")
             file.write(xml)
             file.close()
@@ -261,7 +265,7 @@ class PoioILE(QtGui.QMainWindow):
             self.init = 1
             self.annotationFileObject = EafAnnotationFileObject(filepath)
             self.annotationTierHandler = self.annotationFileObject.createTierHandler()
-            self.annotationParser = self.annotationFileObject.createParser()
+            self.annotationParser = self.annotationFileObject.createParserMorphsynt()
             self.eafTree = AnnotationTree(self.annotationParser)
             self.initTierTypesFromSettings()
             self.eafTree.parse()

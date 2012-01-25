@@ -2,8 +2,8 @@
 
 # Form implementation generated from reading ui file 'MainAnalyzer.ui'
 #
-# Created: Mon Aug 01 10:31:01 2011
-#      by: PyQt4 UI code generator 4.8.3
+# Created: Tue Jan 24 12:05:59 2012
+#      by: PyQt4 UI code generator 4.9
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -32,8 +32,8 @@ class Ui_MainWindow(object):
         self.label_7.setSizePolicy(sizePolicy)
         self.label_7.setSizeIncrement(QtCore.QSize(1, 0))
         font = QtGui.QFont()
-        font.setWeight(75)
         font.setBold(True)
+        font.setWeight(75)
         self.label_7.setFont(font)
         self.label_7.setObjectName(_fromUtf8("label_7"))
         self.gridLayout.addWidget(self.label_7, 12, 1, 1, 2)
@@ -91,8 +91,8 @@ class Ui_MainWindow(object):
         sizePolicy.setHeightForWidth(self.buttonSearch.sizePolicy().hasHeightForWidth())
         self.buttonSearch.setSizePolicy(sizePolicy)
         font = QtGui.QFont()
-        font.setWeight(75)
         font.setBold(True)
+        font.setWeight(75)
         self.buttonSearch.setFont(font)
         self.buttonSearch.setObjectName(_fromUtf8("buttonSearch"))
         self.gridLayout.addWidget(self.buttonSearch, 3, 4, 1, 3)
@@ -117,8 +117,8 @@ class Ui_MainWindow(object):
         self.label_8 = QtGui.QLabel(self.centralWidget)
         self.label_8.setSizeIncrement(QtCore.QSize(2, 0))
         font = QtGui.QFont()
-        font.setWeight(75)
         font.setBold(True)
+        font.setWeight(75)
         self.label_8.setFont(font)
         self.label_8.setObjectName(_fromUtf8("label_8"))
         self.gridLayout.addWidget(self.label_8, 12, 3, 1, 1)

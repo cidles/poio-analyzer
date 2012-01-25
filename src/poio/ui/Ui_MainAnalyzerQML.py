@@ -2,8 +2,8 @@
 
 # Form implementation generated from reading ui file 'MainAnalyzerQML.ui'
 #
-# Created: Mon Aug 01 10:31:01 2011
-#      by: PyQt4 UI code generator 4.8.3
+# Created: Tue Jan 24 12:05:59 2012
+#      by: PyQt4 UI code generator 4.9
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -17,7 +17,7 @@ except AttributeError:
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName(_fromUtf8("MainWindow"))
-        MainWindow.resize(957, 838)
+        MainWindow.resize(800, 600)
         self.centralWidget = QtGui.QWidget(MainWindow)
         self.centralWidget.setObjectName(_fromUtf8("centralWidget"))
         self.horizontalLayout = QtGui.QHBoxLayout(self.centralWidget)
@@ -32,8 +32,8 @@ class Ui_MainWindow(object):
         self.label_7.setSizePolicy(sizePolicy)
         self.label_7.setSizeIncrement(QtCore.QSize(1, 0))
         font = QtGui.QFont()
-        font.setWeight(75)
         font.setBold(True)
+        font.setWeight(75)
         self.label_7.setFont(font)
         self.label_7.setObjectName(_fromUtf8("label_7"))
         self.gridLayout.addWidget(self.label_7, 12, 1, 1, 2)
@@ -76,8 +76,8 @@ class Ui_MainWindow(object):
         sizePolicy.setHeightForWidth(self.buttonSearch.sizePolicy().hasHeightForWidth())
         self.buttonSearch.setSizePolicy(sizePolicy)
         font = QtGui.QFont()
-        font.setWeight(75)
         font.setBold(True)
+        font.setWeight(75)
         self.buttonSearch.setFont(font)
         self.buttonSearch.setObjectName(_fromUtf8("buttonSearch"))
         self.gridLayout.addWidget(self.buttonSearch, 3, 5, 1, 3)
@@ -150,8 +150,8 @@ class Ui_MainWindow(object):
         self.label_8 = QtGui.QLabel(self.centralWidget)
         self.label_8.setSizeIncrement(QtCore.QSize(2, 0))
         font = QtGui.QFont()
-        font.setWeight(75)
         font.setBold(True)
+        font.setWeight(75)
         self.label_8.setFont(font)
         self.label_8.setObjectName(_fromUtf8("label_8"))
         self.gridLayout.addWidget(self.label_8, 12, 3, 1, 1)
@@ -179,7 +179,7 @@ class Ui_MainWindow(object):
         self.statusBar.setObjectName(_fromUtf8("statusBar"))
         MainWindow.setStatusBar(self.statusBar)
         self.menuBar = QtGui.QMenuBar(MainWindow)
-        self.menuBar.setGeometry(QtCore.QRect(0, 0, 957, 21))
+        self.menuBar.setGeometry(QtCore.QRect(0, 0, 800, 21))
         self.menuBar.setObjectName(_fromUtf8("menuBar"))
         self.menuFiel = QtGui.QMenu(self.menuBar)
         self.menuFiel.setObjectName(_fromUtf8("menuFiel"))
