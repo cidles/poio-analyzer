@@ -4,8 +4,8 @@
 import sys, os.path, re
 from PyQt4 import QtCore, QtGui
 
-from pyannotation.elan.data import EafAnnotationFileObject
-from pyannotation.data import AnnotationTree
+#from pyannotation.elan.data import EafAnnotationFileObject
+import pyannotation.annotationtree
 
 import poio
 from poio.ui.PoioIlTextEdit import PoioIlTextEdit
@@ -18,119 +18,72 @@ class PoioILE(QtGui.QMainWindow):
 
     def __init__(self, *args):
         QtGui.QMainWindow.__init__(self, *args)
+
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
-        self.initVars()
-        self.initConnects()
-        self.initSettings()
-        #self.hideTiersWidgets()
+
+        self.init_vars()
+        self.init_connects()
+        self.init_settings()
+
         self.init = 0
         
-    def initVars(self):
+    def init_vars(self):
         self.eaf = None
-        self.utterancesDict = []
-        self.clearAllTierVars()
+        self.utterances_dict = []
+        self.clear_all_tier_vars()
         self.filename = ''
         self.project = None
 
-    def initSettings(self):
+    def init_settings(self):
         QtCore.QCoreApplication.setOrganizationName("Interdisciplinary Centre for Social and Language Documentation");
         QtCore.QCoreApplication.setOrganizationDomain("cidles.eu");
         QtCore.QCoreApplication.setApplicationName("PoioILE");
         settings = QtCore.QSettings()
-        self.strMorphemeSeperator = unicode(settings.value("Ann/MorphSep", QtCore.QVariant("-")).toString())
-        self.strGlossSepereator = unicode(settings.value("Ann/GlossSep",  QtCore.QVariant(":")).toString())
-        self.strEmptyCharacter = unicode(settings.value("Ann/EmptyChar",  QtCore.QVariant("#")).toString())
+        self.str_morpheme_seperator = unicode(settings.value("Ann/MorphSep", QtCore.QVariant("-")).toString())
+        self.str_gloss_sepereator = unicode(settings.value("Ann/GlossSep",  QtCore.QVariant(":")).toString())
+        self.str_empty_character = unicode(settings.value("Ann/EmptyChar",  QtCore.QVariant("#")).toString())
         
-    def initConnects(self):
+    def init_connects(self):
         # Projects
-        QtCore.QObject.connect(self.ui.actionNew, QtCore.SIGNAL("triggered()"), self.newProject)
-        QtCore.QObject.connect(self.ui.actionOpen, QtCore.SIGNAL("triggered()"), self.openProject)
+        QtCore.QObject.connect(self.ui.actionNew, QtCore.SIGNAL("triggered()"), self.new_project)
+        QtCore.QObject.connect(self.ui.actionOpen, QtCore.SIGNAL("triggered()"), self.open_project)
         #QtCore.QObject.connect(self.ui.actionSaveAs, QtCore.SIGNAL("triggered()"), self.saveProjectAs)
-        QtCore.QObject.connect(self.ui.actionSave, QtCore.SIGNAL("triggered()"), self.saveProject)
+        QtCore.QObject.connect(self.ui.actionSave, QtCore.SIGNAL("triggered()"), self.save_project)
 
         # Files
-        QtCore.QObject.connect(self.ui.actionAddFile, QtCore.SIGNAL("triggered()"), self.addFile)
+        QtCore.QObject.connect(self.ui.actionAddFile, QtCore.SIGNAL("triggered()"), self.add_file)
         self.ui.toolbuttonAddFile.setDefaultAction(self.ui.actionAddFile)
-        QtCore.QObject.connect(self.ui.actionExportFile, QtCore.SIGNAL("triggered()"), self.exportFile)
+        QtCore.QObject.connect(self.ui.actionExportFile, QtCore.SIGNAL("triggered()"), self.export_file)
         self.ui.toolbuttonExportFile.setDefaultAction(self.ui.actionExportFile)
-        QtCore.QObject.connect(self.ui.actionNewFile, QtCore.SIGNAL("triggered()"), self.newFile)
+        QtCore.QObject.connect(self.ui.actionNewFile, QtCore.SIGNAL("triggered()"), self.new_file)
         self.ui.toolbuttonNewFile.setDefaultAction(self.ui.actionNewFile)
-        QtCore.QObject.connect(self.ui.actionRemoveFile, QtCore.SIGNAL("triggered()"), self.removeFile)
+        QtCore.QObject.connect(self.ui.actionRemoveFile, QtCore.SIGNAL("triggered()"), self.remove_file)
         self.ui.toolbuttonRemoveFile.setDefaultAction(self.ui.actionRemoveFile)
 
         QtCore.QObject.connect(self.ui.actionQuit, QtCore.SIGNAL("triggered()"), self.close)
-        QtCore.QObject.connect(self.ui.actionAboutPoioILE, QtCore.SIGNAL("triggered()"), self.aboutDialog)
-        QtCore.QObject.connect(self.ui.actionInsertUtterance, QtCore.SIGNAL("triggered()"), self.insertUtteranceAfterCurrent)
-        QtCore.QObject.connect(self.ui.actionDeleteUtterance, QtCore.SIGNAL("triggered()"), self.deleteCurrentUtterance)
-        QtCore.QObject.connect(self.ui.actionInsertWord, QtCore.SIGNAL("triggered()"), self.insertWordAfterCurrent)
-        QtCore.QObject.connect(self.ui.actionDeleteWord, QtCore.SIGNAL("triggered()"), self.deleteCurrentWord)
-        QtCore.QObject.connect(self.ui.listwidgetUtterances, QtCore.SIGNAL("currentItemChanged(QListWidgetItem *, QListWidgetItem *)"), self.setTierUtterances)
-        QtCore.QObject.connect(self.ui.listwidgetWords, QtCore.SIGNAL("currentItemChanged(QListWidgetItem *, QListWidgetItem *)"), self.setTierWords)
-        QtCore.QObject.connect(self.ui.listwidgetMorphemes, QtCore.SIGNAL("currentItemChanged(QListWidgetItem *, QListWidgetItem *)"), self.setTierMorphemes)
-        QtCore.QObject.connect(self.ui.listwidgetFunctions, QtCore.SIGNAL("currentItemChanged(QListWidgetItem *, QListWidgetItem *)"), self.setTierFunctions)
-        QtCore.QObject.connect(self.ui.listwidgetTranslations, QtCore.SIGNAL("currentItemChanged(QListWidgetItem *, QListWidgetItem *)"), self.setTierTranslations)
-        QtCore.QObject.connect(self.ui.pushbuttonNewTierMorphemes, QtCore.SIGNAL("clicked()"), self.newTierMorphemes)
-        QtCore.QObject.connect(self.ui.pushbuttonNewTierFunctions, QtCore.SIGNAL("clicked()"), self.newTierFunctions)
-        QtCore.QObject.connect(self.ui.pushbuttonNewTierTranslations, QtCore.SIGNAL("clicked()"), self.newTierTranslations)
+        QtCore.QObject.connect(self.ui.actionAboutPoioILE, QtCore.SIGNAL("triggered()"), self.about_dialog)
+        QtCore.QObject.connect(self.ui.actionInsertUtterance, QtCore.SIGNAL("triggered()"), self.insert_utterance_after_current)
+        QtCore.QObject.connect(self.ui.actionDeleteUtterance, QtCore.SIGNAL("triggered()"), self.delete_current_utterance)
+        QtCore.QObject.connect(self.ui.actionInsertWord, QtCore.SIGNAL("triggered()"), self.insert_word_after_current)
+        QtCore.QObject.connect(self.ui.actionDeleteWord, QtCore.SIGNAL("triggered()"), self.delete_current_word)
+        QtCore.QObject.connect(self.ui.listwidgetUtterances, QtCore.SIGNAL("currentItemChanged(QListWidgetItem *, QListWidgetItem *)"), self.set_tier_utterances)
+        QtCore.QObject.connect(self.ui.listwidgetWords, QtCore.SIGNAL("currentItemChanged(QListWidgetItem *, QListWidgetItem *)"), self.set_tier_words)
+        QtCore.QObject.connect(self.ui.listwidgetMorphemes, QtCore.SIGNAL("currentItemChanged(QListWidgetItem *, QListWidgetItem *)"), self.set_tier_morphemes)
+        QtCore.QObject.connect(self.ui.listwidgetFunctions, QtCore.SIGNAL("currentItemChanged(QListWidgetItem *, QListWidgetItem *)"), self.set_tier_functions)
+        QtCore.QObject.connect(self.ui.listwidgetTranslations, QtCore.SIGNAL("currentItemChanged(QListWidgetItem *, QListWidgetItem *)"), self.set_tier_translations)
+        QtCore.QObject.connect(self.ui.pushbuttonNewTierMorphemes, QtCore.SIGNAL("clicked()"), self.new_tier_morphemes)
+        QtCore.QObject.connect(self.ui.pushbuttonNewTierFunctions, QtCore.SIGNAL("clicked()"), self.new_tier_functions)
+        QtCore.QObject.connect(self.ui.pushbuttonNewTierTranslations, QtCore.SIGNAL("clicked()"), self.new_tier_translations)
 
-
-    def hideTiersWidgets(self):
-        # Labels
-        self.ui.labelUtterances.hide()
-        self.ui.labelWords.hide()
-        self.ui.labelMorphemes.hide()
-        self.ui.labelFunctions.hide()
-        self.ui.labelTranslations.hide()
-
-        # Lists
-        self.ui.listwidgetUtterances.hide()
-        self.ui.listwidgetWords.hide()
-        self.ui.listwidgetMorphemes.hide()
-        self.ui.listwidgetFunctions.hide()
-        self.ui.listwidgetTranslations.hide()
-
-        # Buttons
-        self.ui.pushbuttonNewTierUtterances.hide()
-        self.ui.pushbuttonNewTierWords.hide()
-        self.ui.pushbuttonNewTierMorphemes.hide()
-        self.ui.pushbuttonNewTierFunctions.hide()
-        self.ui.pushbuttonNewTierTranslations.hide()
-
-        self.ui.line.hide()
-
-    def showTiersWidgets(self):
-        # Labels
-        self.ui.labelUtterances.show()
-        self.ui.labelWords.show()
-        self.ui.labelMorphemes.show()
-        self.ui.labelFunctions.show()
-        self.ui.labelTranslations.show()
-
-        # Lists
-        self.ui.listwidgetUtterances.show()
-        self.ui.listwidgetWords.show()
-        self.ui.listwidgetMorphemes.show()
-        self.ui.listwidgetFunctions.show()
-        self.ui.listwidgetTranslations.show()
-
-        # Buttons
-        self.ui.pushbuttonNewTierUtterances.show()
-        self.ui.pushbuttonNewTierWords.show()
-        self.ui.pushbuttonNewTierMorphemes.show()
-        self.ui.pushbuttonNewTierFunctions.show()
-        self.ui.pushbuttonNewTierTranslations.show()
-
-        self.ui.line.show()
-
-    def aboutDialog(self):
+    def about_dialog(self):
         about = QtGui.QMessageBox(self)
         about.setTextFormat(QtCore.Qt.RichText)
         about.setWindowTitle(self.tr("About PoioILE"))
         about.setText(self.tr("<b>PoioILE 0.2.1</b><br/>Poio Interlinear Editor by the <a href=\"http://cidles.eu\">Interdisciplinary Centre for Social and Language Documentation</a>.<br/><br/>All rights reserved. See LICENSE file for details.<br/><br/>For more information visit the website:<br/><a href=\"http://ltml.cidles.eu/poio\">http://ltml.cidles.eu/poio</a>"))
         about.exec_()
 
-    def lineeditValidate(self, input):
+    def lineedit_validate(self, input):
         a = input.split(" ")
         lg = 0
         lm = 0
@@ -143,188 +96,186 @@ class PoioILE(QtGui.QMainWindow):
         else:
             return False
 
-    def updateIlTextEdit(self):
+    def update_il_text_edit(self):
         self.ui.texteditInterlinear.clear()
         self.ui.texteditInterlinear.appendTitle(self.filename)
-        idInScene = 1
-        progress = QtGui.QProgressDialog(self.tr("Loading Tiers..."), self.tr("Abort"), 0, len(self.utterancesIds), self.parent())
-        progress.setWindowModality(QtCore.Qt.WindowModal)
-        for id in self.utterancesIds:
-            progress.setValue(idInScene - 1)
-            utterance = self.eafTree.getUtteranceById(id)
-            translations = self.eafTree.getTranslationsForUtterance(id)
+        id_in_scene = 1
+
+        for id in self.utterances_ids:
+            utterance = self.eaf_tree.get_utterance_by_id(id)
+            translations = self.eaf_tree.get_translations_for_utterance(id)
             if len(translations) == 0:
-                translationId = self.eafTree.newTranslationForUtteranceId(id, "")
-                translations = [ [translationId, self.strEmptyCharacter] ]
+                id_translation = self.eaf_tree.new_translation_for_utterance_id(id, "")
+                translations = [ [id_translation, self.str_empty_character] ]
             else:
                 for t in translations:
                     if t[1] == "":
-                        t[1] = self.strEmptyCharacter
-            wordIds = self.eafTree.getWordIdsForUtterance(id)
-            ilElements = []
-            for wid in wordIds:
-                if wid == "":
-                    strWord = self.strEmptyCharacter
-                    strMorphemes = self.strEmptyCharacter
-                    strGlosses = self.strEmptyCharacter
+                        t[1] = self.str_empty_character
+            ids_words = self.eaf_tree.get_word_ids_for_utterance(id)
+            il_elements = []
+            for id_w in ids_words:
+                if id_w == "":
+                    str_word = self.str_empty_character
+                    str_morphemes = self.str_empty_character
+                    str_glosses = self.str_empty_character
                 else:
-                    strWord = self.eafTree.getWordById(wid)
-                    if strWord == "":
-                        strWord = self.strEmptyCharacter
-                    strMorphemes = self.eafTree.getMorphemeStringForWord(wid)
-                    if strMorphemes == "":
-                        strMorphemes = strWord
-                    strGlosses = self.eafTree.getGlossStringForWord(wid)
-                    if strGlosses == "":
-                        strGlosses = self.strEmptyCharacter
-                ilElements.append([wid, strWord, strMorphemes, strGlosses, False])
-            self.ui.texteditInterlinear.appendUtterance(id,  utterance, ilElements, translations)
-            idInScene = idInScene + 1
-            if (progress.wasCanceled()):
-                self.graphicssceneIlText.clear()
-                break
-        progress.setValue(len(self.utterancesIds))
+                    str_word = self.eaf_tree.get_word_by_id(id_w)
+                    if str_word == "":
+                        str_word = self.str_empty_character
+                    str_morphemes = self.eaf_tree.get_morpheme_string_for_word(id_w)
+                    if str_morphemes == "":
+                        str_morphemes = str_word
+                    str_glosses = self.eaf_tree.get_gloss_string_for_word(id_w)
+                    if str_glosses == "":
+                        str_glosses = self.str_empty_character
+                il_elements.append([id_w, str_word, str_morphemes, str_glosses, False])
+            self.ui.texteditInterlinear.appendUtterance(id,  utterance, il_elements, translations)
+            id_in_scene = id_in_scene + 1
+
         self.ui.texteditInterlinear.scrollToAnchor("title")
 
-    def deleteCurrentUtterance(self):
-        self.updateEafTreeFromTexteditInterlinear()
+    def delete_current_utterance(self):
+        self.update_eaf_tree_from_textedit_interlinear()
         #utteranceId = self.ui.texteditInterlinear.deleteCurrentUtterance()
-        utteranceId = self.ui.texteditInterlinear.getCurrentUtteranceId()
-        if utteranceId == "":
+        id_utterance = self.ui.texteditInterlinear.getCurrentUtteranceId()
+        if id_utterance == "":
             QtGui.QMessageBox.info(self, self.tr("No utterance selected"), self.tr("Please move the cursor to the utterace you want to delete."), QtGui.QMessageBox.Ok)
         else:
-            self.eafTree.removeUtteranceWithId(utteranceId)
-            self.utterancesIds.remove(utteranceId)
-            self.updateIlTextEdit()
+            self.eaf_tree.remove_utterance_with_id(id_utterance)
+            self.utterances_ids.remove(id_utterance)
+            self.update_il_text_edit()
         
-    def insertUtteranceAfterCurrent(self):
+    def insert_utterance_after_current(self):
         pass
 
-    def deleteCurrentWord(self):
-        self.updateEafTreeFromTexteditInterlinear()
-        wordId = self.ui.texteditInterlinear.getCurrentWordId()
-        if wordId == "":
+    def delete_current_word(self):
+        self.update_eaf_tree_from_textedit_interlinear()
+        id_word = self.ui.texteditInterlinear.getCurrentWordId()
+        if id_word == "":
             QtGui.QMessageBox.information(self, self.tr("No word selected"), self.tr("Please move the cursor to the word you want to delete."), QtGui.QMessageBox.Ok)
         else:
-            print wordId
-            self.eafTree.removeWordWithId(wordId)
-            self.updateIlTextEdit()
+            self.eaf_tree.remove_word_with_id(id_word)
+            self.update_il_text_edit()
         
-    def insertWordAfterCurrent(self):
+    def insert_word_after_current(self):
         pass
 
-    def clearAllTierLists(self):
+    def clear_all_tier_lists(self):
         self.ui.listwidgetUtterances.clear()
         self.ui.listwidgetWords.clear()
         self.ui.listwidgetMorphemes.clear()
         self.ui.listwidgetFunctions.clear()
         self.ui.listwidgetTranslations.clear()
 
-    def clearAllTierVars(self):
-        self.tierWords = None
-        self.tierUtterances = None
-        self.tierMorphemes = None
-        self.tierFunctions = None
-        self.tierTranslations = None
+    def clear_all_tier_vars(self):
+        self.tier_words = None
+        self.tier_utterances = None
+        self.tier_morphemes = None
+        self.tier_functions = None
+        self.tier_translations = None
 
-    def newProject(self):
+    def new_project(self):
         pass
 
-    def openProject(self):
+    def open_project(self):
         pass
 
-    def saveProject(self):
+    def save_project(self):
         pass
 
-    def newFile(self):
+    def new_file(self):
         pass
 
-    def removeFile(self):
+    def remove_file(self):
         pass
 
-    def exportFile(self):
+    def export_file(self):
         filepath = QtGui.QFileDialog.getSaveFileName(self, self.tr("Export File"), "", self.tr("Elan files (*.eaf);;All files (*.*)"))
         filepath = unicode(filepath)
         if filepath != '':
             self.filepath = filepath
             self.filename = os.path.basename(filepath)
-            if self.tierUtterances == None or self.tierTranslations == None or self.tierWords == None or self.tierMorphemes == None or self.tierFunctions == None:
+            if self.tier_utterances == None or self.tier_translations == None or self.tier_words == None or self.tier_morphemes == None or self.tier_functions == None:
                 QtGui.QMessageBox.critical(self, self.tr("Please define tiers"), self.tr("Please create and choose all tiers before saving the data to a file."), QtGui.QMessageBox.Ok)
                 return
-            self.updateEafTreeFromTexteditInterlinear()
-            xml = self.eafTree.getFile(self.tierUtterances, self.tierWords, self.tierMorphemes, self.tierFunctions, self.tierTranslations)
+            self.update_eaf_tree_from_textedit_interlinear()
+            xml = self.eaf_tree.get_file(self.tier_utterances, self.tier_words, self.tier_morphemes, self.tier_functions, self.tier_translations)
             file = open(self.filepath, "w")
             file.write(xml)
             file.close()
             self.ui.statusBar.showMessage(self.tr("File exported."))
 
-    def addFile(self):
+    def add_file(self):
         filepath = QtGui.QFileDialog.getOpenFileName(self, self.tr("Add File"), "", self.tr("Elan files (*.eaf);;All files (*.*)"))
         filepath = unicode(filepath)
         if filepath != '':
             self.init = 1
-            self.annotationFileObject = EafAnnotationFileObject(filepath)
-            self.annotationTierHandler = self.annotationFileObject.createTierHandler()
-            self.annotationParser = self.annotationFileObject.createParserMorphsynt()
-            self.eafTree = AnnotationTree(self.annotationParser)
-            self.initTierTypesFromSettings()
-            self.eafTree.parse()
-            self.clearAllTierLists()
-            self.clearAllTierVars()
-            self.initTierUtterances()
+            #self.annotation_file_object = EafAnnotationFileObject(filepath)
+            #self.annotationTierHandler = self.annotationFileObject.createTierHandler()
+            #self.annotationParser = self.annotationFileObject.createParserMorphsynt()
+            self.eaf_tree = pyannotation.annotationtree.AnnotationTree(
+                pyannotation.data.EAF,
+                pyannotation.data.MORPHSYNT,
+                filepath
+            )
+            self.init_tier_types_from_settings()
+            self.eaf_tree.parse()
+            self.clear_all_tier_lists()
+            self.clear_all_tier_vars()
+            self.init_tier_utterances()
             self.filename = os.path.basename(filepath)
             self.filepath = filepath
 #            self.graphicssceneIlText.setTextTitle(self.filename)
             self.init = 0
-            self.updateIlTextEdit()
+            self.update_il_text_edit()
 
-    def updateEafTreeFromTexteditInterlinear(self):
-        dictAnnotations = self.ui.texteditInterlinear.getAnnotationDict()
-        for id in self.utterancesIds:
-            utterance = self.eafTree.getUtteranceById(id)
-            newUtterance = dictAnnotations["utterance-%s" % id]
-            if utterance != newUtterance:
-                self.eafTree.setUtterance(id, newUtterance)
-            translations = self.eafTree.getTranslationsForUtterance(id)
+    def update_eaf_tree_from_textedit_interlinear(self):
+        dict_annotations = self.ui.texteditInterlinear.getAnnotationDict()
+        for id in self.utterances_ids:
+            utterance = self.eaf_tree.get_utterance_by_id(id)
+            new_utterance = dict_annotations["utterance-%s" % id]
+            if utterance != new_utterance:
+                self.eaf_tree.set_utterance(id, new_utterance)
+            translations = self.eaf_tree.get_translations_for_utterance(id)
             for t in translations:
-                newTranslation = dictAnnotations["translation-%s" % t[0]]
-                if t[1] != newTranslation:
-                    self.eafTree.setTranslation(t[0], newTranslation)
-            wordIds = self.eafTree.getWordIdsForUtterance(id)
-            for wid in wordIds:
-                newWord = dictAnnotations["word-%s" % wid]
-                newMorphemes = dictAnnotations["morph-%s" % wid]
-                newGlosses = dictAnnotations["gloss-%s" % wid]
-                strWord = self.eafTree.getWordById(wid)
-                strMorphemes = self.eafTree.getMorphemeStringForWord(wid)
-                strGlosses = self.eafTree.getGlossStringForWord(wid)
-                if newWord != strWord or newMorphemes != strMorphemes or newGlosses != strGlosses:
-                    text = "%s %s %s" % (newWord, newMorphemes, newGlosses)
-                    if not self.lineeditValidate(text):
+                new_translation = dict_annotations["translation-%s" % t[0]]
+                if t[1] != new_translation:
+                    self.eaf_tree.set_translation(t[0], new_translation)
+            ids_words = self.eaf_tree.get_word_ids_for_utterance(id)
+            for id_w in ids_words:
+                new_word = dict_annotations["word-%s" % id_w]
+                new_morphemes = dict_annotations["morph-%s" % id_w]
+                new_glosses = dict_annotations["gloss-%s" % id_w]
+                str_word = self.eaf_tree.get_word_by_id(id_w)
+                str_morphemes = self.eaf_tree.get_morpheme_string_for_word(id_w)
+                str_glosses = self.eaf_tree.get_gloss_string_for_word(id_w)
+                if new_word != str_word or new_morphemes != str_morphemes or new_glosses != str_glosses:
+                    text = "%s %s %s" % (new_word, new_morphemes, new_glosses)
+                    if not self.lineedit_validate(text):
                         QtGui.QMessageBox.critical(self, self.tr("Wrong input"), self.tr("The number of morphemes and the number of glosses do not match. Please check your input in utterance ") + "%s." % id, QtGui.QMessageBox.Ok)
                     else:
-                        ilElement = self.eafTree.ilElementForString(text)
-                        self.eafTree.setIlElementForWordId(wid, ilElement)
+                        il_element = self.eaf_tree.il_element_for_string(text)
+                        self.eaf_tree.set_il_element_for_word_id(id_w, il_element)
         return True
 
-    def initTierTypesFromSettings(self):
+    def init_tier_types_from_settings(self):
             settings = QtCore.QSettings()
-            arrUtteranceTierTypes = unicode(settings.value("Ann/UttTierTypeRefs",  QtCore.QVariant(u"utterance|utterances|Äußerung|Äußerungen")).toString()).split("|")
-            arrWordTierTypes = unicode(settings.value("Ann/WordTierTypeRefs",  QtCore.QVariant(u"words|word|Wort|Worte|Wörter")).toString()).split("|")
-            arrMorphemeTierTypes = unicode(settings.value("Ann/MorphTierTypeRefs",  QtCore.QVariant(u"morpheme|morphemes|Morphem|Morpheme")).toString()).split("|")
-            arrGlossTierTypes = unicode(settings.value("Ann/GlossTierTypeRefs",  QtCore.QVariant(u"glosses|gloss|Glossen|Gloss|Glosse")).toString()).split("|")
-            arrTranslationTierTypes = unicode(settings.value("Ann/TransTierTypeRefs",  QtCore.QVariant(u"translation|translations|Übersetzung|Übersetzungen")).toString()).split("|")
-            self.annotationTierHandler.setUtterancetierType(arrUtteranceTierTypes)
+            arr_utterance_tier_types = unicode(settings.value("Ann/UttTierTypeRefs",  QtCore.QVariant(u"utterance|utterances|Äußerung|Äußerungen")).toString()).split("|")
+            arr_word_tier_types = unicode(settings.value("Ann/WordTierTypeRefs",  QtCore.QVariant(u"words|word|Wort|Worte|Wörter")).toString()).split("|")
+            arr_morpheme_tier_types = unicode(settings.value("Ann/MorphTierTypeRefs",  QtCore.QVariant(u"morpheme|morphemes|Morphem|Morpheme")).toString()).split("|")
+            arr_gloss_tier_types = unicode(settings.value("Ann/GlossTierTypeRefs",  QtCore.QVariant(u"glosses|gloss|Glossen|Gloss|Glosse")).toString()).split("|")
+            arr_translation_tier_types = unicode(settings.value("Ann/TransTierTypeRefs",  QtCore.QVariant(u"translation|translations|Übersetzung|Übersetzungen")).toString()).split("|")
+            self.eaf_tree.tier_handler.set_utterancetier_type(arr_utterance_tier_types)
             #print arrUtteranceTierTypes
-            self.annotationTierHandler.setWordtierType(arrWordTierTypes)
-            self.annotationTierHandler.setMorphemetierType(arrMorphemeTierTypes)
-            self.annotationTierHandler.setGlosstierType(arrGlossTierTypes)
-            self.annotationTierHandler.setTranslationtierType(arrTranslationTierTypes)
+            self.eaf_tree.tier_handler.set_wordtier_type(arr_word_tier_types)
+            self.eaf_tree.tier_handler.set_morphemetier_type(arr_morpheme_tier_types)
+            self.eaf_tree.tier_handler.set_glosstier_type(arr_gloss_tier_types)
+            self.eaf_tree.tier_handler.set_translationtier_type(arr_translation_tier_types)
             
-    def initTierUtterances(self):
+    def init_tier_utterances(self):
         self.ui.listwidgetUtterances.clear()
         #alltiers = self.eaf.tiers()
-        alltiers = self.annotationTierHandler.getUtterancetierIds()
+        alltiers = self.eaf_tree.tier_handler.get_utterancetier_ids()
         for id in alltiers:
             item_text = "%s" % id
             item = QtGui.QListWidgetItem(item_text)
@@ -335,9 +286,9 @@ class PoioILE(QtGui.QMainWindow):
         if len(alltiers)>0:
             self.ui.listwidgetUtterances.setCurrentItem(self.ui.listwidgetUtterances.item(0))
         
-    def initTierWords(self):
+    def init_tier_words(self):
         self.ui.listwidgetWords.clear()
-        alltiers = self.annotationTierHandler.getWordtierIds(self.tierUtterances)
+        alltiers = self.eaf_tree.tier_handler.get_wordtier_ids(self.tier_utterances)
         for id in alltiers:
             item_text = "%s" % id
             item = QtGui.QListWidgetItem(item_text)
@@ -348,9 +299,9 @@ class PoioILE(QtGui.QMainWindow):
         if len(alltiers)>0:
             self.ui.listwidgetWords.setCurrentItem(self.ui.listwidgetWords.item(0))
 
-    def initTierMorphemes(self):
+    def init_tier_morphemes(self):
         self.ui.listwidgetMorphemes.clear()
-        alltiers = self.annotationTierHandler.getMorphemetierIds(self.tierWords)
+        alltiers = self.eaf_tree.tier_handler.get_morphemetier_ids(self.tier_words)
         for id in alltiers:
             item_text = "%s" % id
             item = QtGui.QListWidgetItem(item_text)
@@ -361,9 +312,9 @@ class PoioILE(QtGui.QMainWindow):
         if len(alltiers)>0:
             self.ui.listwidgetMorphemes.setCurrentItem(self.ui.listwidgetMorphemes.item(0))
         
-    def initTierGlosses(self):
+    def init_tier_glosses(self):
         self.ui.listwidgetFunctions.clear()
-        alltiers = self.annotationTierHandler.getGlosstierIds(self.tierMorphemes)
+        alltiers = self.eaf_tree.tier_handler.get_glosstier_ids(self.tier_morphemes)
         for id in alltiers:
             item_text = "%s" % id
             item = QtGui.QListWidgetItem(item_text)
@@ -374,9 +325,9 @@ class PoioILE(QtGui.QMainWindow):
         if len(alltiers)>0:
             self.ui.listwidgetFunctions.setCurrentItem(self.ui.listwidgetFunctions.item(0))
 
-    def initTierTranslations(self):
+    def init_tier_translations(self):
         self.ui.listwidgetTranslations.clear()
-        alltiers = self.annotationTierHandler.getTranslationtierIds(self.tierUtterances)
+        alltiers = self.eaf_tree.tier_handler.get_translationtier_ids(self.tier_utterances)
         for id in alltiers:
             item_text = "%s" % id
             item = QtGui.QListWidgetItem(item_text)
@@ -387,85 +338,85 @@ class PoioILE(QtGui.QMainWindow):
         if len(alltiers)>0:
             self.ui.listwidgetTranslations.setCurrentItem(self.ui.listwidgetTranslations.item(0))
         
-    def setTierUtterances(self,  current,  prev):
+    def set_tier_utterances(self,  current,  prev):
         if current == None:
-            self.tierUtterances = None
+            self.tier_utterances = None
         else:
-            self.tierUtterances = unicode(current.data(32).toString())
-            self.initTierWords()
-            self.initTierTranslations()
+            self.tier_utterances = unicode(current.data(32).toString())
+            self.init_tier_words()
+            self.init_tier_translations()
             #self.utterancesIds = self.eaf.getAlignableAnnotationIdsForTier(self.tierUtterances)
-            self.utterancesIds = self.eafTree.getUtteranceIdsInTier(self.tierUtterances)
+            self.utterances_ids = self.eaf_tree.get_utterance_ids_in_tier(self.tier_utterances)
             if self.init == 0:
-                self.updateIlTextEdit()
+                self.update_il_text_edit()
 
-    def setTierWords(self,  current,  prev):
+    def set_tier_words(self,  current,  prev):
         if current == None:
-            self.tierWords = None
+            self.tier_words = None
         else:
-            self.tierWords = unicode(current.data(32).toString())
-            self.initTierMorphemes()
+            self.tier_words = unicode(current.data(32).toString())
+            self.init_tier_morphemes()
             if self.init == 0:
-                self.updateIlTextEdit()
+                self.update_il_text_edit()
 
-    def setTierMorphemes(self,  current,  prev):
+    def set_tier_morphemes(self,  current,  prev):
         if current == None:
-            self.tierMorphemes = None
+            self.tier_morphemes = None
         else:
-            self.tierMorphemes = unicode(current.data(32).toString())
-            self.initTierGlosses()
+            self.tier_morphemes = unicode(current.data(32).toString())
+            self.init_tier_glosses()
             if self.init == 0:
-                self.updateIlTextEdit()
+                self.update_il_text_edit()
 
-    def setTierFunctions(self,  current,  prev):
+    def set_tier_functions(self,  current,  prev):
         if current == None:
-            self.tierFunctions = None
+            self.tier_functions = None
         else:
-            self.tierFunctions = unicode(current.data(32).toString())
+            self.tier_functions = unicode(current.data(32).toString())
             if self.init == 0:
-                self.updateIlTextEdit()
+                self.update_il_text_edit()
 
-    def setTierTranslations(self,  current,  prev):
+    def set_tier_translations(self,  current,  prev):
         if current == None:
-            self.tierTranslations = None
+            self.tier_translations = None
         else:
-            self.tierTranslations = unicode(current.data(32).toString())
+            self.tier_translations = unicode(current.data(32).toString())
             if self.init == 0:
-                self.updateIlTextEdit()
+                self.update_il_text_edit()
 
-    def newTierMorphemes(self):
-        if self.tierWords == '':
+    def new_tier_morphemes(self):
+        if self.tier_words == '':
             QtGui.QMessageBox.critical(self, self.tr("No word tier"), self.tr("Please choose or create a word tier before creating the morpheme tier."), QtGui.QMessageBox.Ok)
         else:
-            locale = self.annotationTierHandler.getLocaleForTier(self.tierWords)
-            participant = self.annotationTierHandler.getParticipantForTier(self.tierWords)
-            dialog = DialogNewTier(self.tierWords,  'morphemes',  locale, participant, self)
+            locale = self.eaf_tree.tier_handler.get_locale_for_tier(self.tier_words)
+            participant = self.eaf_tree.tier_handler.get_participant_for_tier(self.tier_words)
+            dialog = DialogNewTier(self.tier_words,  'morphemes',  locale, participant, self)
             ret = dialog.exec_()
             if ret == 1:
-                self.annotationTierHandler.addTier(dialog.tierId, dialog.tierType, "Symbolic_Subdivision", self.tierWords, dialog.tierDefaultLocale, dialog.tierParticipant)
-                self.initTierMorphemes()
+                self.eaf_tree.tier_handler.add_tier(dialog.tierId, dialog.tierType, "Symbolic_Subdivision", self.tier_words, dialog.tierDefaultLocale, dialog.tierParticipant)
+                self.init_tier_morphemes()
 
-    def newTierFunctions(self):        
-        if self.tierMorphemes == '':
+    def new_tier_functions(self):
+        if self.tier_morphemes == '':
             QtGui.QMessageBox.critical(self, self.tr("No morphemes tier"), self.tr("Please choose or create a morphemes tier before creating the gloss tier."), QtGui.QMessageBox.Ok)
         else:
-            locale = self.annotationTierHandler.getLocaleForTier(self.tierMorphemes)
-            participant = self.annotationTierHandler.getParticipantForTier(self.tierMorphemes)
-            dialog = DialogNewTier(self.tierMorphemes,  'glosses',  locale, participant, self)
+            locale = self.eaf_tree.tier_handler.get_locale_for_tier(self.tier_morphemes)
+            participant = self.eaf_tree.tier_handler.get_participant_for_tier(self.tier_morphemes)
+            dialog = DialogNewTier(self.tier_morphemes,  'glosses',  locale, participant, self)
             ret = dialog.exec_()
             if ret == 1:
-                self.annotationTierHandler.addTier(dialog.tierId, dialog.tierType, "Symbolic_Subdivision", self.tierMorphemes, dialog.tierDefaultLocale, dialog.tierParticipant)
-                self.initTierGlosses()
+                self.eaf_tree.tier_handler.add_tier(dialog.tierId, dialog.tierType, "Symbolic_Subdivision", self.tier_morphemes, dialog.tierDefaultLocale, dialog.tierParticipant)
+                self.init_tier_glosses()
 
-    def newTierTranslations(self):        
-        if self.tierUtterances == '':
+    def new_tier_translations(self):
+        if self.tier_utterances == '':
             QtGui.QMessageBox.critical(self, self.tr("No utterances tier"), self.tr("Please choose or create an utterances tier before creating the translation tier."), QtGui.QMessageBox.Ok)
         else:
-            locale = self.annotationTierHandler.getLocaleForTier(self.tierUtterances)
-            participant = self.annotationTierHandler.getParticipantForTier(self.tierUtterances)
-            dialog = DialogNewTier(self.tierUtterances,  'translations',  locale, participant, self)
+            locale = self.eaf_tree.tier_handler.get_locale_for_tier(self.tier_utterances)
+            participant = self.eaf_tree.tier_handler.get_participant_for_tier(self.tier_utterances)
+            dialog = DialogNewTier(self.tier_utterances,  'translations',  locale, participant, self)
             ret = dialog.exec_()
             if ret == 1:
-                self.annotationTierHandler.addTier(dialog.tierId, dialog.tierType, "Symbolic_Association", self.tierUtterances, dialog.tierDefaultLocale, dialog.tierParticipant)
-                self.initTierTranslations()
+                self.eaf_tree.tier_handler.add_tier(dialog.tierId, dialog.tierType, "Symbolic_Association", self.tier_utterances, dialog.tierDefaultLocale, dialog.tierParticipant)
+                self.init_tier_translations()
 

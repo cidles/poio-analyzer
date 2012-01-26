@@ -82,16 +82,16 @@
          </layout>
         </item>
         <item>
-         <layout class="QVBoxLayout" name="verticalLayoutWbW">
+         <layout class="QVBoxLayout" name="verticalLayoutWfw">
           <item>
-           <widget class="QLabel" name="labelWbW">
+           <widget class="QLabel" name="labelWfw">
             <property name="text">
              <string>Word-for-word translation tiers</string>
             </property>
            </widget>
           </item>
           <item>
-           <widget class="QListWidget" name="listwidgetWbW">
+           <widget class="QListWidget" name="listwidgetWfw">
             <property name="maximumSize">
              <size>
               <width>16777215</width>
@@ -101,7 +101,7 @@
            </widget>
           </item>
           <item>
-           <widget class="QPushButton" name="pushbuttonNewTierWfW">
+           <widget class="QPushButton" name="pushbuttonNewTierWfw">
             <property name="text">
              <string>New</string>
             </property>
@@ -110,16 +110,16 @@
          </layout>
         </item>
         <item>
-         <layout class="QVBoxLayout" name="verticalLayoutGRAID1">
+         <layout class="QVBoxLayout" name="verticalLayoutGraid1">
           <item>
-           <widget class="QLabel" name="labelGRAID1">
+           <widget class="QLabel" name="labelGraid1">
             <property name="text">
              <string>GRAID1 tiers</string>
             </property>
            </widget>
           </item>
           <item>
-           <widget class="QListWidget" name="listwidgetGRAID1">
+           <widget class="QListWidget" name="listwidgetGraid1">
             <property name="maximumSize">
              <size>
               <width>16777215</width>
@@ -135,7 +135,7 @@
            </widget>
           </item>
           <item>
-           <widget class="QPushButton" name="pushbuttonNewTierGRAID1">
+           <widget class="QPushButton" name="pushbuttonNewTierGraid1">
             <property name="text">
              <string>New</string>
             </property>
@@ -144,16 +144,16 @@
          </layout>
         </item>
         <item>
-         <layout class="QVBoxLayout" name="verticalLayoutGRAID2">
+         <layout class="QVBoxLayout" name="verticalLayoutGraid2">
           <item>
-           <widget class="QLabel" name="labelGRAID2">
+           <widget class="QLabel" name="labelGraid2">
             <property name="text">
              <string>GRAID2 tiers</string>
             </property>
            </widget>
           </item>
           <item>
-           <widget class="QListWidget" name="listwidgetGRAID2">
+           <widget class="QListWidget" name="listwidgetGraid2">
             <property name="maximumSize">
              <size>
               <width>16777215</width>
@@ -163,7 +163,7 @@
            </widget>
           </item>
           <item>
-           <widget class="QPushButton" name="pushbuttonNewTierGRAID2">
+           <widget class="QPushButton" name="pushbuttonNewTierGraid2">
             <property name="text">
              <string>New</string>
             </property>
