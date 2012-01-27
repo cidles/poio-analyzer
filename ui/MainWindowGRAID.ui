@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>PoioILE</string>
+   <string>PoioGRAID</string>
   </property>
   <property name="locale">
    <locale language="English" country="UnitedStates"/>
@@ -19,311 +19,11 @@
   <widget class="QWidget" name="centralWidget">
    <layout class="QVBoxLayout" name="verticalLayout">
     <item>
-     <layout class="QVBoxLayout" name="verticalLayoutMain" stretch="0,0,1">
-      <item>
-       <layout class="QHBoxLayout" name="horizontalLayout">
-        <item>
-         <layout class="QVBoxLayout" name="verticalLayoutUtterances">
-          <item>
-           <widget class="QLabel" name="labelUtterances">
-            <property name="text">
-             <string>Utterance tiers</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QListWidget" name="listwidgetUtterances">
-            <property name="maximumSize">
-             <size>
-              <width>16777215</width>
-              <height>150</height>
-             </size>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QPushButton" name="pushbuttonNewTierUtterances">
-            <property name="text">
-             <string>New</string>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </item>
-        <item>
-         <layout class="QVBoxLayout" name="verticalLayoutWords">
-          <item>
-           <widget class="QLabel" name="labelWords">
-            <property name="text">
-             <string>Word tiers</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QListWidget" name="listwidgetWords">
-            <property name="enabled">
-             <bool>true</bool>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>16777215</width>
-              <height>150</height>
-             </size>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QPushButton" name="pushbuttonNewTierWords">
-            <property name="text">
-             <string>New</string>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </item>
-        <item>
-         <layout class="QVBoxLayout" name="verticalLayoutWfw">
-          <item>
-           <widget class="QLabel" name="labelWfw">
-            <property name="text">
-             <string>Word-for-word translation tiers</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QListWidget" name="listwidgetWfw">
-            <property name="maximumSize">
-             <size>
-              <width>16777215</width>
-              <height>150</height>
-             </size>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QPushButton" name="pushbuttonNewTierWfw">
-            <property name="text">
-             <string>New</string>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </item>
-        <item>
-         <layout class="QVBoxLayout" name="verticalLayoutGraid1">
-          <item>
-           <widget class="QLabel" name="labelGraid1">
-            <property name="text">
-             <string>GRAID1 tiers</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QListWidget" name="listwidgetGraid1">
-            <property name="maximumSize">
-             <size>
-              <width>16777215</width>
-              <height>150</height>
-             </size>
-            </property>
-            <property name="baseSize">
-             <size>
-              <width>0</width>
-              <height>0</height>
-             </size>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QPushButton" name="pushbuttonNewTierGraid1">
-            <property name="text">
-             <string>New</string>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </item>
-        <item>
-         <layout class="QVBoxLayout" name="verticalLayoutGraid2">
-          <item>
-           <widget class="QLabel" name="labelGraid2">
-            <property name="text">
-             <string>GRAID2 tiers</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QListWidget" name="listwidgetGraid2">
-            <property name="maximumSize">
-             <size>
-              <width>16777215</width>
-              <height>150</height>
-             </size>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QPushButton" name="pushbuttonNewTierGraid2">
-            <property name="text">
-             <string>New</string>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </item>
-        <item>
-         <layout class="QVBoxLayout" name="verticalLayoutTranslations">
-          <item>
-           <widget class="QLabel" name="labelTranslations">
-            <property name="text">
-             <string>Translation tiers</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QListWidget" name="listwidgetTranslations">
-            <property name="maximumSize">
-             <size>
-              <width>16777215</width>
-              <height>150</height>
-             </size>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QPushButton" name="pushbuttonNewTierTranslations">
-            <property name="text">
-             <string>New</string>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </item>
-       </layout>
-      </item>
-      <item>
-       <widget class="Line" name="line">
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-       </widget>
-      </item>
+     <layout class="QVBoxLayout" name="verticalLayoutMain" stretch="1">
       <item>
        <layout class="QHBoxLayout" name="horizontalLayoutEditArea">
         <item>
-         <layout class="QVBoxLayout" name="verticalLayoutProjectFiles">
-          <item>
-           <widget class="QLabel" name="label_6">
-            <property name="text">
-             <string>Project Files:</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QListWidget" name="listwidgetFiles">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <layout class="QHBoxLayout" name="horizontalLayout_4">
-            <item>
-             <widget class="QToolButton" name="toolbuttonAddFile">
-              <property name="enabled">
-               <bool>true</bool>
-              </property>
-              <property name="toolTip">
-               <string>Add File...</string>
-              </property>
-              <property name="text">
-               <string>...</string>
-              </property>
-              <property name="icon">
-               <iconset resource="poio.qrc">
-                <normaloff>:/images/pixmaps/fileopen.png</normaloff>:/images/pixmaps/fileopen.png</iconset>
-              </property>
-              <property name="autoRaise">
-               <bool>false</bool>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QToolButton" name="toolbuttonNewFile">
-              <property name="toolTip">
-               <string>New File</string>
-              </property>
-              <property name="text">
-               <string>...</string>
-              </property>
-              <property name="icon">
-               <iconset resource="poio.qrc">
-                <normaloff>:/images/pixmaps/filenew.png</normaloff>:/images/pixmaps/filenew.png</iconset>
-              </property>
-              <property name="autoRaise">
-               <bool>false</bool>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QToolButton" name="toolbuttonExportFile">
-              <property name="toolTip">
-               <string>Export File...</string>
-              </property>
-              <property name="text">
-               <string>...</string>
-              </property>
-              <property name="icon">
-               <iconset resource="poio.qrc">
-                <normaloff>:/images/pixmaps/fileexport.png</normaloff>:/images/pixmaps/fileexport.png</iconset>
-              </property>
-              <property name="autoRaise">
-               <bool>false</bool>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QToolButton" name="toolbuttonRemoveFile">
-              <property name="toolTip">
-               <string>Remove File</string>
-              </property>
-              <property name="text">
-               <string>...</string>
-              </property>
-              <property name="icon">
-               <iconset resource="poio.qrc">
-                <normaloff>:/images/pixmaps/fileclose.png</normaloff>:/images/pixmaps/fileclose.png</iconset>
-              </property>
-              <property name="autoRaise">
-               <bool>false</bool>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <spacer name="horizontalSpacer">
-              <property name="orientation">
-               <enum>Qt::Horizontal</enum>
-              </property>
-              <property name="sizeType">
-               <enum>QSizePolicy::Minimum</enum>
-              </property>
-              <property name="sizeHint" stdset="0">
-               <size>
-                <width>40</width>
-                <height>20</height>
-               </size>
-              </property>
-             </spacer>
-            </item>
-           </layout>
-          </item>
-         </layout>
-        </item>
-        <item>
-         <widget class="PoioIlTextEdit" name="texteditInterlinear"/>
+         <widget class="PoioGraidTextEdit" name="textedit"/>
         </item>
        </layout>
       </item>
@@ -345,14 +45,10 @@
     <property name="title">
      <string>File</string>
     </property>
-    <addaction name="actionNew"/>
-    <addaction name="actionOpen"/>
-    <addaction name="actionSave"/>
-    <addaction name="separator"/>
-    <addaction name="actionAddFile"/>
     <addaction name="actionNewFile"/>
-    <addaction name="actionExportFile"/>
-    <addaction name="actionRemoveFile"/>
+    <addaction name="actionOpenFile"/>
+    <addaction name="actionSaveFile"/>
+    <addaction name="actionSaveFileAs"/>
     <addaction name="separator"/>
     <addaction name="actionQuit"/>
    </widget>
@@ -373,7 +69,7 @@
     <property name="title">
      <string>About</string>
     </property>
-    <addaction name="actionAboutPoioILE"/>
+    <addaction name="actionAboutPoioGRAID"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuEdit"/>
@@ -389,46 +85,55 @@
    <attribute name="toolBarBreak">
     <bool>false</bool>
    </attribute>
-   <addaction name="actionNew"/>
-   <addaction name="actionOpen"/>
-   <addaction name="actionSave"/>
+   <addaction name="actionNewFile"/>
+   <addaction name="actionOpenFile"/>
+   <addaction name="actionSaveFile"/>
    <addaction name="separator"/>
    <addaction name="actionInsertUtterance"/>
    <addaction name="actionDeleteUtterance"/>
    <addaction name="actionInsertWord"/>
    <addaction name="actionDeleteWord"/>
   </widget>
-  <action name="actionOpen">
+  <action name="actionOpenFile">
    <property name="icon">
     <iconset resource="poio.qrc">
      <normaloff>:/images/pixmaps/projectopen.png</normaloff>:/images/pixmaps/projectopen.png</iconset>
    </property>
    <property name="text">
-    <string>Open Project...</string>
+    <string>Open File...</string>
+   </property>
+   <property name="toolTip">
+    <string>Open File</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+O</string>
    </property>
   </action>
-  <action name="actionSave">
+  <action name="actionSaveFile">
    <property name="icon">
     <iconset resource="poio.qrc">
      <normaloff>:/images/pixmaps/filesave.png</normaloff>:/images/pixmaps/filesave.png</iconset>
    </property>
    <property name="text">
-    <string>Save Project</string>
+    <string>Save File</string>
+   </property>
+   <property name="toolTip">
+    <string>Save File</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+S</string>
    </property>
   </action>
-  <action name="actionSaveAs">
+  <action name="actionSaveFileAs">
    <property name="icon">
     <iconset resource="poio.qrc">
      <normaloff>:/images/pixmaps/filesaveas.png</normaloff>:/images/pixmaps/filesaveas.png</iconset>
    </property>
    <property name="text">
     <string>Save File as...</string>
+   </property>
+   <property name="toolTip">
+    <string>Save File As</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+Alt+S</string>
@@ -442,16 +147,16 @@
     <string>Ctrl+Q</string>
    </property>
   </action>
-  <action name="actionNew">
+  <action name="actionNewFile">
    <property name="icon">
     <iconset resource="poio.qrc">
-     <normaloff>:/images/pixmaps/projectnew.png</normaloff>:/images/pixmaps/projectnew.png</iconset>
+     <normaloff>:/images/pixmaps/filenew.png</normaloff>:/images/pixmaps/filenew.png</iconset>
    </property>
    <property name="text">
-    <string>New Project...</string>
+    <string>New File...</string>
    </property>
    <property name="toolTip">
-    <string>Create a new annotation project</string>
+    <string>Create a new annotation file</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+N</string>
@@ -516,9 +221,12 @@
     <string>Delete word</string>
    </property>
   </action>
-  <action name="actionAboutPoioILE">
+  <action name="actionAboutPoioGRAID">
    <property name="text">
-    <string>About PoioILE...</string>
+    <string>About PoioGRAID...</string>
+   </property>
+   <property name="toolTip">
+    <string>About PoioGRAID</string>
    </property>
   </action>
   <action name="actionOptions">
@@ -526,60 +234,12 @@
     <string>Options...</string>
    </property>
   </action>
-  <action name="actionAddFile">
-   <property name="enabled">
-    <bool>true</bool>
-   </property>
-   <property name="icon">
-    <iconset resource="poio.qrc">
-     <normaloff>:/images/pixmaps/fileopen.png</normaloff>:/images/pixmaps/fileopen.png</iconset>
-   </property>
-   <property name="text">
-    <string>Add File...</string>
-   </property>
-  </action>
-  <action name="actionExportFile">
-   <property name="enabled">
-    <bool>true</bool>
-   </property>
-   <property name="icon">
-    <iconset resource="poio.qrc">
-     <normaloff>:/images/pixmaps/fileexport.png</normaloff>:/images/pixmaps/fileexport.png</iconset>
-   </property>
-   <property name="text">
-    <string>Export File...</string>
-   </property>
-  </action>
-  <action name="actionRemoveFile">
-   <property name="enabled">
-    <bool>true</bool>
-   </property>
-   <property name="icon">
-    <iconset resource="poio.qrc">
-     <normaloff>:/images/pixmaps/fileclose.png</normaloff>:/images/pixmaps/fileclose.png</iconset>
-   </property>
-   <property name="text">
-    <string>Remove File</string>
-   </property>
-  </action>
-  <action name="actionNewFile">
-   <property name="enabled">
-    <bool>true</bool>
-   </property>
-   <property name="icon">
-    <iconset resource="poio.qrc">
-     <normaloff>:/images/pixmaps/filenew.png</normaloff>:/images/pixmaps/filenew.png</iconset>
-   </property>
-   <property name="text">
-    <string>New File..</string>
-   </property>
-  </action>
  </widget>
  <customwidgets>
   <customwidget>
-   <class>PoioIlTextEdit</class>
+   <class>PoioGraidTextEdit</class>
    <extends>QTextEdit</extends>
-   <header>PoioIlTextEdit.h</header>
+   <header>PoioGraidTextEdit.h</header>
   </customwidget>
  </customwidgets>
  <resources>

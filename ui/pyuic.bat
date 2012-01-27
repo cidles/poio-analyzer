@@ -7,5 +7,6 @@ call %PYQTTOOLSDIR%\pyuic4 MainAnalyzerQML.ui > %DIALOGSDIR%\Ui_MainAnalyzerQML.
 call %PYQTTOOLSDIR%\pyuic4 TabWidgetSearch.ui > %DIALOGSDIR%\Ui_TabWidgetSearch.py
 call %PYQTTOOLSDIR%\pyuic4 Options.ui > %DIALOGSDIR%\Ui_Options.py
 call %PYQTTOOLSDIR%\pyuic4 NewTier.ui > %DIALOGSDIR%\Ui_NewTier.py
+call %PYQTTOOLSDIR%\pyuic4 NewFileGraid.ui > %DIALOGSDIR%\Ui_NewFileGraid.py
 call %PYQTTOOLSDIR%\pyrcc4 poio.qrc > %DIALOGSDIR%\poio_rc.py
 call %PYQTTOOLSDIR%\pyrcc4 poioanalyzer.qrc > %DIALOGSDIR%\poioanalyzer_rc.py

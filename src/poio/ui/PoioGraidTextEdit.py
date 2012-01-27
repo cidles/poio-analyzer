@@ -6,7 +6,7 @@ from PyQt4 import QtCore, QtGui
 from evoque.template import Template
 from lxml import etree
 
-class PoioIlTextEdit(QtGui.QTextEdit):
+class PoioGraidTextEdit(QtGui.QTextEdit):
 
     def __init__(self, parent):
         QtGui.QTextEdit.__init__(self, parent)
@@ -17,7 +17,7 @@ class PoioIlTextEdit(QtGui.QTextEdit):
         palette = self.palette()
         palette.setColor(QtGui.QPalette.Inactive, QtGui.QPalette.Highlight, QtGui.QColor("yellow"))
         self.setPalette(palette)
-        #QtCore.QObject.connect(self, QtCore.SIGNAL("cursorPositionChanged()"), self.checkCursorPosition)
+        QtCore.QObject.connect(self, QtCore.SIGNAL("cursorPositionChanged()"), self.checkCursorPosition)
         settings = QtCore.QSettings()
         self.strEmptyCharacter = unicode(settings.value("Ann/EmptyChar",  QtCore.QVariant("#")).toString())
 
@@ -122,24 +122,37 @@ class PoioIlTextEdit(QtGui.QTextEdit):
         utteranceId = re.sub(r"^utterance-", "", utteranceId)
         return utteranceId
         
-    def appendTitle(self, title):
+    def append_title(self, title):
         self.setDocumentTitle(title)
         # margin is not working :-(
         self.append("<div style=\"font-size:14pt;\">&nbsp;</div>")
         self.append("<div style=\"font-size:14pt;font-weight:bold;text-decoration:underline;\" id=\"title\" class=\"title\">" + title + "</div>")
 
+    def append_element(self, element, structure_type_handler):
+        c = self.textCursor()
+        c.movePosition(QtGui.QTextCursor.End)
 
-    def appendUtterances(self, utterances):
-        t = Template(os.path.abspath("html"), "PoioIlUtterances.html")
-        text = t.evoque(vars(), quoting="str")
-        self.append(text)
+        # create table
+        count_rows = structure_type_handler.nr_of_tiers
+        table = c.insertTable(count_rows, 2)
+
+        for i, row_name in enumerate(structure_type_handler.flat_data_hierarchy):
+            c = table.cellAt(i, 0)
+            c.firstCursorPosition().insertText(row_name)
+
+    def _insert_annotation_cell(self, elements, table, row):
+        for e in elements:
+            if type(e) is list:
+                self._insert_annotation_cell(e, table)
+            else:
+                if self._current_column > table.columns():
+                    table.appendColumns(1)
+                c = table.cellAt(self._current_row, self._current_column)
+                c.firstCursorPosition().insertText(e['annotation'])
+                self._current_column += 1
+
 
     def appendUtterance(self, id,  utterance, ilElements, translations):
-        t = Template(os.path.abspath("html"), "PoioGRAIDUtterance.html")
-        countwords = len(ilElements)
-        text = t.evoque(vars(), quoting="str")
-        self.append(text)
-
         return
     
         c = self.textCursor()
