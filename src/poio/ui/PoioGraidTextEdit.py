@@ -3,8 +3,8 @@
 
 import os, re
 from PyQt4 import QtCore, QtGui
-from evoque.template import Template
-from lxml import etree
+#from evoque.template import Template
+from xml import etree
 
 class PoioGraidTextEdit(QtGui.QTextEdit):
 
@@ -140,16 +140,35 @@ class PoioGraidTextEdit(QtGui.QTextEdit):
             c = table.cellAt(i, 0)
             c.firstCursorPosition().insertText(row_name)
 
-    def _insert_annotation_cell(self, elements, table, row):
-        for e in elements:
-            if type(e) is list:
-                self._insert_annotation_cell(e, table)
+        self._insert_annotation_cell(element,
+                                     structure_type_handler.flat_data_hierarchy,
+                                     structure_type_handler.data_hierarchy,
+                                     table,
+                                     1)
+
+    def _insert_annotation_cell(self, elements, flat_hierarchy, hierarchy, table, column):
+        inserted = 0
+        for i, t in enumerate(hierarchy):
+            if type(t) is list:
+                elements_list = elements[i]
+                for i, e in enumerate(elements_list):
+                    inserted += self._insert_annotation_cell(e, flat_hierarchy, t, table, column + i + inserted)
+                inserted = inserted + len(elements_list) - 1
+                merge_rows = [ r for r in hierarchy if type(r) is not list]
+                for r in merge_rows:
+                    row = flat_hierarchy.index(r)
+                    table.mergeCells(row, column, 1, inserted + 1)
             else:
-                if self._current_column > table.columns():
-                    table.appendColumns(1)
-                c = table.cellAt(self._current_row, self._current_column)
-                c.firstCursorPosition().insertText(e['annotation'])
-                self._current_column += 1
+                row = flat_hierarchy.index(t)
+                self._insert_annotation_cell2(elements[i], table, row, column)
+
+        return inserted
+
+    def _insert_annotation_cell2(self, e, table, row, column):
+        if (column + 1) > table.columns():
+            table.appendColumns(1)
+        c = table.cellAt(row, column)
+        c.firstCursorPosition().insertText(e['annotation'])
 
 
     def appendUtterance(self, id,  utterance, ilElements, translations):

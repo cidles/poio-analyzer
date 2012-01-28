@@ -4,16 +4,12 @@
 import sys, os.path, re
 from PyQt4 import QtCore, QtGui
 
-#from pyannotation.elan.data import EafAnnotationFileObject
 import pyannotation.annotationtree
 import pyannotation.data
-from pyannotation.data import DataStructureTypeGraid
 
-import poio
-from poio.ui.PoioGraidTextEdit import PoioGraidTextEdit
+#from poio.ui.PoioGraidTextEdit import PoioGraidTextEdit
 from poio.ui.Ui_MainWindowGRAID import Ui_MainWindow
 from poio.ui.Ui_NewFileGraid import Ui_NewFileGraid
-from poio.ui.DialogNewTier import DialogNewTier
 
 
 class PoioGRAID(QtGui.QMainWindow):
@@ -198,7 +194,20 @@ class PoioGRAID(QtGui.QMainWindow):
             wfw = element_tb['wfw'][i].split()
             graid1 = element_tb['gr_1'][i].split()
             graid2 = element_tb['gr_2'][i]
-            elements.append([ phrase, [ words, wfw, graid1 ], graid2 ])
+            il_elements = []
+            for i in range(max(len(words), len(wfw), len(graid1))):
+                e1 = ''
+                e2 = ''
+                e3 = ''
+                if i < len(words):
+                    e1 = words[i]
+                if i < len(wfw):
+                    e2 = wfw[i]
+                if i < len(graid1):
+                    e3 = graid1[i]
+                il_elements.append([e1, e2, e3])
+
+            elements.append([ phrase, il_elements, graid2 ])
 
         return [ utterance, elements, translation, comment]
 
