@@ -148,13 +148,16 @@ class PoioGRAID(QtGui.QMainWindow):
                 if line.startswith("\\"):
                     block.append(line.strip())
 
+        utterance = self._parse_element_from_tb_style(block)
+        self.annotation_tree.append_element_without_ids(utterance)
+
         print self.annotation_tree.tree
 
     def _parse_element_from_tb_style(self, block):
         element_tb = dict()
-        utterance = ""
-        translation = ""
-        comment = ""
+        utterance = u""
+        translation = u""
+        comment = u""
 
         for line in block:
             line = re.sub(" +", " ", line)
@@ -162,7 +165,7 @@ class PoioGRAID(QtGui.QMainWindow):
             line_elements = line.split(None, 1)
             if len(line_elements) < 2:
                 type = line
-                text = ""
+                text = u""
             else:
                 type = line_elements[0]
                 text = line_elements[1]
@@ -171,7 +174,7 @@ class PoioGRAID(QtGui.QMainWindow):
                 if type[1:] == "sl":
                     #text = re.sub("\(\d+\) ?", "", text)
                     utterance = text
-                    utterance = re.sub("\d# ?", "", utterance)
+                    utterance = re.sub("\d?# ?", "", utterance)
                     utterance = re.sub(" +", " ", utterance)
                     utterance = utterance.strip()
 
@@ -185,20 +188,41 @@ class PoioGRAID(QtGui.QMainWindow):
                     #text = re.sub("^x ", "", text)
                     element_tb[type[1:]] = list()
                     last_start = 0
-                    for m in re.finditer("(?:\d#|$)", text):
+                    for m in re.finditer("(?:\d?#|$)", text):
                         element_tb[type[1:]].append(text[last_start:m.start(0)])
                         last_start = m.end(0)
         elements = []
         for i, phrase in enumerate(element_tb['sl']):
             words = phrase.split()
-            wfw = element_tb['wfw'][i].split()
-            graid1 = element_tb['gr_1'][i].split()
-            graid2 = element_tb['gr_2'][i]
+            wfw = []
+            try:
+                wfw = element_tb['wfw'][i].split()
+            except IndexError:
+                pass
+            except KeyError:
+                pass
+
+            graid1 = []
+            try:
+                graid1 = element_tb['gr_1'][i].split()
+            except IndexError:
+                pass
+            except KeyError:
+                pass
+
+            graid2 = ''
+            try:
+                graid2 = element_tb['gr_2'][i]
+            except IndexError:
+                pass
+            except KeyError:
+                pass
+
             il_elements = []
             for i in range(max(len(words), len(wfw), len(graid1))):
-                e1 = ''
-                e2 = ''
-                e3 = ''
+                e1 = u''
+                e2 = u''
+                e3 = u''
                 if i < len(words):
                     e1 = words[i]
                 if i < len(wfw):
@@ -212,7 +236,8 @@ class PoioGRAID(QtGui.QMainWindow):
         return [ utterance, elements, translation, comment]
 
     def save_file(self):
-        pass
+        tree = self.ui.textedit.anntation_tree_from_document(self.annotation_tree.structure_type_handler)
+        print tree
 
     def save_file_as(self):
         filepath = QtGui.QFileDialog.getSaveFileName(self, self.tr("Export File"), "", self.tr("Elan files (*.eaf);;All files (*.*)"))
