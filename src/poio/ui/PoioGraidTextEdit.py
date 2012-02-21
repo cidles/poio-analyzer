@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 # (C) 2009 copyright by Peter Bouda
 
-import os, re
+import re
 from PyQt4 import QtCore, QtGui
-#from evoque.template import Template
-from xml import etree
+
+class NoStructureTypeHandlerError(Exception): pass
 
 class PoioGraidTextEdit(QtGui.QTextEdit):
 
@@ -13,6 +13,7 @@ class PoioGraidTextEdit(QtGui.QTextEdit):
         self.setLineWrapMode(QtGui.QTextEdit.NoWrap)
         self.setAcceptRichText(False)
         self.setUndoRedoEnabled(True)
+        self.structure_type_handler = None
 
         #self.setStyleSheet(".match { color:green; }")
 
@@ -25,11 +26,13 @@ class PoioGraidTextEdit(QtGui.QTextEdit):
     def keyPressEvent(self, event):
         c = self.textCursor()
         t = c.currentTable()
+
         if event.key() == QtCore.Qt.Key_Return or event.key() == QtCore.Qt.Key_Enter \
             or t == None or c.charFormat().fontCapitalization()==QtGui.QFont.SmallCaps:
             event.accept()
-        else:
-            QtGui.QTextEdit.keyPressEvent(self, event)
+            return
+
+        QtGui.QTextEdit.keyPressEvent(self, event)
 
     def insertFromMimeData(self, source):
         text = unicode(source.text())
@@ -45,18 +48,92 @@ class PoioGraidTextEdit(QtGui.QTextEdit):
         else:
             self.setCursorWidth(1)
 
+    def insert_column_at_cursor(self, id, after):
+        """
+        Inserts column before the current cursor position.
+        """
+        if not self.structure_type_handler:
+            raise NoStructureTypeHandlerError
+
+        cursor = self.textCursor()
+        table = cursor.currentTable()
+        if table:
+            cell = table.cellAt(cursor)
+            r = cell.row()
+            c = cell.column()
+            if r > 0 and c > 0:
+                new_column_pos = cell.column()
+                merge_with = new_column_pos + 1
+                if after:
+                    new_column_pos = cell.column() + cell.columnSpan()
+                    merge_with = new_column_pos - 1
+
+                table.insertColumns(new_column_pos, 1)
+
+                type = self.structure_type_handler.flat_data_hierarchy[r]
+                for p in self.structure_type_handler.get_parents_of_type(type):
+                    print p
+
+    def delete_column_at_cursor(self):
+        cursor = self.textCursor()
+        table = cursor.currentTable()
+        if table:
+            cell = table.cellAt(cursor)
+            if cell.row() > 0 and cell.column() > 0:
+                #print cell.column()
+                #print cell.columnSpan()
+                for i in range(cell.columnSpan()):
+                    table.removeColumns(cell.column(), 1)
+                #table.removeColumns(cell.column(), cell.columnSpan() + 1)
+                #print unicode(table.document().toPlainText()).encode("utf-8")
+
+    def delete_current_cell(self, merge_cells = False):
+        """
+        Removes the cell with the current cursor.
+        """
+        cursor = self.textCursor()
+        table = cursor.currentTable()
+        if table:
+            cell = table.cellAt(cursor)
+            r = cell.row()
+            c = cell.column()
+            c_span =cell.columnSpan()
+            if r > 0:
+                parent_cell = table.cellAt(r - 1, c)
+                # do not delete if this cell already spans all columns of parent
+                if parent_cell.columnSpan() > c_span:
+                    if not merge_cells:
+                        # remove the text in the cell
+                        cursor.setPosition(cell.firstCursorPosition().position())
+                        cursor.setPosition(cell.lastCursorPosition().position(), QtGui.QTextCursor.KeepAnchor)
+                        cursor.removeSelectedText()
+
+                    # merge the cells
+                    start_merge_column = c
+                    # if this cell is not the last element of parent then we merge with previous neighbour
+                    # otherwise we merge with next neighbour
+                    if (parent_cell.column() + parent_cell.columnSpan()) == (c + c_span):
+                        neighbour_cell = table.cellAt(r, c - 1)
+                        start_merge_column = neighbour_cell.column()
+                    else:
+                        neighbour_cell = table.cellAt(r, c + c_span)
+                    table.mergeCells(r, start_merge_column, 1, c_span + neighbour_cell.columnSpan())
+
     def append_title(self, title):
         self.setDocumentTitle(title)
         # margin is not working :-(
         self.append("<div style=\"font-size:14pt;\">&nbsp;</div>")
         self.append("<div style=\"font-size:14pt;font-weight:bold;text-decoration:underline;\" id=\"title\" class=\"title\">" + title + "</div>")
 
-    def append_element(self, element, structure_type_handler):
+    def append_element(self, element):
+        if not self.structure_type_handler:
+            raise NoStructureTypeHandlerError
+
         c = self.textCursor()
         c.movePosition(QtGui.QTextCursor.End)
 
         # create table
-        count_rows = structure_type_handler.nr_of_tiers
+        count_rows = self.structure_type_handler.nr_of_types
         table = c.insertTable(count_rows, 2)
         format = table.format()
         format.setCellPadding(2)
@@ -67,12 +144,12 @@ class PoioGraidTextEdit(QtGui.QTextEdit):
         table.setFormat(format)
 
         self._insert_annotation_cell(element,
-                                     structure_type_handler.flat_data_hierarchy,
-                                     structure_type_handler.data_hierarchy,
+                                     self.structure_type_handler.flat_data_hierarchy,
+                                     self.structure_type_handler.data_hierarchy,
                                      table,
                                      1)
 
-        for i, row_name in enumerate(structure_type_handler.flat_data_hierarchy):
+        for i, row_name in enumerate(self.structure_type_handler.flat_data_hierarchy):
             c = table.cellAt(i, 0)
             format = c.format()
             format.setFontCapitalization(QtGui.QFont.SmallCaps)
@@ -107,7 +184,10 @@ class PoioGraidTextEdit(QtGui.QTextEdit):
         f.setAnchorNames([unicode(e['id'])])
         c.setFormat(f)
 
-    def anntation_tree_from_document(self, structure_type_handler):
+    def anntation_tree_from_document(self):
+        if not self.structure_type_handler:
+            raise NoStructureTypeHandlerError
+
         root = self.document().rootFrame()
         #string_document_text = unicode(self.document().toPlainText())
         tree = []
@@ -115,8 +195,8 @@ class PoioGraidTextEdit(QtGui.QTextEdit):
             if frame.__class__.__name__ == "QTextTable":
                 utterance = list()
                 self._annotation_cell(utterance,
-                    structure_type_handler.flat_data_hierarchy,
-                    structure_type_handler.data_hierarchy,
+                    self.structure_type_handler.flat_data_hierarchy,
+                    self.structure_type_handler.data_hierarchy,
                     frame,
                     0, 1, frame.columns()-1)
                 tree.append(utterance)

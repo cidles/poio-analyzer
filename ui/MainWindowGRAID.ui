@@ -38,7 +38,7 @@
      <x>0</x>
      <y>0</y>
      <width>977</width>
-     <height>21</height>
+     <height>19</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -60,8 +60,9 @@
     <addaction name="separator"/>
     <addaction name="actionInsertUtterance"/>
     <addaction name="actionDeleteUtterance"/>
-    <addaction name="actionInsertWord"/>
-    <addaction name="actionDeleteWord"/>
+    <addaction name="actionInsertColumnBefore"/>
+    <addaction name="actionInsertColumnAfter"/>
+    <addaction name="actionDeleteColumn"/>
     <addaction name="separator"/>
     <addaction name="actionOptions"/>
    </widget>
@@ -91,8 +92,9 @@
    <addaction name="separator"/>
    <addaction name="actionInsertUtterance"/>
    <addaction name="actionDeleteUtterance"/>
-   <addaction name="actionInsertWord"/>
-   <addaction name="actionDeleteWord"/>
+   <addaction name="actionInsertColumnBefore"/>
+   <addaction name="actionInsertColumnAfter"/>
+   <addaction name="actionDeleteColumn"/>
   </widget>
   <action name="actionOpenFile">
    <property name="icon">
@@ -164,7 +166,7 @@
   </action>
   <action name="actionDeleteUtterance">
    <property name="enabled">
-    <bool>true</bool>
+    <bool>false</bool>
    </property>
    <property name="icon">
     <iconset resource="poio.qrc">
@@ -176,7 +178,7 @@
   </action>
   <action name="actionInsertUtterance">
    <property name="enabled">
-    <bool>true</bool>
+    <bool>false</bool>
    </property>
    <property name="icon">
     <iconset resource="poio.qrc">
@@ -190,6 +192,9 @@
    </property>
   </action>
   <action name="actionCopyUtterance">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="text">
     <string>Copy utterance</string>
    </property>
@@ -197,19 +202,7 @@
     <string>Ctrl+C</string>
    </property>
   </action>
-  <action name="actionInsertWord">
-   <property name="enabled">
-    <bool>true</bool>
-   </property>
-   <property name="icon">
-    <iconset resource="poio.qrc">
-     <normaloff>:/images/pixmaps/insertword.png</normaloff>:/images/pixmaps/insertword.png</iconset>
-   </property>
-   <property name="text">
-    <string>Insert new word</string>
-   </property>
-  </action>
-  <action name="actionDeleteWord">
+  <action name="actionDeleteColumn">
    <property name="enabled">
     <bool>true</bool>
    </property>
@@ -218,7 +211,13 @@
      <normaloff>:/images/pixmaps/removeword.png</normaloff>:/images/pixmaps/removeword.png</iconset>
    </property>
    <property name="text">
-    <string>Delete word</string>
+    <string>Delete column</string>
+   </property>
+   <property name="toolTip">
+    <string>Delete column</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+D</string>
    </property>
   </action>
   <action name="actionAboutPoioGRAID">
@@ -230,8 +229,29 @@
    </property>
   </action>
   <action name="actionOptions">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="text">
     <string>Options...</string>
+   </property>
+  </action>
+  <action name="actionInsertColumnBefore">
+   <property name="icon">
+    <iconset resource="poio.qrc">
+     <normaloff>:/images/pixmaps/insertcolumnbefore.png</normaloff>:/images/pixmaps/insertcolumnbefore.png</iconset>
+   </property>
+   <property name="text">
+    <string>Insert column before</string>
+   </property>
+  </action>
+  <action name="actionInsertColumnAfter">
+   <property name="icon">
+    <iconset resource="poio.qrc">
+     <normaloff>:/images/pixmaps/insertcolumnafter.png</normaloff>:/images/pixmaps/insertcolumnafter.png</iconset>
+   </property>
+   <property name="text">
+    <string>Insert column after</string>
    </property>
   </action>
  </widget>
