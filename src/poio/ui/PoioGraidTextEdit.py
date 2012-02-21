@@ -61,18 +61,44 @@ class PoioGraidTextEdit(QtGui.QTextEdit):
             cell = table.cellAt(cursor)
             r = cell.row()
             c = cell.column()
+            c_span = cell.columnSpan()
+            type = self.structure_type_handler.flat_data_hierarchy[r]
+
+            # check if the cursor is in utterance or an annotation of the
+            # same level
+            for s in self.structure_type_handler.get_siblings_of_type(
+                    "utterance"):
+                if r == self.structure_type_handler.flat_data_hierarchy.\
+                        index(s):
+                    return
+
             if r > 0 and c > 0:
-                new_column_pos = cell.column()
-                merge_with = new_column_pos + 1
+                new_column_pos = c
                 if after:
-                    new_column_pos = cell.column() + cell.columnSpan()
-                    merge_with = new_column_pos - 1
+                    new_column_pos = c + c_span
+                else:
+                    c = c + 1
 
                 table.insertColumns(new_column_pos, 1)
 
-                type = self.structure_type_handler.flat_data_hierarchy[r]
                 for p in self.structure_type_handler.get_parents_of_type(type):
-                    print p
+                    r_parent = self.structure_type_handler.\
+                        flat_data_hierarchy.index(p)
+                    cell_parent = table.cellAt(r_parent, c)
+                    c_parent = cell_parent.column()
+                    c_span_parent = cell_parent.columnSpan()
+                    # if this cell was appended after the parent cell
+                    # then merge in parent row
+                    if after:
+                        if (c_parent + c_span_parent) == c + c_span:
+                            table.mergeCells(r_parent,
+                                c_parent, 1, c_span_parent + 1)
+                    # if this cell was inserted before parent then merge
+                    # parent now
+                    else:
+                        if c_parent == c:
+                            table.mergeCells(r_parent,
+                                c_parent - 1, 1, c_span_parent + 1)
 
     def delete_column_at_cursor(self):
         cursor = self.textCursor()

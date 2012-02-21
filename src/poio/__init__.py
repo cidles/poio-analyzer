@@ -18,12 +18,12 @@
 #
 
 __author__      = 'Peter Bouda <pbouda@cidles.eu>'
-__version__     = '0.2'
-__versionminor_ = '0'
-__date__        = '2010-10-01'
-__copyright__   = '© 2010 Peter Bouda'
+__version__     = '0.3'
+__versionminor_ = '1'
+__date__        = '2012-02-21'
+__copyright__   = '© 2010-2012 Peter Bouda'
 __licence__     = 'GNU General Public License, version 3 or later'
-__url__         = 'http://ltml.cidles.eu/'
+__url__         = 'http://www.cidles.eu/ltll'
 
 
 
