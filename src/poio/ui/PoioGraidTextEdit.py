@@ -21,14 +21,18 @@ class PoioGraidTextEdit(QtGui.QTextEdit):
         #palette.setColor(QtGui.QPalette.Inactive, QtGui.QPalette.Highlight, QtGui.QColor("yellow"))
         #self.setPalette(palette)
 
-        QtCore.QObject.connect(self, QtCore.SIGNAL("cursorPositionChanged()"), self.check_cursor_position)
+        QtCore.QObject.connect(
+            self, QtCore.SIGNAL("cursorPositionChanged()"),
+            self.check_cursor_position)
 
     def keyPressEvent(self, event):
         c = self.textCursor()
         t = c.currentTable()
 
-        if event.key() == QtCore.Qt.Key_Return or event.key() == QtCore.Qt.Key_Enter \
-            or t == None or c.charFormat().fontCapitalization()==QtGui.QFont.SmallCaps:
+        if event.key() == QtCore.Qt.Key_Return or \
+                event.key() == QtCore.Qt.Key_Enter or \
+                t == None or \
+                c.charFormat().fontCapitalization() == QtGui.QFont.SmallCaps:
             event.accept()
             return
 
@@ -43,7 +47,9 @@ class PoioGraidTextEdit(QtGui.QTextEdit):
     def check_cursor_position(self):
         c = self.textCursor()
         t = c.currentTable()
-        if t == None or c.charFormat().fontCapitalization()==QtGui.QFont.SmallCaps:
+
+        if t == None or \
+                c.charFormat().fontCapitalization() == QtGui.QFont.SmallCaps:
             self.setCursorWidth(0)
         else:
             self.setCursorWidth(1)
@@ -72,14 +78,22 @@ class PoioGraidTextEdit(QtGui.QTextEdit):
                         index(s):
                     return
 
-            if r > 0 and c > 0:
+            if r >  0 and c > 0:
                 new_column_pos = c
                 if after:
                     new_column_pos = c + c_span
                 else:
-                    c = c + 1
+                    c += 1
 
                 table.insertColumns(new_column_pos, 1)
+                # set text format to normal text and add id
+                for row in range(table.rows()):
+                    new_cell = table.cellAt(row, new_column_pos)
+                    f = new_cell.format()
+                    f.setFontCapitalization(QtGui.QFont.MixedCase)
+                    f.setAnchorNames([unicode(id)])
+                    new_cell.setFormat(f)
+                    id += 1
 
                 for p in self.structure_type_handler.get_parents_of_type(type):
                     r_parent = self.structure_type_handler.\
@@ -99,6 +113,8 @@ class PoioGraidTextEdit(QtGui.QTextEdit):
                         if c_parent == c:
                             table.mergeCells(r_parent,
                                 c_parent - 1, 1, c_span_parent + 1)
+
+        return id
 
     def delete_column_at_cursor(self):
         cursor = self.textCursor()
@@ -130,26 +146,49 @@ class PoioGraidTextEdit(QtGui.QTextEdit):
                 if parent_cell.columnSpan() > c_span:
                     if not merge_cells:
                         # remove the text in the cell
-                        cursor.setPosition(cell.firstCursorPosition().position())
-                        cursor.setPosition(cell.lastCursorPosition().position(), QtGui.QTextCursor.KeepAnchor)
+                        cursor.setPosition(
+                            cell.firstCursorPosition().position())
+                        cursor.setPosition(
+                            cell.lastCursorPosition().position(),
+                            QtGui.QTextCursor.KeepAnchor)
                         cursor.removeSelectedText()
 
                     # merge the cells
                     start_merge_column = c
                     # if this cell is not the last element of parent then we merge with previous neighbour
                     # otherwise we merge with next neighbour
-                    if (parent_cell.column() + parent_cell.columnSpan()) == (c + c_span):
+                    if (parent_cell.column() + parent_cell.columnSpan()) == \
+                            (c + c_span):
                         neighbour_cell = table.cellAt(r, c - 1)
                         start_merge_column = neighbour_cell.column()
                     else:
                         neighbour_cell = table.cellAt(r, c + c_span)
-                    table.mergeCells(r, start_merge_column, 1, c_span + neighbour_cell.columnSpan())
+                    table.mergeCells(
+                        r, start_merge_column, 1,
+                        c_span + neighbour_cell.columnSpan())
 
     def append_title(self, title):
         self.setDocumentTitle(title)
         # margin is not working :-(
         self.append("<div style=\"font-size:14pt;\">&nbsp;</div>")
         self.append("<div style=\"font-size:14pt;font-weight:bold;text-decoration:underline;\" id=\"title\" class=\"title\">" + title + "</div>")
+
+    def insert_empty_element(self, after = False):
+        pass
+
+    def delete_current_element(self):
+        cursor = self.textCursor()
+        table = cursor.currentTable()
+        current_id = None
+        if table:
+            cell = table.cellAt(0, 1)
+            f = cell.format()
+            current_id = f.anchorNames()[0]
+            cursor.setPosition(table.firstPosition() - 1)
+            cursor.setPosition(
+                table.lastPosition() + 1, QtGui.QTextCursor.KeepAnchor)
+            cursor.removeSelectedText()
+        return current_id
 
     def append_element(self, element):
         if not self.structure_type_handler:
@@ -170,12 +209,13 @@ class PoioGraidTextEdit(QtGui.QTextEdit):
         table.setFormat(format)
 
         self._insert_annotation_cell(element,
-                                     self.structure_type_handler.flat_data_hierarchy,
-                                     self.structure_type_handler.data_hierarchy,
-                                     table,
-                                     1)
+            self.structure_type_handler.flat_data_hierarchy,
+            self.structure_type_handler.data_hierarchy,
+            table,
+            1)
 
-        for i, row_name in enumerate(self.structure_type_handler.flat_data_hierarchy):
+        for i, row_name in enumerate(
+                self.structure_type_handler.flat_data_hierarchy):
             c = table.cellAt(i, 0)
             format = c.format()
             format.setFontCapitalization(QtGui.QFont.SmallCaps)
@@ -189,7 +229,8 @@ class PoioGraidTextEdit(QtGui.QTextEdit):
             if type(t) is list:
                 elements_list = elements[i]
                 for i, e in enumerate(elements_list):
-                    inserted += self._insert_annotation_cell(e, flat_hierarchy, t, table, column + i + inserted)
+                    inserted += self._insert_annotation_cell(
+                        e, flat_hierarchy, t, table, column + i + inserted)
                 inserted = inserted + len(elements_list) - 1
                 merge_rows = [ r for r in hierarchy if type(r) is not list]
                 for r in merge_rows:
@@ -237,7 +278,9 @@ class PoioGraidTextEdit(QtGui.QTextEdit):
                 while column_add < column_span:
                     c = table.cellAt(row, column + column_add)
                     sub_element = list()
-                    self._annotation_cell(sub_element, flat_hierarchy, t, table, row, column + column_add, c.columnSpan())
+                    self._annotation_cell(
+                        sub_element, flat_hierarchy, t, table, row,
+                        column + column_add, c.columnSpan())
                     sub_tree.append(sub_element)
                     column_add += c.columnSpan()
                 elements.append(sub_tree)

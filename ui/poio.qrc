@@ -1,5 +1,7 @@
 <RCC>
   <qresource prefix="images">
+    <file>pixmaps/insertutteranceafter.png</file>
+    <file>pixmaps/insertutterancebefore.png</file>
     <file>pixmaps/projectnew.png</file>
     <file>pixmaps/fileclose.png</file>
     <file>pixmaps/projectopen.png</file>
@@ -9,7 +11,6 @@
     <file>pixmaps/fileopen.png</file>
     <file>pixmaps/filesave.png</file>
     <file>pixmaps/filesaveas.png</file>
-    <file>pixmaps/insertutterance.png</file>
     <file>pixmaps/removeutterance.png</file>
     <file>pixmaps/insertcolumnafter.png</file>
     <file>pixmaps/insertcolumnbefore.png</file>

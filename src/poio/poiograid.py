@@ -36,7 +36,7 @@ class PoioGRAID(QtGui.QMainWindow):
         self.ui.textedit.structure_type_handler = \
             self.annotation_tree.structure_type_handler
 
-        self.filename = ''
+        self.filepath = None
         self.title = ''
 
     def init_settings(self):
@@ -60,8 +60,13 @@ class PoioGRAID(QtGui.QMainWindow):
         self.ui.actionAboutPoioGRAID.triggered.connect(self.about_dialog)
 
         # insert and delete tables and columns
-        #QtCore.QObject.connect(self.ui.actionInsertUtterance, QtCore.SIGNAL("triggered()"), self.insert_utterance_after_current)
-        #QtCore.QObject.connect(self.ui.actionDeleteUtterance, QtCore.SIGNAL("triggered()"), self.delete_current_utterance)
+        self.ui.actionInsertUtteranceAfter.triggered.connect(
+            self.insert_utterance_after)
+        self.ui.actionInsertUtteranceBefore.triggered.connect(
+            self.insert_utterance_before)
+        self.ui.actionDeleteUtterance.triggered.connect(
+            self.delete_utterance)
+
         self.ui.actionInsertColumnBefore.triggered.connect(
             self.insert_column_before)
         self.ui.actionInsertColumnAfter.triggered.connect(
@@ -72,7 +77,15 @@ class PoioGRAID(QtGui.QMainWindow):
         about = QtGui.QMessageBox(self)
         about.setTextFormat(QtCore.Qt.RichText)
         about.setWindowTitle(self.tr("About PoioGRAID"))
-        about.setText(self.tr("<b>PoioGRAID 0.1.0</b><br/>Poio GRAID Editor by the <a href=\"http://www.cidles.eu\">Interdisciplinary Centre for Social and Language Documentation</a>.<br/><br/>All rights reserved. See LICENSE file for details.<br/><br/>For more information visit the website:<br/><a href=\"http://www.cidles.eu/ltll/poio\">http://www.cidles.eu/ltll/poio</a>"))
+        about.setText(self.tr("<b>PoioGRAID 0.1.0</b><br/>Poio GRAID Editor "
+                              "by the <a href=\"http://www.cidles.eu\">"
+                              "Interdisciplinary Centre for Social and "
+                              "Language Documentation</a>.<br/><br/>All "
+                              "rights reserved. See LICENSE file for details."
+                              "<br/><br/>For more information visit the "
+                              "website:<br/><a href=\"http://www.cidles.eu/"
+                              "ltll/poio\">http://www.cidles.eu/ltll/poio"
+                              "</a>"))
         about.exec_()
 
     def update_textedit(self):
@@ -85,6 +98,11 @@ class PoioGRAID(QtGui.QMainWindow):
         self.ui.textedit.scrollToAnchor("title")
 
     def delete_utterance(self):
+        deleted_id = self.ui.textedit.delete_current_element()
+        print deleted_id
+        # TODO: delete utterance from annotation tree here
+
+    def insert_utterance_before(self):
         pass
 
     def insert_utterance_after(self):
@@ -94,12 +112,14 @@ class PoioGRAID(QtGui.QMainWindow):
         self.ui.textedit.delete_column_at_cursor()
 
     def insert_column_before(self):
-        self.ui.textedit.insert_column_at_cursor(
+        next_id = self.ui.textedit.insert_column_at_cursor(
             self.annotation_tree.next_annotation_id, False)
+        self.annotation_tree.next_annotation_id = next_id
 
     def insert_column_after(self):
-        self.ui.textedit.insert_column_at_cursor(
+        next_id = self.ui.textedit.insert_column_at_cursor(
             self.annotation_tree.next_annotation_id, True)
+        self.annotation_tree.next_annotation_id = next_id
 
     def new_file(self):
         dialog = QtGui.QDialog(self)
@@ -115,19 +135,23 @@ class PoioGRAID(QtGui.QMainWindow):
         self.update_textedit()
 
     def save_file(self):
-        tree = self.ui.textedit.anntation_tree_from_document(
-            self.annotation_tree.structure_type_handler)
-        print tree
+        if not self.filepath:
+            self.save_file_as()
+        else:
+            tree = self.ui.textedit.anntation_tree_from_document()
+            print tree
 
     def save_file_as(self):
         filepath = QtGui.QFileDialog.getSaveFileName(
             self,
-            self.tr("Export File"),
+            self.tr("Save File As"),
             "",
-            self.tr("Elan files (*.eaf);;All files (*.*)"))
+            self.tr("CPickle file (*.cpickle);;All files (*.*)"))
         filepath = unicode(filepath)
         if filepath != '':
-            pass
+            self.filepath = filepath
+        else:
+            return
 
     def open_file(self):
         filepath = QtGui.QFileDialog.getOpenFileName(

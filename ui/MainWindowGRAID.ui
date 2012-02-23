@@ -58,7 +58,8 @@
     </property>
     <addaction name="actionCopyUtterance"/>
     <addaction name="separator"/>
-    <addaction name="actionInsertUtterance"/>
+    <addaction name="actionInsertUtteranceAfter"/>
+    <addaction name="actionInsertUtteranceBefore"/>
     <addaction name="actionDeleteUtterance"/>
     <addaction name="actionInsertColumnBefore"/>
     <addaction name="actionInsertColumnAfter"/>
@@ -90,7 +91,8 @@
    <addaction name="actionOpenFile"/>
    <addaction name="actionSaveFile"/>
    <addaction name="separator"/>
-   <addaction name="actionInsertUtterance"/>
+   <addaction name="actionInsertUtteranceBefore"/>
+   <addaction name="actionInsertUtteranceAfter"/>
    <addaction name="actionDeleteUtterance"/>
    <addaction name="actionInsertColumnBefore"/>
    <addaction name="actionInsertColumnAfter"/>
@@ -166,7 +168,7 @@
   </action>
   <action name="actionDeleteUtterance">
    <property name="enabled">
-    <bool>false</bool>
+    <bool>true</bool>
    </property>
    <property name="icon">
     <iconset resource="poio.qrc">
@@ -174,21 +176,6 @@
    </property>
    <property name="text">
     <string>Delete utterance</string>
-   </property>
-  </action>
-  <action name="actionInsertUtterance">
-   <property name="enabled">
-    <bool>false</bool>
-   </property>
-   <property name="icon">
-    <iconset resource="poio.qrc">
-     <normaloff>:/images/pixmaps/insertutterance.png</normaloff>:/images/pixmaps/insertutterance.png</iconset>
-   </property>
-   <property name="text">
-    <string>Insert new utterance</string>
-   </property>
-   <property name="toolTip">
-    <string>Insert new utterance</string>
    </property>
   </action>
   <action name="actionCopyUtterance">
@@ -252,6 +239,27 @@
    </property>
    <property name="text">
     <string>Insert column after</string>
+   </property>
+  </action>
+  <action name="actionInsertUtteranceBefore">
+   <property name="icon">
+    <iconset resource="poio.qrc">
+     <normaloff>:/images/pixmaps/insertutterancebefore.png</normaloff>:/images/pixmaps/insertutterancebefore.png</iconset>
+   </property>
+   <property name="text">
+    <string>Insert utterance before</string>
+   </property>
+   <property name="toolTip">
+    <string>Insert utterance before</string>
+   </property>
+  </action>
+  <action name="actionInsertUtteranceAfter">
+   <property name="icon">
+    <iconset resource="poio.qrc">
+     <normaloff>:/images/pixmaps/insertutteranceafter.png</normaloff>:/images/pixmaps/insertutteranceafter.png</iconset>
+   </property>
+   <property name="text">
+    <string>Insert utterance after</string>
    </property>
   </action>
  </widget>
