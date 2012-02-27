@@ -13,6 +13,7 @@ class PoioGraidTextEdit(QtGui.QTextEdit):
         self.setLineWrapMode(QtGui.QTextEdit.NoWrap)
         self.setAcceptRichText(False)
         self.setUndoRedoEnabled(True)
+        self.setTabChangesFocus(True)
         self.structure_type_handler = None
 
         #self.setStyleSheet(".match { color:green; }")
@@ -29,10 +30,16 @@ class PoioGraidTextEdit(QtGui.QTextEdit):
         c = self.textCursor()
         t = c.currentTable()
 
+        if  not t or \
+                c.charFormat().fontCapitalization() == QtGui.QFont.SmallCaps:
+            event.accept()
+            return
+
         if event.key() == QtCore.Qt.Key_Return or \
                 event.key() == QtCore.Qt.Key_Enter or \
-                t == None or \
-                c.charFormat().fontCapitalization() == QtGui.QFont.SmallCaps:
+                event.key() == QtCore.Qt.Key_Tab:
+            c.movePosition(QtGui.QTextCursor.NextCell)
+            self.setTextCursor(c)
             event.accept()
             return
 
@@ -91,6 +98,7 @@ class PoioGraidTextEdit(QtGui.QTextEdit):
                     new_cell = table.cellAt(row, new_column_pos)
                     f = new_cell.format()
                     f.setFontCapitalization(QtGui.QFont.MixedCase)
+                    f.setForeground(QtGui.QBrush("black"))
                     f.setAnchorNames([unicode(id)])
                     new_cell.setFormat(f)
                     id += 1
@@ -139,7 +147,7 @@ class PoioGraidTextEdit(QtGui.QTextEdit):
             cell = table.cellAt(cursor)
             r = cell.row()
             c = cell.column()
-            c_span =cell.columnSpan()
+            c_span = cell.columnSpan()
             if r > 0:
                 parent_cell = table.cellAt(r - 1, c)
                 # do not delete if this cell already spans all columns of parent
@@ -173,9 +181,6 @@ class PoioGraidTextEdit(QtGui.QTextEdit):
         self.append("<div style=\"font-size:14pt;\">&nbsp;</div>")
         self.append("<div style=\"font-size:14pt;font-weight:bold;text-decoration:underline;\" id=\"title\" class=\"title\">" + title + "</div>")
 
-    def insert_empty_element(self, after = False):
-        pass
-
     def delete_current_element(self):
         cursor = self.textCursor()
         table = cursor.currentTable()
@@ -190,12 +195,39 @@ class PoioGraidTextEdit(QtGui.QTextEdit):
             cursor.removeSelectedText()
         return current_id
 
+    def insert_element(self, element, after = False):
+        if not self.structure_type_handler:
+            raise NoStructureTypeHandlerError
+
+        c = self.textCursor()
+        table = c.currentTable()
+
+        current_id = None
+
+        if table:
+            cell = table.cellAt(0, 1)
+            f = cell.format()
+            current_id = f.anchorNames()[0]
+            if after:
+                pos = table.lastPosition() + 1
+            else:
+                pos = table.firstPosition() - 1
+
+            self._insert_element_at_position(element, pos)
+
+        return current_id
+
     def append_element(self, element):
         if not self.structure_type_handler:
             raise NoStructureTypeHandlerError
 
         c = self.textCursor()
         c.movePosition(QtGui.QTextCursor.End)
+        self._insert_element_at_position(element, c.position())
+
+    def _insert_element_at_position(self, element, pos):
+        c = self.textCursor()
+        c.setPosition(pos)
 
         # create table
         count_rows = self.structure_type_handler.nr_of_types
@@ -215,7 +247,7 @@ class PoioGraidTextEdit(QtGui.QTextEdit):
             1)
 
         for i, row_name in enumerate(
-                self.structure_type_handler.flat_data_hierarchy):
+            self.structure_type_handler.flat_data_hierarchy):
             c = table.cellAt(i, 0)
             format = c.format()
             format.setFontCapitalization(QtGui.QFont.SmallCaps)

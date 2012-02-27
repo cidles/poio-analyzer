@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 # (C) 2009-2012 copyright by Peter Bouda
 
-import sys, os.path, re
+import re
+import pickle
 from PyQt4 import QtCore, QtGui
 
 import pyannotation.annotationtree
@@ -99,14 +100,20 @@ class PoioGRAID(QtGui.QMainWindow):
 
     def delete_utterance(self):
         deleted_id = self.ui.textedit.delete_current_element()
-        print deleted_id
-        # TODO: delete utterance from annotation tree here
+        if deleted_id:
+            self.annotation_tree.remove_element_with_id(deleted_id)
 
     def insert_utterance_before(self):
-        pass
+        element = self.annotation_tree.empty_element()
+        current_id = self.ui.textedit.insert_element(element)
+        if current_id:
+            self.annotation_tree.insert_element(element, current_id)
 
     def insert_utterance_after(self):
-        pass
+        element = self.annotation_tree.empty_element()
+        current_id = self.ui.textedit.insert_element(element, True)
+        if current_id:
+            self.annotation_tree.insert_element(element, current_id, True)
 
     def delete_column(self):
         self.ui.textedit.delete_column_at_cursor()
@@ -139,17 +146,23 @@ class PoioGRAID(QtGui.QMainWindow):
             self.save_file_as()
         else:
             tree = self.ui.textedit.anntation_tree_from_document()
-            print tree
+            file = open(self.filepath, "wb")
+            pickle.dump(tree, file)
+            file.close()
+
 
     def save_file_as(self):
         filepath = QtGui.QFileDialog.getSaveFileName(
             self,
             self.tr("Save File As"),
             "",
-            self.tr("CPickle file (*.cpickle);;All files (*.*)"))
+            self.tr("Pickle file (*.pickle);;All files (*.*)"))
         filepath = unicode(filepath)
         if filepath != '':
+            if not filepath.endswith(".cpickle"):
+                filepath += ".cpickle"
             self.filepath = filepath
+            self.save_file()
         else:
             return
 
@@ -158,10 +171,14 @@ class PoioGRAID(QtGui.QMainWindow):
             self,
             self.tr("Add File"),
             "",
-            self.tr("Elan files (*.eaf);;All files (*.*)"))
+            self.tr("Pickle files (*.pickle);;All files (*.*)"))
         filepath = unicode(filepath)
         if filepath != '':
-            pass
+            file = open(filepath, "rb")
+            self.annotation_tree.tree = pickle.load(file)
+            file.close()
+            self.update_textedit()
+            self.filepath = filepath
 
 
     # Private functions #######################################################
@@ -182,16 +199,16 @@ class PoioGRAID(QtGui.QMainWindow):
         for line in lines:
             if line and line.startswith("\\id") and len(block):
                 utterance = self._parse_element_from_tb_style(block)
-                self.annotation_tree.append_element_without_ids(utterance)
+                self.annotation_tree.append_element(utterance)
                 block = list()
             elif line:
                 if line.startswith("\\"):
                     block.append(line.strip())
 
         utterance = self._parse_element_from_tb_style(block)
-        self.annotation_tree.append_element_without_ids(utterance)
+        self.annotation_tree.append_element(utterance)
 
-        print self.annotation_tree.tree
+        #print self.annotation_tree.tree
 
     def _parse_element_from_tb_style(self, block):
         element_tb = dict()
@@ -270,9 +287,26 @@ class PoioGRAID(QtGui.QMainWindow):
                     e2 = wfw[i]
                 if i < len(graid1):
                     e3 = graid1[i]
-                il_elements.append([e1, e2, e3])
+                il_elements.append([
+                    { 'id' : self.annotation_tree.next_annotation_id,
+                      'annotation' :  e1 },
+                    { 'id' : self.annotation_tree.next_annotation_id,
+                      'annotation' : e2 },
+                    { 'id' : self.annotation_tree.next_annotation_id,
+                      'annotation' : e3 }])
 
-            elements.append([ phrase, il_elements, graid2 ])
+            elements.append([
+                { 'id' : self.annotation_tree.next_annotation_id,
+                  'annotation' : phrase },
+                il_elements,
+                { 'id' : self.annotation_tree.next_annotation_id,
+                  'annotation' : graid2 }])
 
-        return [ utterance, elements, translation, comment]
+        return [ { 'id' : self.annotation_tree.next_annotation_id,
+                   'annotation' : utterance },
+                  elements,
+                  { 'id' : self.annotation_tree.next_annotation_id,
+                    'annotation' : translation },
+                  { 'id' : self.annotation_tree.next_annotation_id,
+                    'annotation' : comment } ]
 
