@@ -18,9 +18,9 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-import sys, os
+import sys
+import os
 import glob
-import re
 from distutils.core import setup
 
 # build targets
@@ -65,20 +65,25 @@ if target == DEFAULT or building_source:
       ('share/applications', inst_desktop)
     ]
 
-author, email = re.match(r'^(.*) <(.*)>$', poio.__author__).groups()
-
 setup(
-  name         = 'poio',
-  version      = poio.__version__,
-  package_dir  = { '':'src' },
-  packages     = packages,
-  description='Poio, annotation and analyzation software for linguists.',
-  long_description='Poio is an annotation and analyzation software for linguists. It allows to add morpho-syntactic annotations to language data and analyze those data.',
-  author       = author,
-  author_email = email,
-  url          = poio.__url__,
-  scripts      = glob.glob('bin/*'),
-  data_files   = data_files
+    name             = 'poio',
+    version          = poio.__version__,
+    url              = poio.__url__,
+    description      = 'Poio, annotation and analysis software for linguists.',
+    long_description = poio.__longdescr__,
+    license          = poio.__license__,
+    keywords         = poio.__keywords__,
+    maintainer       = poio.__maintainer__,
+    maintainer_email = poio.__maintainer_email__,
+    classifiers      = poio.__classifiers__,
+    author           = poio.__author__,
+    author_email     = poio.__author_email__,
+
+    package_dir      = { '':'src' },
+    packages         = packages,
+    scripts          = glob.glob('bin/*'),
+    data_files       = data_files,
+    install_requires = ['PyQt']
 )
 
 
