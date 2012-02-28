@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'MainWindowGRAID.ui'
 #
-# Created: Thu Feb 23 17:18:43 2012
+# Created: Tue Feb 28 09:48:13 2012
 #      by: PyQt4 UI code generator 4.9
 #
 # WARNING! All changes made in this file will be lost!
@@ -175,11 +175,11 @@ class Ui_MainWindow(object):
         self.actionAboutPoioGRAID.setText(QtGui.QApplication.translate("MainWindow", "About PoioGRAID...", None, QtGui.QApplication.UnicodeUTF8))
         self.actionAboutPoioGRAID.setToolTip(QtGui.QApplication.translate("MainWindow", "About PoioGRAID", None, QtGui.QApplication.UnicodeUTF8))
         self.actionOptions.setText(QtGui.QApplication.translate("MainWindow", "Options...", None, QtGui.QApplication.UnicodeUTF8))
-        self.actionInsertColumnBefore.setText(QtGui.QApplication.translate("MainWindow", "Insert column before", None, QtGui.QApplication.UnicodeUTF8))
-        self.actionInsertColumnAfter.setText(QtGui.QApplication.translate("MainWindow", "Insert column after", None, QtGui.QApplication.UnicodeUTF8))
-        self.actionInsertUtteranceBefore.setText(QtGui.QApplication.translate("MainWindow", "Insert utterance before", None, QtGui.QApplication.UnicodeUTF8))
+        self.actionInsertColumnBefore.setText(QtGui.QApplication.translate("MainWindow", "Insert empty column before", None, QtGui.QApplication.UnicodeUTF8))
+        self.actionInsertColumnAfter.setText(QtGui.QApplication.translate("MainWindow", "Insert empty column after", None, QtGui.QApplication.UnicodeUTF8))
+        self.actionInsertUtteranceBefore.setText(QtGui.QApplication.translate("MainWindow", "Insert empty utterance before", None, QtGui.QApplication.UnicodeUTF8))
         self.actionInsertUtteranceBefore.setToolTip(QtGui.QApplication.translate("MainWindow", "Insert utterance before", None, QtGui.QApplication.UnicodeUTF8))
-        self.actionInsertUtteranceAfter.setText(QtGui.QApplication.translate("MainWindow", "Insert utterance after", None, QtGui.QApplication.UnicodeUTF8))
+        self.actionInsertUtteranceAfter.setText(QtGui.QApplication.translate("MainWindow", "Insert empty utterance after", None, QtGui.QApplication.UnicodeUTF8))
 
 from PoioGraidTextEdit import PoioGraidTextEdit
 import poio_rc

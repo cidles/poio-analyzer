@@ -229,7 +229,7 @@
      <normaloff>:/images/pixmaps/insertcolumnbefore.png</normaloff>:/images/pixmaps/insertcolumnbefore.png</iconset>
    </property>
    <property name="text">
-    <string>Insert column before</string>
+    <string>Insert empty column before</string>
    </property>
   </action>
   <action name="actionInsertColumnAfter">
@@ -238,7 +238,7 @@
      <normaloff>:/images/pixmaps/insertcolumnafter.png</normaloff>:/images/pixmaps/insertcolumnafter.png</iconset>
    </property>
    <property name="text">
-    <string>Insert column after</string>
+    <string>Insert empty column after</string>
    </property>
   </action>
   <action name="actionInsertUtteranceBefore">
@@ -247,7 +247,7 @@
      <normaloff>:/images/pixmaps/insertutterancebefore.png</normaloff>:/images/pixmaps/insertutterancebefore.png</iconset>
    </property>
    <property name="text">
-    <string>Insert utterance before</string>
+    <string>Insert empty utterance before</string>
    </property>
    <property name="toolTip">
     <string>Insert utterance before</string>
@@ -259,7 +259,7 @@
      <normaloff>:/images/pixmaps/insertutteranceafter.png</normaloff>:/images/pixmaps/insertutteranceafter.png</iconset>
    </property>
    <property name="text">
-    <string>Insert utterance after</string>
+    <string>Insert empty utterance after</string>
    </property>
   </action>
  </widget>
