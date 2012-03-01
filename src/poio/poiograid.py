@@ -192,7 +192,10 @@ class PoioGRAID(QtGui.QMainWindow):
         ui = Ui_NewFileGraid()
         ui.setupUi(dialog)
         ret = dialog.exec_()
-        if ret == 1:
+        if ret == QtGui.QDialog.Accepted:
+            self.annotation_tree = pyannotation.annotationtree.AnnotationTree(
+                pyannotation.data.GRAID)
+            self.title = ""
             self.statusBar().showMessage(self.tr("Parsing text..."), 5)
             if ui.radioButtoTbStyleText.isChecked():
                 self._parse_tb_style_text(
@@ -201,7 +204,7 @@ class PoioGRAID(QtGui.QMainWindow):
                 self._parse_plain_text(
                     unicode(ui.textedit.document().toPlainText()))
             self.statusBar().showMessage(self.tr("Parsing done."), 5)
-        self.update_textedit()
+            self.update_textedit()
 
     def save_file(self):
         """
