@@ -63,7 +63,7 @@ class PoioGraidTextEdit(QtGui.QTextEdit):
 
     def insert_column_at_cursor(self, id, after):
         """
-        Inserts column before the current cursor position.
+        Inserts column before or after the current cursor position.
         """
         if not self.structure_type_handler:
             raise NoStructureTypeHandlerError
@@ -83,7 +83,7 @@ class PoioGraidTextEdit(QtGui.QTextEdit):
                     "utterance"):
                 if r == self.structure_type_handler.flat_data_hierarchy.\
                         index(s):
-                    return
+                    return id
 
             if r >  0 and c > 0:
                 new_column_pos = c
