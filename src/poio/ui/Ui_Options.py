@@ -2,8 +2,8 @@
 
 # Form implementation generated from reading ui file 'Options.ui'
 #
-# Created: Tue Feb 28 09:48:14 2012
-#      by: PyQt4 UI code generator 4.9
+# Created: Mon Apr 30 15:26:13 2012
+#      by: PyQt4 UI code generator 4.8.6
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -19,6 +19,7 @@ class Ui_DialogOptions(object):
         DialogOptions.setObjectName(_fromUtf8("DialogOptions"))
         DialogOptions.setWindowModality(QtCore.Qt.ApplicationModal)
         DialogOptions.resize(750, 550)
+        DialogOptions.setWindowTitle(QtGui.QApplication.translate("DialogOptions", "Kura Options", None, QtGui.QApplication.UnicodeUTF8))
         DialogOptions.setLocale(QtCore.QLocale(QtCore.QLocale.English, QtCore.QLocale.UnitedStates))
         DialogOptions.setModal(True)
         self.buttonBox = QtGui.QDialogButtonBox(DialogOptions)
@@ -55,6 +56,6 @@ class Ui_DialogOptions(object):
         QtCore.QMetaObject.connectSlotsByName(DialogOptions)
 
     def retranslateUi(self, DialogOptions):
-        DialogOptions.setWindowTitle(QtGui.QApplication.translate("DialogOptions", "Kura Options", None, QtGui.QApplication.UnicodeUTF8))
+        pass
 
 from kuraoptionstreeview import KuraOptionsTreeView

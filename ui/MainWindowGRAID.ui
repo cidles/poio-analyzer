@@ -38,7 +38,7 @@
      <x>0</x>
      <y>0</y>
      <width>977</width>
-     <height>19</height>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -64,6 +64,9 @@
     <addaction name="actionInsertColumnBefore"/>
     <addaction name="actionInsertColumnAfter"/>
     <addaction name="actionDeleteColumn"/>
+    <addaction name="separator"/>
+    <addaction name="actionFind"/>
+    <addaction name="actionFindAndReplace"/>
     <addaction name="separator"/>
     <addaction name="actionOptions"/>
    </widget>
@@ -260,6 +263,22 @@
    </property>
    <property name="text">
     <string>Insert empty utterance after</string>
+   </property>
+  </action>
+  <action name="actionFind">
+   <property name="text">
+    <string>Find...</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+F</string>
+   </property>
+  </action>
+  <action name="actionFindAndReplace">
+   <property name="text">
+    <string>Find and Replace...</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+R</string>
    </property>
   </action>
  </widget>

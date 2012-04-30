@@ -8,5 +8,7 @@ call %PYQTTOOLSDIR%\pyuic4 TabWidgetSearch.ui > %DIALOGSDIR%\Ui_TabWidgetSearch.
 call %PYQTTOOLSDIR%\pyuic4 Options.ui > %DIALOGSDIR%\Ui_Options.py
 call %PYQTTOOLSDIR%\pyuic4 NewTier.ui > %DIALOGSDIR%\Ui_NewTier.py
 call %PYQTTOOLSDIR%\pyuic4 NewFileGraid.ui > %DIALOGSDIR%\Ui_NewFileGraid.py
+call %PYQTTOOLSDIR%\pyuic4 FindReplaceForm.ui > %DIALOGSDIR%\Ui_FindReplaceForm.py
+call %PYQTTOOLSDIR%\pyuic4 FindReplaceDialog.ui > %DIALOGSDIR%\Ui_FindReplaceDialog.py
 call %PYQTTOOLSDIR%\pyrcc4 poio.qrc > %DIALOGSDIR%\poio_rc.py
 call %PYQTTOOLSDIR%\pyrcc4 poioanalyzer.qrc > %DIALOGSDIR%\poioanalyzer_rc.py

@@ -1,5 +1,11 @@
 # -*- coding: utf-8 -*-
-# (C) 2009 copyright by Peter Bouda
+#
+# Poio Tools for Linguists
+#
+# Copyright (C) 2009-2012 Poio Project
+# Author: Peter Bouda <pbouda@cidles.eu>
+# URL: <http://www.cidles.eu/ltll/poio>
+# For license information, see LICENSE.TXT
 
 import re
 from PyQt4 import QtCore, QtGui
@@ -16,11 +22,11 @@ class PoioGraidTextEdit(QtGui.QTextEdit):
         self.setTabChangesFocus(True)
         self.structure_type_handler = None
 
-        #self.setStyleSheet(".match { color:green; }")
+        palette = self.palette()
+        palette.setColor(QtGui.QPalette.Inactive, QtGui.QPalette.Highlight, QtGui.QColor("yellow"))
+        self.setPalette(palette)
 
-        #palette = self.palette()
-        #palette.setColor(QtGui.QPalette.Inactive, QtGui.QPalette.Highlight, QtGui.QColor("yellow"))
-        #self.setPalette(palette)
+        #self.setStyleSheet(".match { color:green; }")
 
         QtCore.QObject.connect(
             self, QtCore.SIGNAL("cursorPositionChanged()"),
@@ -30,7 +36,7 @@ class PoioGraidTextEdit(QtGui.QTextEdit):
         c = self.textCursor()
         t = c.currentTable()
 
-        if  not t or \
+        if not t or \
                 c.charFormat().fontCapitalization() == QtGui.QFont.SmallCaps:
             event.accept()
             return
@@ -38,7 +44,14 @@ class PoioGraidTextEdit(QtGui.QTextEdit):
         if event.key() == QtCore.Qt.Key_Return or \
                 event.key() == QtCore.Qt.Key_Enter or \
                 event.key() == QtCore.Qt.Key_Tab:
-            c.movePosition(QtGui.QTextCursor.NextCell)
+            cell = t.cellAt(c)
+            if cell.column() + cell.columnSpan() == t.columns():
+                pass
+            else:
+                c.movePosition(QtGui.QTextCursor.NextCell)
+            if c.charFormat().fontCapitalization() == QtGui.QFont.SmallCaps:
+                c.movePosition(QtGui.QTextCursor.NextCell)
+
             self.setTextCursor(c)
             event.accept()
             return
@@ -55,7 +68,7 @@ class PoioGraidTextEdit(QtGui.QTextEdit):
         c = self.textCursor()
         t = c.currentTable()
 
-        if t == None or \
+        if not t or \
                 c.charFormat().fontCapitalization() == QtGui.QFont.SmallCaps:
             self.setCursorWidth(0)
         else:
