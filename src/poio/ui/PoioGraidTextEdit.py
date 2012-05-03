@@ -14,6 +14,10 @@ class NoStructureTypeHandlerError(Exception): pass
 
 class PoioGraidTextEdit(QtGui.QTextEdit):
 
+    FIRST_DATA_COLUMN = 2
+    ROW_NAMES_COLUMNS = 1
+    NUMBERS_COLUMN = 0
+
     def __init__(self, parent):
         QtGui.QTextEdit.__init__(self, parent)
         self.setLineWrapMode(QtGui.QTextEdit.NoWrap)
@@ -27,6 +31,10 @@ class PoioGraidTextEdit(QtGui.QTextEdit):
         self.setPalette(palette)
 
         #self.setStyleSheet(".match { color:green; }")
+
+        cursor = self.textCursor()
+        cursor.setPosition(0)
+        self.setTextCursor(cursor)
 
         QtCore.QObject.connect(
             self, QtCore.SIGNAL("cursorPositionChanged()"),
@@ -142,7 +150,8 @@ class PoioGraidTextEdit(QtGui.QTextEdit):
         table = cursor.currentTable()
         if table:
             cell = table.cellAt(cursor)
-            if cell.row() > 0 and cell.column() > 0:
+            if cell.row() >= PoioGraidTextEdit.FIRST_DATA_COLUMN \
+                and cell.column() >= PoioGraidTextEdit.FIRST_DATA_COLUMN:
                 #print cell.column()
                 #print cell.columnSpan()
                 for i in range(cell.columnSpan()):
@@ -199,7 +208,7 @@ class PoioGraidTextEdit(QtGui.QTextEdit):
         table = cursor.currentTable()
         current_id = None
         if table:
-            cell = table.cellAt(0, 1)
+            cell = table.cellAt(0, PoioGraidTextEdit.FIRST_DATA_COLUMN)
             f = cell.format()
             current_id = f.anchorNames()[0]
             cursor.setPosition(table.firstPosition() - 1)
@@ -218,7 +227,7 @@ class PoioGraidTextEdit(QtGui.QTextEdit):
         current_id = None
 
         if table:
-            cell = table.cellAt(0, 1)
+            cell = table.cellAt(0, PoioGraidTextEdit.FIRST_DATA_COLUMN)
             f = cell.format()
             current_id = f.anchorNames()[0]
             if after:
@@ -227,6 +236,7 @@ class PoioGraidTextEdit(QtGui.QTextEdit):
                 pos = table.firstPosition() - 1
 
             self._insert_element_at_position(element, pos)
+            self.update_numbers()
 
         return current_id
 
@@ -236,7 +246,15 @@ class PoioGraidTextEdit(QtGui.QTextEdit):
 
         c = self.textCursor()
         c.movePosition(QtGui.QTextCursor.End)
-        self._insert_element_at_position(element, c.position())
+        table = self._insert_element_at_position(element, c.position())
+
+        number = 0
+        root = self.document().rootFrame()
+        for frame in root.childFrames():
+            if frame.__class__.__name__ == "QTextTable":
+                number += 1
+        self._update_number_of_table(table, number)
+
 
     def _insert_element_at_position(self, element, pos):
         c = self.textCursor()
@@ -244,7 +262,8 @@ class PoioGraidTextEdit(QtGui.QTextEdit):
 
         # create table
         count_rows = self.structure_type_handler.nr_of_types
-        table = c.insertTable(count_rows, 2)
+        table = c.insertTable(count_rows,
+            PoioGraidTextEdit.FIRST_DATA_COLUMN + 1)
         format = table.format()
         format.setCellPadding(2)
         format.setCellSpacing(-1)
@@ -257,18 +276,52 @@ class PoioGraidTextEdit(QtGui.QTextEdit):
             self.structure_type_handler.flat_data_hierarchy,
             self.structure_type_handler.data_hierarchy,
             table,
-            1)
+            PoioGraidTextEdit.FIRST_DATA_COLUMN)
+
+        # merge the cells for the element numbers
+        table.mergeCells(0, PoioGraidTextEdit.NUMBERS_COLUMN, count_rows, 1)
+        # set format for number
+        c = table.cellAt(0, PoioGraidTextEdit.NUMBERS_COLUMN)
+        format = c.format()
+        format.setFontCapitalization(QtGui.QFont.SmallCaps)
+        format.setFontWeight(QtGui.QFont.Bold)
+        format.setFontPointSize(12)
+        format.setVerticalAlignment(QtGui.QTextCharFormat.AlignMiddle)
+        c.setFormat(format)
 
         for i, row_name in enumerate(
             self.structure_type_handler.flat_data_hierarchy):
-            c = table.cellAt(i, 0)
+            c = table.cellAt(i, PoioGraidTextEdit.ROW_NAMES_COLUMNS)
             format = c.format()
             format.setFontCapitalization(QtGui.QFont.SmallCaps)
             format.setForeground(QtGui.QBrush(QtGui.QColor(150, 150, 150)))
             c.setFormat(format)
             c.firstCursorPosition().insertText(row_name)
 
-    def _insert_annotation_cell(self, elements, flat_hierarchy, hierarchy, table, column):
+        return table
+
+    def update_numbers(self):
+        root = self.document().rootFrame()
+        #string_document_text = unicode(self.document().toPlainText())
+        tree = []
+        number = 1
+        for frame in root.childFrames():
+            if frame.__class__.__name__ == "QTextTable":
+                self._update_number_of_table(frame, number)
+                number += 1
+
+    def _update_number_of_table(self, table, number):
+        c = table.cellAt(0, PoioGraidTextEdit.NUMBERS_COLUMN)
+        cursor = c.firstCursorPosition()
+        cursor.setPosition(
+            c.lastCursorPosition().position(), QtGui.QTextCursor.KeepAnchor)
+        #cursor.removeSelectedText()
+        cursor.insertText(" {0} ".format(number))
+
+
+
+    def _insert_annotation_cell(self, elements, flat_hierarchy, hierarchy,
+                                table, column):
         inserted = 0
         for i, t in enumerate(hierarchy):
             if type(t) is list:
@@ -310,11 +363,13 @@ class PoioGraidTextEdit(QtGui.QTextEdit):
                     self.structure_type_handler.flat_data_hierarchy,
                     self.structure_type_handler.data_hierarchy,
                     frame,
-                    0, 1, frame.columns()-1)
+                    0, PoioGraidTextEdit.FIRST_DATA_COLUMN,
+                    frame.columns() - PoioGraidTextEdit.FIRST_DATA_COLUMN)
                 tree.append(utterance)
         return tree
 
-    def _annotation_cell(self, elements, flat_hierarchy, hierarchy, table, row, column, column_span):
+    def _annotation_cell(self, elements, flat_hierarchy, hierarchy, table,
+                         row, column, column_span):
         #processed = 0
         for i, t in enumerate(hierarchy):
             if type(t) is list:
@@ -344,5 +399,6 @@ class PoioGraidTextEdit(QtGui.QTextEdit):
         start = int(c.firstCursorPosition().position())
         end = int(c.lastCursorPosition().position())
         element['id'] = int(unicode(c.format().anchorNames()[0]))
-        element['annotation'] = unicode(self.document().toPlainText())[start:end]
+        element['annotation'] = \
+            unicode(self.document().toPlainText())[start:end]
         return element
