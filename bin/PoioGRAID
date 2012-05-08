@@ -32,6 +32,7 @@ def main():
     data_dir = os.path.join(prefix, 'data')
     share_dir = os.path.join(prefix, 'share', 'poio')
 
+    print os.getcwd()
     if os.path.exists(src_dir) and os.path.exists(data_dir) \
             and not prefix.startswith('/usr'):
         # Run Kura from local source folder (not installed)
@@ -39,7 +40,11 @@ def main():
         sys.path.insert(0, src_dir)
         print >>sys.stderr, 'Using resources from', data_dir
         os.chdir(data_dir)
+    elif os.path.exists(os.path.join(prefix, "bin", "WINDOWS.txt")):
+        print >>sys.stderr, 'Using resources from', data_dir
+        #os.chdir(data_dir)
     else:
+        print >>sys.stderr, 'Using resources from', share_dir
         os.chdir(share_dir)
 
 
@@ -52,7 +57,7 @@ def main():
     # Loading translations
     qtTranslator = QtCore.QTranslator()
     qtTranslator.load("qt_" + unicode(QtCore.QLocale.system().name()),
-        QtCore.QLibraryInfo.location(QtCore.QLibraryInfo.TranslationsPath))
+        os.path.join(data_dir, "translations"))
     app.installTranslator(qtTranslator)
 
     #myappTranslator = QtCore.QTranslator()

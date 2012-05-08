@@ -17,6 +17,8 @@ import pyannotation.data
 #from poio.ui.PoioGraidTextEdit import PoioGraidTextEdit
 from poio.ui.Ui_MainWindowGRAID import Ui_MainWindow
 from poio.ui.Ui_NewFileGraid import Ui_NewFileGraid
+from poio.ui.FindReplaceDialog import FindReplaceDialog
+from poio.ui.FindDialog import FindDialog
 
 
 class PoioGRAID(QtGui.QMainWindow):
@@ -40,6 +42,14 @@ class PoioGRAID(QtGui.QMainWindow):
 
         self.ui.textedit.append_title(
             self.tr("Please create or open a file..."))
+
+        self._dialog_find_and_replace = FindReplaceDialog(self)
+        self._dialog_find_and_replace.setModal(False)
+        self._dialog_find_and_replace.set_text_edit(self.ui.textedit)
+
+        self._dialog_find = FindDialog(self)
+        self._dialog_find.setModal(False)
+        self._dialog_find.set_text_edit(self.ui.textedit)
 
     def init_vars(self):
         """
@@ -94,6 +104,11 @@ class PoioGRAID(QtGui.QMainWindow):
         self.ui.actionInsertColumnAfter.triggered.connect(
             self.insert_column_after)
         self.ui.actionDeleteColumn.triggered.connect(self.delete_column)
+
+        # find and replace
+        self.ui.actionFindAndReplace.triggered.connect(
+            self.find_and_replace)
+        self.ui.actionFind.triggered.connect(self.find)
 
     def about_dialog(self):
         """
@@ -192,7 +207,10 @@ class PoioGRAID(QtGui.QMainWindow):
         ui = Ui_NewFileGraid()
         ui.setupUi(dialog)
         ret = dialog.exec_()
-        if ret == 1:
+        if ret == QtGui.QDialog.Accepted:
+            self.annotation_tree = pyannotation.annotationtree.AnnotationTree(
+                pyannotation.data.GRAID)
+            self.title = ""
             self.statusBar().showMessage(self.tr("Parsing text..."), 5)
             if ui.radioButtoTbStyleText.isChecked():
                 self._parse_tb_style_text(
@@ -201,7 +219,7 @@ class PoioGRAID(QtGui.QMainWindow):
                 self._parse_plain_text(
                     unicode(ui.textedit.document().toPlainText()))
             self.statusBar().showMessage(self.tr("Parsing done."), 5)
-        self.update_textedit()
+            self.update_textedit()
 
     def save_file(self):
         """
@@ -255,6 +273,11 @@ class PoioGRAID(QtGui.QMainWindow):
             self.update_textedit()
             self.filepath = filepath
 
+    def find_and_replace(self):
+        self._dialog_find_and_replace.show()
+
+    def find(self):
+        self._dialog_find.show()
 
     # Private functions #######################################################
 

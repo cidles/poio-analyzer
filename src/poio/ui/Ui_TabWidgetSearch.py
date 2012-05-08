@@ -2,8 +2,8 @@
 
 # Form implementation generated from reading ui file 'TabWidgetSearch.ui'
 #
-# Created: Tue Feb 28 09:48:14 2012
-#      by: PyQt4 UI code generator 4.9
+# Created: Mon Apr 30 15:26:13 2012
+#      by: PyQt4 UI code generator 4.8.6
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -18,6 +18,7 @@ class Ui_TabWidgetSearch(object):
     def setupUi(self, TabWidgetSearch):
         TabWidgetSearch.setObjectName(_fromUtf8("TabWidgetSearch"))
         TabWidgetSearch.resize(400, 300)
+        TabWidgetSearch.setWindowTitle(QtGui.QApplication.translate("TabWidgetSearch", "Form", None, QtGui.QApplication.UnicodeUTF8))
         self.verticalLayout = QtGui.QVBoxLayout(TabWidgetSearch)
         self.verticalLayout.setObjectName(_fromUtf8("verticalLayout"))
         self.gridLayout_2 = QtGui.QGridLayout()
@@ -30,6 +31,7 @@ class Ui_TabWidgetSearch(object):
         self.label_2.setSizePolicy(sizePolicy)
         self.label_2.setSizeIncrement(QtCore.QSize(1, 0))
         self.label_2.setLayoutDirection(QtCore.Qt.LeftToRight)
+        self.label_2.setText(QtGui.QApplication.translate("TabWidgetSearch", "Utterances:", None, QtGui.QApplication.UnicodeUTF8))
         self.label_2.setAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignLeft|QtCore.Qt.AlignVCenter)
         self.label_2.setObjectName(_fromUtf8("label_2"))
         self.gridLayout_2.addWidget(self.label_2, 0, 0, 1, 1)
@@ -44,6 +46,7 @@ class Ui_TabWidgetSearch(object):
         sizePolicy.setHeightForWidth(self.label_3.sizePolicy().hasHeightForWidth())
         self.label_3.setSizePolicy(sizePolicy)
         self.label_3.setSizeIncrement(QtCore.QSize(1, 0))
+        self.label_3.setText(QtGui.QApplication.translate("TabWidgetSearch", "Words:", None, QtGui.QApplication.UnicodeUTF8))
         self.label_3.setAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignLeft|QtCore.Qt.AlignVCenter)
         self.label_3.setObjectName(_fromUtf8("label_3"))
         self.gridLayout_2.addWidget(self.label_3, 1, 0, 1, 1)
@@ -58,6 +61,7 @@ class Ui_TabWidgetSearch(object):
         sizePolicy.setHeightForWidth(self.label_4.sizePolicy().hasHeightForWidth())
         self.label_4.setSizePolicy(sizePolicy)
         self.label_4.setSizeIncrement(QtCore.QSize(1, 0))
+        self.label_4.setText(QtGui.QApplication.translate("TabWidgetSearch", "Morphemes:", None, QtGui.QApplication.UnicodeUTF8))
         self.label_4.setAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignLeft|QtCore.Qt.AlignVCenter)
         self.label_4.setObjectName(_fromUtf8("label_4"))
         self.gridLayout_2.addWidget(self.label_4, 2, 0, 1, 1)
@@ -72,6 +76,7 @@ class Ui_TabWidgetSearch(object):
         sizePolicy.setHeightForWidth(self.label_5.sizePolicy().hasHeightForWidth())
         self.label_5.setSizePolicy(sizePolicy)
         self.label_5.setSizeIncrement(QtCore.QSize(1, 0))
+        self.label_5.setText(QtGui.QApplication.translate("TabWidgetSearch", "Glosses:", None, QtGui.QApplication.UnicodeUTF8))
         self.label_5.setAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignLeft|QtCore.Qt.AlignVCenter)
         self.label_5.setObjectName(_fromUtf8("label_5"))
         self.gridLayout_2.addWidget(self.label_5, 3, 0, 1, 1)
@@ -86,6 +91,7 @@ class Ui_TabWidgetSearch(object):
         sizePolicy.setHeightForWidth(self.label_6.sizePolicy().hasHeightForWidth())
         self.label_6.setSizePolicy(sizePolicy)
         self.label_6.setSizeIncrement(QtCore.QSize(1, 0))
+        self.label_6.setText(QtGui.QApplication.translate("TabWidgetSearch", "Translations:", None, QtGui.QApplication.UnicodeUTF8))
         self.label_6.setAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignLeft|QtCore.Qt.AlignVCenter)
         self.label_6.setObjectName(_fromUtf8("label_6"))
         self.gridLayout_2.addWidget(self.label_6, 4, 0, 1, 1)
@@ -94,20 +100,25 @@ class Ui_TabWidgetSearch(object):
         self.lineeditSearchTranslations.setObjectName(_fromUtf8("lineeditSearchTranslations"))
         self.gridLayout_2.addWidget(self.lineeditSearchTranslations, 4, 1, 1, 1)
         self.groupBox = QtGui.QGroupBox(TabWidgetSearch)
+        self.groupBox.setTitle(QtGui.QApplication.translate("TabWidgetSearch", "Search Options", None, QtGui.QApplication.UnicodeUTF8))
         self.groupBox.setObjectName(_fromUtf8("groupBox"))
         self.verticalLayout_4 = QtGui.QVBoxLayout(self.groupBox)
         self.verticalLayout_4.setObjectName(_fromUtf8("verticalLayout_4"))
         self.radiobuttonAnd = QtGui.QRadioButton(self.groupBox)
+        self.radiobuttonAnd.setText(QtGui.QApplication.translate("TabWidgetSearch", "AND", None, QtGui.QApplication.UnicodeUTF8))
         self.radiobuttonAnd.setChecked(True)
         self.radiobuttonAnd.setObjectName(_fromUtf8("radiobuttonAnd"))
         self.verticalLayout_4.addWidget(self.radiobuttonAnd)
         self.radiobuttonOr = QtGui.QRadioButton(self.groupBox)
+        self.radiobuttonOr.setText(QtGui.QApplication.translate("TabWidgetSearch", "OR", None, QtGui.QApplication.UnicodeUTF8))
         self.radiobuttonOr.setObjectName(_fromUtf8("radiobuttonOr"))
         self.verticalLayout_4.addWidget(self.radiobuttonOr)
         self.checkboxInvert = QtGui.QCheckBox(self.groupBox)
+        self.checkboxInvert.setText(QtGui.QApplication.translate("TabWidgetSearch", "NOT", None, QtGui.QApplication.UnicodeUTF8))
         self.checkboxInvert.setObjectName(_fromUtf8("checkboxInvert"))
         self.verticalLayout_4.addWidget(self.checkboxInvert)
         self.checkboxContained = QtGui.QCheckBox(self.groupBox)
+        self.checkboxContained.setText(QtGui.QApplication.translate("TabWidgetSearch", "contained matches", None, QtGui.QApplication.UnicodeUTF8))
         self.checkboxContained.setObjectName(_fromUtf8("checkboxContained"))
         self.verticalLayout_4.addWidget(self.checkboxContained)
         self.gridLayout_2.addWidget(self.groupBox, 0, 3, 5, 1)
@@ -122,15 +133,5 @@ class Ui_TabWidgetSearch(object):
         QtCore.QMetaObject.connectSlotsByName(TabWidgetSearch)
 
     def retranslateUi(self, TabWidgetSearch):
-        TabWidgetSearch.setWindowTitle(QtGui.QApplication.translate("TabWidgetSearch", "Form", None, QtGui.QApplication.UnicodeUTF8))
-        self.label_2.setText(QtGui.QApplication.translate("TabWidgetSearch", "Utterances:", None, QtGui.QApplication.UnicodeUTF8))
-        self.label_3.setText(QtGui.QApplication.translate("TabWidgetSearch", "Words:", None, QtGui.QApplication.UnicodeUTF8))
-        self.label_4.setText(QtGui.QApplication.translate("TabWidgetSearch", "Morphemes:", None, QtGui.QApplication.UnicodeUTF8))
-        self.label_5.setText(QtGui.QApplication.translate("TabWidgetSearch", "Glosses:", None, QtGui.QApplication.UnicodeUTF8))
-        self.label_6.setText(QtGui.QApplication.translate("TabWidgetSearch", "Translations:", None, QtGui.QApplication.UnicodeUTF8))
-        self.groupBox.setTitle(QtGui.QApplication.translate("TabWidgetSearch", "Search Options", None, QtGui.QApplication.UnicodeUTF8))
-        self.radiobuttonAnd.setText(QtGui.QApplication.translate("TabWidgetSearch", "AND", None, QtGui.QApplication.UnicodeUTF8))
-        self.radiobuttonOr.setText(QtGui.QApplication.translate("TabWidgetSearch", "OR", None, QtGui.QApplication.UnicodeUTF8))
-        self.checkboxInvert.setText(QtGui.QApplication.translate("TabWidgetSearch", "NOT", None, QtGui.QApplication.UnicodeUTF8))
-        self.checkboxContained.setText(QtGui.QApplication.translate("TabWidgetSearch", "contained matches", None, QtGui.QApplication.UnicodeUTF8))
+        pass
 
