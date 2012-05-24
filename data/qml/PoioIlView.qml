@@ -30,8 +30,8 @@ Rectangle {
                 Column {
                     spacing: 10
                     Repeater {
-                        model: modelData.utterances
-                        delegate: Utterance {}
+                        model: modelData.elements
+                        delegate: Element {}
                     }
                 }
             }

@@ -228,7 +228,7 @@ class PoioGraidTextEdit(QtGui.QTextEdit):
 
         if table:
             cell = table.cellAt(0, PoioGraidTextEdit.FIRST_DATA_COLUMN)
-            f = cell.format()
+            f = cell.fomat()
             current_id = f.anchorNames()[0]
             if after:
                 pos = table.lastPosition() + 1
@@ -254,7 +254,6 @@ class PoioGraidTextEdit(QtGui.QTextEdit):
             if frame.__class__.__name__ == "QTextTable":
                 number += 1
         self._update_number_of_table(table, number)
-
 
     def _insert_element_at_position(self, element, pos):
         c = self.textCursor()
@@ -317,8 +316,6 @@ class PoioGraidTextEdit(QtGui.QTextEdit):
             c.lastCursorPosition().position(), QtGui.QTextCursor.KeepAnchor)
         #cursor.removeSelectedText()
         cursor.insertText(" {0} ".format(number))
-
-
 
     def _insert_annotation_cell(self, elements, flat_hierarchy, hierarchy,
                                 table, column):

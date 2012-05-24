@@ -2,8 +2,8 @@
 
 # Form implementation generated from reading ui file 'NewFileGraid.ui'
 #
-# Created: Mon Apr 30 15:26:13 2012
-#      by: PyQt4 UI code generator 4.8.6
+# Created: Wed May 23 09:15:01 2012
+#      by: PyQt4 UI code generator 4.9
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -18,7 +18,6 @@ class Ui_NewFileGraid(object):
     def setupUi(self, NewFileGraid):
         NewFileGraid.setObjectName(_fromUtf8("NewFileGraid"))
         NewFileGraid.resize(640, 480)
-        NewFileGraid.setWindowTitle(QtGui.QApplication.translate("NewFileGraid", "Create a new file", None, QtGui.QApplication.UnicodeUTF8))
         self.verticalLayout_2 = QtGui.QVBoxLayout(NewFileGraid)
         self.verticalLayout_2.setObjectName(_fromUtf8("verticalLayout_2"))
         self.verticalLayout = QtGui.QVBoxLayout()
@@ -26,12 +25,10 @@ class Ui_NewFileGraid(object):
         self.horizontalLayout_2 = QtGui.QHBoxLayout()
         self.horizontalLayout_2.setObjectName(_fromUtf8("horizontalLayout_2"))
         self.radiobuttonPlainText = QtGui.QRadioButton(NewFileGraid)
-        self.radiobuttonPlainText.setText(QtGui.QApplication.translate("NewFileGraid", "Plain Text", None, QtGui.QApplication.UnicodeUTF8))
         self.radiobuttonPlainText.setChecked(True)
         self.radiobuttonPlainText.setObjectName(_fromUtf8("radiobuttonPlainText"))
         self.horizontalLayout_2.addWidget(self.radiobuttonPlainText)
         self.radioButtoTbStyleText = QtGui.QRadioButton(NewFileGraid)
-        self.radioButtoTbStyleText.setText(QtGui.QApplication.translate("NewFileGraid", "Toolbox-Style Text", None, QtGui.QApplication.UnicodeUTF8))
         self.radioButtoTbStyleText.setObjectName(_fromUtf8("radioButtoTbStyleText"))
         self.horizontalLayout_2.addWidget(self.radioButtoTbStyleText)
         spacerItem = QtGui.QSpacerItem(40, 20, QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Minimum)
@@ -53,5 +50,7 @@ class Ui_NewFileGraid(object):
         QtCore.QMetaObject.connectSlotsByName(NewFileGraid)
 
     def retranslateUi(self, NewFileGraid):
-        pass
+        NewFileGraid.setWindowTitle(QtGui.QApplication.translate("NewFileGraid", "Create a new file", None, QtGui.QApplication.UnicodeUTF8))
+        self.radiobuttonPlainText.setText(QtGui.QApplication.translate("NewFileGraid", "Plain Text", None, QtGui.QApplication.UnicodeUTF8))
+        self.radioButtoTbStyleText.setText(QtGui.QApplication.translate("NewFileGraid", "Toolbox-Style Text", None, QtGui.QApplication.UnicodeUTF8))
 

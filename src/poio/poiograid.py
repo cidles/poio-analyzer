@@ -73,8 +73,6 @@ class PoioGRAID(QtGui.QMainWindow):
         QtCore.QCoreApplication.setOrganizationDomain("cidles.eu");
         QtCore.QCoreApplication.setApplicationName("PoioGRAID");
         settings = QtCore.QSettings()
-        #self.str_empty_character = unicode(
-        #    settings.value("Ann/EmptyChar",  QtCore.QVariant("#")).toString())
 
     def init_connects(self):
         """
