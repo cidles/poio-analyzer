@@ -6,20 +6,10 @@ import time
 from PyQt4 import QtCore, QtGui
 from PyQt4.QtDeclarative import QDeclarativeView
 
-#from pyannotation.toolbox.data import ToolboxAnnotationFileObject
-#from pyannotation.elan.data import EafAnnotationFileObject
-#from pyannotation.data import AnnotationTree, AnnotationTreeFilter
-#import pyannotation.data
-
-#from pyannotation.corpusreader import GlossCorpusReader
-#from pyannotation.corpus import CorpusTrees
-
-#import pyannotation
 import pyannotation.corpus
 import pyannotation.annotationtree
 
-from poio.ui.Ui_MainAnalyzerQML import Ui_MainWindow
-#from poio.ui.PoioIlTextEdit import PoioIlTextEdit
+from poio.ui.Ui_MainAnalyzerHTML import Ui_MainWindow
 from poio.ui.Ui_TabWidgetSearch import Ui_TabWidgetSearch
 
 from poio.poioproject import PoioProject
@@ -36,31 +26,17 @@ class PoioAnalyzer(QtGui.QMainWindow):
 
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
+        #self.ui.webviewResult.settings().setUserStyleSheetUrl(
+        #    QtCore.QUrl(u"h:/ProjectsWin/git-github/Poio/ui/css/resultview.css")) #.setStyleSheet("td { border: 1px solid black; }")
 
         self.init_connects()
         self.init_settings()
         self.project = PoioProject(os.getcwd())
         self.ui.listFiles.setModel(self.project)
         self.init_corpus()
-        self.init_declarative_view()
 
         self.add_search_tab()
 
-
-    def init_declarative_view(self):
-        # init DeclarativeView
-        #self.ui.declarativeviewResult.setResizeMode(QDeclarativeView.SizeRootObjectToView)
-        self.ui.declarativeviewResult.setResizeMode(QDeclarativeView.SizeViewToRootObject)
-        self.ui.declarativeviewResult.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOn)
-        self.ui.declarativeviewResult.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOn)
-        context = self.ui.declarativeviewResult.rootContext()
-        context.setContextProperty("resultModel", [])
-
-        self.ui.declarativeviewResult.setSource(QtCore.QUrl.fromLocalFile("qml/PoioIlView.qml"))
-
-        #obj = self.ui.declarativeviewResult.rootObject()
-        #QtCore.QObject.connect(obj, QtCore.SIGNAL("fileAdded(QString, int)"), self.upateVerticalPositionOfFile)
-        
     def init_corpus(self):
         """
         Initializes an empty corpus.
@@ -68,23 +44,6 @@ class PoioAnalyzer(QtGui.QMainWindow):
         #print sys.path
         self.corpus = pyannotation.corpus.CorpusTrees(self.data_structure_type)
 
-    def update_corpus_reader(self):
-        itemsCount = self.project.rowCount()
-        progress = QtGui.QProgressDialog(self.tr("Loading Files..."), self.tr("Abort"), 0, itemsCount, self.parent())
-        progress.setWindowModality(QtCore.Qt.WindowModal)
-        for i in range(itemsCount):
-            progress.setValue(i)
-            poiofile = self.project.poioFileAt(i)
-            if poiofile.isNew:
-                #print poiofile.filepath
-                self.corpus.addFile(poiofile.filepath)
-                poiofile.setIsNew(False)
-            if progress.wasCanceled():
-                self.init_corpus()
-                break
-        progress.setValue(itemsCount)
-        #self.updateCorpusReaderFilter()
-        
     def init_connects(self):
         
         # Menu buttons
@@ -141,7 +100,7 @@ class PoioAnalyzer(QtGui.QMainWindow):
         # PySide version
         #filepaths, types = QtGui.QFileDialog.getOpenFileNames(self, self.tr("Add Files"), "", self.tr("Elan files (*.eaf);;Toolbox files (*.txt);;All files (*.*)"))
         # PyQt version
-        filepaths = QtGui.QFileDialog.getOpenFileNames(self, self.tr("Add Files"), "", self.tr("Elan files (*.eaf);;Toolbox files (*.txt);;All files (*.*)"))
+        filepaths = QtGui.QFileDialog.getOpenFileNames(self, self.tr("Add Files"), "", self.tr("Pickle files (*.pickle)"))
         #filepaths = QtGui.QFileDialog.getOpenFileNames(self, self.tr("Add Files"), "", self.tr("Elan files (*.eaf);;Toolbox files (*.txt);;Kura files (*.xml);;All files (*.*)"))
         self.project.addFilePaths(filepaths)
         start = time.time()
@@ -152,6 +111,23 @@ class PoioAnalyzer(QtGui.QMainWindow):
         self.update_result_view()
         end = time.time()
         print "Time elapsed = ", end - start, "seconds"
+
+    def update_corpus_reader(self):
+        itemsCount = self.project.rowCount()
+        progress = QtGui.QProgressDialog(self.tr("Loading Files..."), self.tr("Abort"), 0, itemsCount, self.parent())
+        progress.setWindowModality(QtCore.Qt.WindowModal)
+        for i in range(itemsCount):
+            progress.setValue(i)
+            poiofile = self.project.poioFileAt(i)
+            if poiofile.isNew:
+                #print poiofile.filepath
+                self.corpus.add_item(poiofile.filepath, pyannotation.data.TREEPICKLE)
+                poiofile.setIsNew(False)
+            if progress.wasCanceled():
+                self.init_corpus()
+                break
+        progress.setValue(itemsCount)
+        #self.updateCorpusReaderFilter()
 
     def set_current_file_in_result_view(self, modelIndex):
         obj = self.ui.declarativeviewResult.rootObject()
@@ -166,69 +142,33 @@ class PoioAnalyzer(QtGui.QMainWindow):
         
     def update_result_view(self):
         files = []
+        html = "<html><head><meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" /></head><body>\n"
         for filepath, annotationtree in self.corpus.items:
-            filter = annotationtree.lastFilter()
-            elements = []
-            for e in annotationtree.elements():
-#                utterance = annotationtree.getUtteranceById(id)
-#                if id in filter.matchobject["utterance"]:
-#                    offset = 0
-#                    for g in filter.matchobject["utterance"][id]:
-#                        utterance = utterance[:g[0]+offset] + "<span style=\"color:green;\">" + utterance[g[0]+offset:]
-#                        offset = offset + len("<span style=\"color:green;\">")
-#                        utterance = utterance[:g[1]+offset] + "</span>" + utterance[g[1]+offset:]
-#                        offset = offset + len("</span>")
-#                translations = annotationtree.getTranslationsForUtterance(id)
-#                if len(translations) == 0:
-#                    translationId = annotationtree.newTranslationForUtteranceId(id, "")
-#                    translations = [ [translationId, self.strEmptyCharacter] ]
-#                else:
-#                    new_translations = []
-#                    for t in translations:
-#                        if t[1] == "":
-#                            new_t = self.strEmptyCharacter
-#                            new_translations.append([t[0], new_t])
-#                        if t[0] in filter.matchobject["translation"]:
-#                            offset = 0
-#                            new_t = t[1]
-#                            for g in filter.matchobject["translation"][t[0]]:
-#                                new_t = new_t[:g[0]+offset] + "<span style=\"color:green;\">" + new_t[g[0]+offset:]
-#                                offset = offset + len("<span style=\"color:green;\">")
-#                                new_t = new_t[:g[1]+offset] + "</span>" + new_t[g[1]+offset:]
-#                                offset = offset + len("</span>")
-#                            new_translations.append([t[0], new_t])
-#                        else:
-#                            new_translations.append([t[0], t[1]])
-#                        translations = new_translations
-#                wordIds = annotationtree.getWordIdsForUtterance(id)
-#                ilElements = []
-#                for wid in wordIds:
-#                    strWord = annotationtree.getWordById(wid)
-#                    if strWord == "":
-#                        strWord = self.strEmptyCharacter
-#                    strMorphemes = annotationtree.getMorphemeStringForWord(wid)
-#                    #print strMorphemes
-#                    if strMorphemes == "":
-#                        strMorphemes = strWord
-#                    strGlosses = annotationtree.getGlossStringForWord(wid)
-#                    if strGlosses == "":
-#                        strGlosses = self.strEmptyCharacter
-#
-#                    markWord = False
-#                    if wid in filter.matchobject["word"]:
-#                        markWord = True
-#                    ilElements.append([wid, strWord, strMorphemes, strGlosses, markWord])
-#
-#                if len(ilElements) == 0:
-#                    ilElements = [['None', self.strEmptyCharacter, self.strEmptyCharacter, self.strEmptyCharacter, self.strEmptyCharacter, False]]
-                elements.append(e)
+            html += u"<h1>{0}</h1>\n".format(os.path.basename(filepath))
+            html += annotationtree.as_html(True, False)
+        html += "</body></html>"
+        #self.ui.webviewResult.settings().setUserStyleSheetUrl(
+        #    QtCore.QUrl(":/css/css/resultview.css")) #.setStyleSheet("td { border: 1px solid black; }")
 
-            if elements == []:
-                elements = None
-            files.append({ "filename" : os.path.basename(filepath), "elements" : elements})
-        context = self.ui.declarativeviewResult.rootContext()
-        context.setContextProperty("resultModel", files)
-        #size = self.ui.declarativeviewResult.sceneRect()
+        #stylesheet_url = QtCore.QUrl.fromLocalFile("h:/ProjectsWin/git-github/Poio/ui/css/resultview.css")
+        css = QtCore.QByteArray("td { border: 1px solid black; }\ntable { margin-top: 10px; }\ntd.element_id { margin-left: 10px; margin-right: 10px; font-weight:bold; }\ntd.ann_type { margin-left: 10px; margin-right: 10px; font-variant:small-caps; }")
+        self.ui.webviewResult.settings().setUserStyleSheetUrl(
+            QtCore.QUrl("data:text/css;charset=utf-8;base64,"
+                + unicode(css.toBase64())))
+        self.ui.webviewResult.setHtml(html)
+
+
+    def export_search_results(self):
+        export_file =  QtGui.QFileDialog.getSaveFileName(self, self.tr("Export Search Result"), "", self.tr("HTML file (*.html)"))
+        export_file = unicode(export_file)
+        OUT  = codecs.open(export_file, "w", "utf-8")
+        html = "<html><head><meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" /></head><body>\n"
+        for filepath, annotationtree in self.corpus.items:
+            html += u"<h1>{0}</h1>\n".format(os.path.basename(filepath))
+            html += annotationtree.as_html(True, False)
+        html += "</body></html>"
+        OUT.write(html)
+        OUT.close()
 
     #def findFromStart(self, exp):
     #    self.ui.texteditInterlinear.setTextCursor(QtGui.QTextCursor(self.ui.texteditInterlinear.document()))
@@ -264,7 +204,7 @@ class PoioAnalyzer(QtGui.QMainWindow):
             filterChain.append(currentFilter)
     
         for _, annotationtree in self.corpus.items:
-            annotationtree.clearFilters()
+            annotationtree.init_filters()
             for filter in filterChain:
                 annotationtree.append_filter(copy.deepcopy(filter))
 
@@ -354,56 +294,3 @@ class PoioAnalyzer(QtGui.QMainWindow):
                 pbouda@cidles.eu</a></b>."""
         )
     
-    def export_search_results(self):
-        export_file =  QtGui.QFileDialog.getSaveFileName(self, self.tr("Export Search Result"), "", self.tr("Text file UTF-8 (*.txt)"))
-        export_file = unicode(export_file)
-        OUT  = codecs.open(export_file, "w", "utf-8")
-        for [filepath, annotationtree] in self.corpusreader.annotationtrees:
-            OUT.write(filepath + "\n\n")
-            utterancesIds = annotationtree.getFilteredUtteranceIds()
-            filter = annotationtree.lastFilter()
-            utterances = []
-            for id in utterancesIds:
-                utterance = annotationtree.getUtteranceById(id)
-
-                OUT.write(id + "\n")
-                OUT.write(utterance + "\n")
-
-                word_ids = annotationtree.getWordIdsForUtterance(id)
-                line_words = ""
-                line_morphemes = ""
-                line_glosses = ""
-                for wid in word_ids:
-                    str_word = annotationtree.getWordById(wid)
-                    if str_word == "":
-                        str_word = self.strEmptyCharacter
-                    str_morphemes = annotationtree.getMorphemeStringForWord(wid)
-                    #print strMorphemes
-                    if str_morphemes == "":
-                        str_morphemes = str_word
-                    str_glosses = annotationtree.getGlossStringForWord(wid)
-                    if str_glosses == "":
-                        str_glosses = self.strEmptyCharacter
-                        
-                    line_words += str_word + " "
-                    line_morphemes += str_morphemes + " "
-                    line_glosses += str_glosses + " "
-
-                line_words = line_words.rstrip()
-                line_morphemes = line_morphemes.rstrip()
-                line_glosses = line_glosses.rstrip()
-                OUT.write(line_words + "\n")
-                OUT.write(line_morphemes + "\n")
-                OUT.write(line_glosses + "\n")
-                    
-                translations = annotationtree.getTranslationsForUtterance(id)
-                if len(translations) == 0:
-                    translationId = annotationtree.newTranslationForUtteranceId(id, "")
-                    translations = [ [translationId, self.strEmptyCharacter] ]
-                    
-                for t in translations:
-                    OUT.write(t[1] +"\n")
-                    
-                OUT.write("\n")
-            OUT.write("\n")
-        OUT.close
