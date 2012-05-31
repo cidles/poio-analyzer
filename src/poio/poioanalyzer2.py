@@ -26,8 +26,6 @@ class PoioAnalyzer(QtGui.QMainWindow):
 
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
-        #self.ui.webviewResult.settings().setUserStyleSheetUrl(
-        #    QtCore.QUrl(u"h:/ProjectsWin/git-github/Poio/ui/css/resultview.css")) #.setStyleSheet("td { border: 1px solid black; }")
 
         self.init_connects()
         self.init_settings()
@@ -59,21 +57,11 @@ class PoioAnalyzer(QtGui.QMainWindow):
         self.ui.buttonCloseThisSearch.pressed.connect(self.search_tab_closed)
         self.ui.buttonClearThisSearch.pressed.connect(self.search_tab_cleared)
         self.ui.tabWidget.currentChanged.connect(self.search_tab_changed)
-        #QtCore.QObject.connect(self.ui.buttonSearch, QtCore.SIGNAL("pressed()"), self.applyFilter)
-        #QtCore.QObject.connect(self.ui.buttonCloseThisSearch, QtCore.SIGNAL("pressed()"), self.searchTabClosed)
-        #QtCore.QObject.connect(self.ui.buttonClearThisSearch, QtCore.SIGNAL("pressed()"), self.searchTabCleared)
-        #QtCore.QObject.connect(self.ui.tabWidget, QtCore.SIGNAL("currentChanged(int)"), self.searchTabChanged)
-        
+
         self.ui.listFiles.activated.connect(self.set_current_file_in_result_view)
         self.ui.actionExportSearchResult.triggered.connect(
             self.export_search_results)
-        
-        #QtCore.QObject.connect(self.ui.lineeditSearchUtterances, QtCore.SIGNAL("returnPressed()"), self.applyFilter)
-        #QtCore.QObject.connect(self.ui.lineeditSearchWords, QtCore.SIGNAL("returnPressed()"), self.applyFilter)
-        #QtCore.QObject.connect(self.ui.lineeditSearchMorphemes, QtCore.SIGNAL("returnPressed()"), self.applyFilter)
-        #QtCore.QObject.connect(self.ui.lineeditSearchGlosses, QtCore.SIGNAL("returnPressed()"), self.applyFilter)
-        #QtCore.QObject.connect(self.ui.lineeditSearchTranslations, QtCore.SIGNAL("returnPressed()"), self.applyFilter)
-        
+
         # Quick Search
         #QtCore.QObject.connect(self.ui.actionQuickSearch, QtCore.SIGNAL("triggered()"), self.ui.lineeditQuickSearch.setFocus)
         #QtCore.QObject.connect(self.ui.lineeditQuickSearch, QtCore.SIGNAL("textChanged(const QString &)"), self.findFromStart)
@@ -130,22 +118,19 @@ class PoioAnalyzer(QtGui.QMainWindow):
         #self.updateCorpusReaderFilter()
 
     def set_current_file_in_result_view(self, modelIndex):
-        obj = self.ui.declarativeviewResult.rootObject()
-        # find my column items
-        filenameObjects = obj.children()[0].children()
-        # file items begin form index 1 in children()
-        index = modelIndex.row() + 1
-        if index < len(filenameObjects):
-            yPosFilename = filenameObjects[index].mapToItem(None, 0, 0).y()
-            self.ui.declarativeviewResult.verticalScrollBar().setValue(yPosFilename)
-        #pass
-        
+        e_id = "#file_{0}".format(modelIndex.row())
+        e = self.ui.webviewResult.page().mainFrame().findFirstElement(e_id)
+        if not e.isNull():
+            e.evaluateJavaScript("this.scrollIntoView(true);")
+
     def update_result_view(self):
         files = []
         html = "<html><head><meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" /></head><body>\n"
+        i = 0
         for filepath, annotationtree in self.corpus.items:
-            html += u"<h1>{0}</h1>\n".format(os.path.basename(filepath))
+            html += u"<h1 id=\"file_{1}\">{0}</h1>\n".format(os.path.basename(filepath), i)
             html += annotationtree.as_html(True, False)
+            i += 1
         html += "</body></html>"
         #self.ui.webviewResult.settings().setUserStyleSheetUrl(
         #    QtCore.QUrl(":/css/css/resultview.css")) #.setStyleSheet("td { border: 1px solid black; }")
@@ -285,7 +270,7 @@ class PoioAnalyzer(QtGui.QMainWindow):
     def about_dialog(self):
         QtGui.QMessageBox.about(self,
             "Poio Analyzer",
-            """<b>Poio Analyzer v0.1</b><br><br>
+            """<b>Poio Analyzer v0.1.1</b><br><br>
                 Linguistic Analyzation Tool for interlinear data,
                 developed by Peter Bouda at the<br>
                 <b><a href=\"http://www.cidles.eu/ltll/poio\">

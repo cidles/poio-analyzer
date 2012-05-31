@@ -17,6 +17,19 @@
    <layout class="QHBoxLayout" name="horizontalLayout">
     <item>
      <layout class="QGridLayout" name="gridLayout">
+      <item row="14" column="4" colspan="2">
+       <widget class="QLineEdit" name="lineeditQuickSearch">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+          <horstretch>4</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+       </widget>
+      </item>
       <item row="12" column="1" colspan="2">
        <widget class="QLabel" name="label_7">
         <property name="sizePolicy">
@@ -42,7 +55,7 @@
         </property>
        </widget>
       </item>
-      <item row="11" column="1" colspan="6">
+      <item row="11" column="1" colspan="5">
        <widget class="Line" name="line">
         <property name="orientation">
          <enum>Qt::Horizontal</enum>
@@ -81,20 +94,7 @@
         </property>
        </widget>
       </item>
-      <item row="14" column="4" colspan="3">
-       <widget class="QLineEdit" name="lineeditQuickSearch">
-        <property name="enabled">
-         <bool>false</bool>
-        </property>
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-          <horstretch>4</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-       </widget>
-      </item>
-      <item row="3" column="4" colspan="3">
+      <item row="3" column="4" colspan="2">
        <widget class="QPushButton" name="buttonSearch">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
@@ -113,7 +113,7 @@
         </property>
        </widget>
       </item>
-      <item row="2" column="1" colspan="6">
+      <item row="2" column="1" colspan="5">
        <widget class="QTabWidget" name="tabWidget">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Expanding" vsizetype="Minimum">
@@ -135,64 +135,6 @@
           <string>New Search...</string>
          </attribute>
         </widget>
-       </widget>
-      </item>
-      <item row="12" column="6">
-       <widget class="QToolButton" name="buttonAlignCenter">
-        <property name="enabled">
-         <bool>false</bool>
-        </property>
-        <property name="text">
-         <string>...</string>
-        </property>
-        <property name="icon">
-         <iconset resource="poioanalyzer.qrc">
-          <normaloff>:/images/pixmaps/aligncenter.png</normaloff>:/images/pixmaps/aligncenter.png</iconset>
-        </property>
-        <property name="iconSize">
-         <size>
-          <width>24</width>
-          <height>24</height>
-         </size>
-        </property>
-        <property name="checkable">
-         <bool>true</bool>
-        </property>
-        <property name="autoRaise">
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-      <item row="12" column="5">
-       <widget class="QToolButton" name="buttonAlignLeft">
-        <property name="enabled">
-         <bool>false</bool>
-        </property>
-        <property name="locale">
-         <locale language="English" country="UnitedStates"/>
-        </property>
-        <property name="text">
-         <string>...</string>
-        </property>
-        <property name="icon">
-         <iconset resource="poioanalyzer.qrc">
-          <normaloff>:/images/pixmaps/alignleft.png</normaloff>:/images/pixmaps/alignleft.png</iconset>
-        </property>
-        <property name="iconSize">
-         <size>
-          <width>24</width>
-          <height>24</height>
-         </size>
-        </property>
-        <property name="checkable">
-         <bool>true</bool>
-        </property>
-        <property name="checked">
-         <bool>true</bool>
-        </property>
-        <property name="autoRaise">
-         <bool>true</bool>
-        </property>
        </widget>
       </item>
       <item row="3" column="1">
@@ -288,7 +230,7 @@
         </property>
        </widget>
       </item>
-      <item row="13" column="3" colspan="4">
+      <item row="13" column="3" colspan="3">
        <widget class="QWebView" name="webviewResult">
         <property name="url">
          <url>
@@ -308,7 +250,7 @@
      <x>0</x>
      <y>0</y>
      <width>800</width>
-     <height>21</height>
+     <height>19</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFiel">
@@ -434,8 +376,6 @@
   <tabstop>buttonClearThisSearch</tabstop>
   <tabstop>buttonSearch</tabstop>
   <tabstop>listFiles</tabstop>
-  <tabstop>buttonAlignLeft</tabstop>
-  <tabstop>buttonAlignCenter</tabstop>
   <tabstop>buttonAddFiles</tabstop>
   <tabstop>buttonRemoveFiles</tabstop>
   <tabstop>lineeditQuickSearch</tabstop>

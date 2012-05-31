@@ -3,7 +3,4 @@
         <file>pixmaps/aligncenter.png</file>
         <file>pixmaps/alignleft.png</file>
     </qresource>
-    <qresource prefix="/css">
-        <file>css/resultview.css</file>
-    </qresource>
 </RCC>
