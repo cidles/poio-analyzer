@@ -228,7 +228,7 @@ class PoioGraidTextEdit(QtGui.QTextEdit):
 
         if table:
             cell = table.cellAt(0, PoioGraidTextEdit.FIRST_DATA_COLUMN)
-            f = cell.fomat()
+            f = cell.format()
             current_id = f.anchorNames()[0]
             if after:
                 pos = table.lastPosition() + 1
