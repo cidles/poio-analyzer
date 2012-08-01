@@ -2,8 +2,8 @@
 
 # Form implementation generated from reading ui file 'MainAnalyzerHTML.ui'
 #
-# Created: Thu May 31 13:44:15 2012
-#      by: PyQt4 UI code generator 4.9
+# Created: Wed Aug 01 16:10:01 2012
+#      by: PyQt4 UI code generator 4.9.4
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -155,7 +155,7 @@ class Ui_MainWindow(object):
         self.statusBar.setObjectName(_fromUtf8("statusBar"))
         MainWindow.setStatusBar(self.statusBar)
         self.menuBar = QtGui.QMenuBar(MainWindow)
-        self.menuBar.setGeometry(QtCore.QRect(0, 0, 800, 19))
+        self.menuBar.setGeometry(QtCore.QRect(0, 0, 800, 21))
         self.menuBar.setObjectName(_fromUtf8("menuBar"))
         self.menuFiel = QtGui.QMenu(self.menuBar)
         self.menuFiel.setObjectName(_fromUtf8("menuFiel"))
@@ -163,6 +163,8 @@ class Ui_MainWindow(object):
         self.menuEdit.setObjectName(_fromUtf8("menuEdit"))
         self.menuAbout = QtGui.QMenu(self.menuBar)
         self.menuAbout.setObjectName(_fromUtf8("menuAbout"))
+        self.menuView = QtGui.QMenu(self.menuBar)
+        self.menuView.setObjectName(_fromUtf8("menuView"))
         MainWindow.setMenuBar(self.menuBar)
         self.actionQuit = QtGui.QAction(MainWindow)
         self.actionQuit.setObjectName(_fromUtf8("actionQuit"))
@@ -188,6 +190,12 @@ class Ui_MainWindow(object):
         self.actionQuickSearch.setObjectName(_fromUtf8("actionQuickSearch"))
         self.actionExportSearchResult = QtGui.QAction(MainWindow)
         self.actionExportSearchResult.setObjectName(_fromUtf8("actionExportSearchResult"))
+        self.actionZoom_In = QtGui.QAction(MainWindow)
+        self.actionZoom_In.setObjectName(_fromUtf8("actionZoom_In"))
+        self.actionZoom_Out = QtGui.QAction(MainWindow)
+        self.actionZoom_Out.setObjectName(_fromUtf8("actionZoom_Out"))
+        self.actionReset_Zoom = QtGui.QAction(MainWindow)
+        self.actionReset_Zoom.setObjectName(_fromUtf8("actionReset_Zoom"))
         self.menuFiel.addAction(self.actionNewProject)
         self.menuFiel.addAction(self.actionSaveProject)
         self.menuFiel.addSeparator()
@@ -201,8 +209,12 @@ class Ui_MainWindow(object):
         self.menuEdit.addAction(self.actionSearches)
         self.menuEdit.addAction(self.actionQuickSearch)
         self.menuAbout.addAction(self.actionAboutPoioAnalyzer)
+        self.menuView.addAction(self.actionZoom_In)
+        self.menuView.addAction(self.actionReset_Zoom)
+        self.menuView.addAction(self.actionZoom_Out)
         self.menuBar.addAction(self.menuFiel.menuAction())
         self.menuBar.addAction(self.menuEdit.menuAction())
+        self.menuBar.addAction(self.menuView.menuAction())
         self.menuBar.addAction(self.menuAbout.menuAction())
 
         self.retranslateUi(MainWindow)
@@ -230,6 +242,7 @@ class Ui_MainWindow(object):
         self.menuFiel.setTitle(QtGui.QApplication.translate("MainWindow", "File", None, QtGui.QApplication.UnicodeUTF8))
         self.menuEdit.setTitle(QtGui.QApplication.translate("MainWindow", "Edit", None, QtGui.QApplication.UnicodeUTF8))
         self.menuAbout.setTitle(QtGui.QApplication.translate("MainWindow", "About", None, QtGui.QApplication.UnicodeUTF8))
+        self.menuView.setTitle(QtGui.QApplication.translate("MainWindow", "View", None, QtGui.QApplication.UnicodeUTF8))
         self.actionQuit.setText(QtGui.QApplication.translate("MainWindow", "Quit", None, QtGui.QApplication.UnicodeUTF8))
         self.actionQuit.setShortcut(QtGui.QApplication.translate("MainWindow", "Ctrl+Q", None, QtGui.QApplication.UnicodeUTF8))
         self.actionNewProject.setText(QtGui.QApplication.translate("MainWindow", "New Project", None, QtGui.QApplication.UnicodeUTF8))
@@ -244,6 +257,12 @@ class Ui_MainWindow(object):
         self.actionQuickSearch.setShortcut(QtGui.QApplication.translate("MainWindow", "Ctrl+F", None, QtGui.QApplication.UnicodeUTF8))
         self.actionExportSearchResult.setText(QtGui.QApplication.translate("MainWindow", "Export Search Result...", None, QtGui.QApplication.UnicodeUTF8))
         self.actionExportSearchResult.setShortcut(QtGui.QApplication.translate("MainWindow", "Ctrl+E", None, QtGui.QApplication.UnicodeUTF8))
+        self.actionZoom_In.setText(QtGui.QApplication.translate("MainWindow", "Zoom In", None, QtGui.QApplication.UnicodeUTF8))
+        self.actionZoom_In.setShortcut(QtGui.QApplication.translate("MainWindow", "Ctrl++", None, QtGui.QApplication.UnicodeUTF8))
+        self.actionZoom_Out.setText(QtGui.QApplication.translate("MainWindow", "Zoom Out", None, QtGui.QApplication.UnicodeUTF8))
+        self.actionZoom_Out.setShortcut(QtGui.QApplication.translate("MainWindow", "Ctrl+-", None, QtGui.QApplication.UnicodeUTF8))
+        self.actionReset_Zoom.setText(QtGui.QApplication.translate("MainWindow", "Reset Zoom", None, QtGui.QApplication.UnicodeUTF8))
+        self.actionReset_Zoom.setShortcut(QtGui.QApplication.translate("MainWindow", "Ctrl+0", None, QtGui.QApplication.UnicodeUTF8))
 
 from PyQt4 import QtWebKit
 import poioanalyzer_rc

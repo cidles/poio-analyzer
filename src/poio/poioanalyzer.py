@@ -7,6 +7,7 @@ import copy
 import codecs
 import time
 from PyQt4 import QtCore, QtGui
+from PyQt4.QtCore import QSettings
 
 import pyannotation.corpus
 import pyannotation.annotationtree
@@ -20,6 +21,9 @@ class PoioAnalyzer(QtGui.QMainWindow):
     """The main window of the PoioAnalyzer application."""
 
     def __init__(self, *args):
+        """
+        Initialize Main Window
+        """
         QtGui.QMainWindow.__init__(self, *args)
 
         self.data_structure_type = pyannotation.data.DataStructureTypeGraid()
@@ -44,10 +48,15 @@ class PoioAnalyzer(QtGui.QMainWindow):
         self.corpus = pyannotation.corpus.CorpusTrees(self.data_structure_type)
 
     def init_connects(self):
-
+        """
+        Initialize action signals
+        """
         # Menu buttons
         self.ui.actionQuit.triggered.connect(self.close)
         self.ui.actionAboutPoioAnalyzer.triggered.connect(self.about_dialog)
+        self.ui.actionZoom_In.triggered.connect(self.zoom_in)
+        self.ui.actionZoom_Out.triggered.connect(self.zoom_out)
+        self.ui.actionReset_Zoom.triggered.connect(self.reset_zoom)
 
         # Push Buttons
         self.ui.buttonAddFiles.pressed.connect(self.add_files)
@@ -69,13 +78,21 @@ class PoioAnalyzer(QtGui.QMainWindow):
         #QtCore.QObject.connect(self.ui.lineeditQuickSearch, QtCore.SIGNAL("returnPressed()"), self.findNext)
 
     def init_settings(self):
+        """
+        Initialize QSettings;
+        Set default zoom to 100%
+        """
         QtCore.QCoreApplication.setOrganizationName(
             "Interdisciplinary Centre for Social and Language Documentation");
         QtCore.QCoreApplication.setOrganizationDomain("cidles.eu");
         QtCore.QCoreApplication.setApplicationName("PoioAnalyzer");
         settings = QtCore.QSettings()
+        settings.setValue("FontZoom", 100)
 
     def remove_files(self):
+        """
+        Remove files from the "Added files list"
+        """
         countRemoved = 0
         for i in self.ui.listFiles.selectedIndexes():
             self.project.removeFilePathAt(i.row()-countRemoved)
@@ -125,7 +142,12 @@ class PoioAnalyzer(QtGui.QMainWindow):
             e.evaluateJavaScript("this.scrollIntoView(true);")
 
     def update_result_view(self):
+        """
+        Updates the view screen with the refreshed data and zoom settings
+        """
         files = []
+        settings = QtCore.QSettings()
+        zoom = str(settings.value("FontZoom").toInt()[0])
         html = "<html><head><meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" /></head><body>\n"
         i = 0
         for filepath, annotationtree in self.corpus.items:
@@ -137,14 +159,51 @@ class PoioAnalyzer(QtGui.QMainWindow):
         #    QtCore.QUrl(":/css/css/resultview.css")) #.setStyleSheet("td { border: 1px solid black; }")
 
         #stylesheet_url = QtCore.QUrl.fromLocalFile("h:/ProjectsWin/git-github/Poio/ui/css/resultview.css")
-        css = QtCore.QByteArray("td { border: 1px solid black; }\ntable { margin-top: 10px; }\ntd.element_id { margin-left: 10px; margin-right: 10px; font-weight:bold; }\ntd.ann_type { margin-left: 10px; margin-right: 10px; font-variant:small-caps; }")
+        css = QtCore.QByteArray("td { font-size: " + zoom + "%; border: 1px solid black; }\ntable { margin-top: 10px; }\ntd.element_id { margin-left: 10px; margin-right: 10px; font-weight:bold; }\ntd.ann_type { margin-left: 10px; margin-right: 10px; font-variant:small-caps; }\nbody { font-size: " + zoom + "%; }")
         self.ui.webviewResult.settings().setUserStyleSheetUrl(
             QtCore.QUrl("data:text/css;charset=utf-8;base64,"
             + unicode(css.toBase64())))
         self.ui.webviewResult.setHtml(html)
 
+    def zoom_in(self):
+        """
+        Increase the zoom setting by 10 % when the menu button is clicked
+        until the 200% zoom limit is reached
+        """
+        settings = QtCore.QSettings()
+        currentzoom = settings.value("FontZoom").toInt()
+        if currentzoom[0] < 200:
+            zoom = currentzoom[0] + 10
+            settings.setValue("FontZoom", zoom)
+            self.update_result_view()
+
+
+    def zoom_out(self):
+        """
+        Decreases the zoom setting by 10 % when the menu button is clicked
+        until the 50% zoom limit is reached
+        """
+        settings = QtCore.QSettings()
+        currentzoom = settings.value("FontZoom").toInt()
+        if currentzoom[0] > 50:
+            zoom = currentzoom[0] - 10
+            settings.setValue("FontZoom", zoom)
+            self.update_result_view()
+
+
+
+    def reset_zoom(self):
+        """
+        Resets the zoom setting to the default value of 100%
+        """
+        settings = QtCore.QSettings()
+        settings.setValue("FontZoom", 100)
+        self.update_result_view()
 
     def export_search_results(self):
+        """
+        Exports the current annotationtree as HTML
+        """
         export_file =  QtGui.QFileDialog.getSaveFileName(self, self.tr("Export Search Result"), "", self.tr("HTML file (*.html)"))
         export_file = unicode(export_file)
         OUT  = codecs.open(export_file, "w", "utf-8")
@@ -169,6 +228,9 @@ class PoioAnalyzer(QtGui.QMainWindow):
     #    return found
 
     def apply_filter(self):
+        """
+        Check for the search options
+        """
         filterChain = []
         for i in range(0, self.ui.tabWidget.currentIndex()+1):
             currentFilter = pyannotation.annotationtree.AnnotationTreeFilter(self.data_structure_type)
@@ -198,12 +260,18 @@ class PoioAnalyzer(QtGui.QMainWindow):
         self.update_result_view()
 
     def search_tab_changed(self, index):
+        """
+        Check if the search tab changed
+        """
         if index == self.ui.tabWidget.count() - 1:
             self.add_search_tab()
         else:
             self.apply_filter()
 
     def add_search_tab(self):
+        """
+
+        """
         nr_of_new_tab = self.ui.tabWidget.count()
         widget_search = QtGui.QWidget()
         ui = Ui_TabWidgetSearch()
@@ -269,6 +337,10 @@ class PoioAnalyzer(QtGui.QMainWindow):
         self.apply_filter()
 
     def about_dialog(self):
+        """
+        Popup a message box containing the "About Information"
+        of Poio Annalyser
+        """
         QtGui.QMessageBox.about(self,
             "Poio Analyzer",
             """<b>Poio Analyzer v0.1.1</b><br><br>
