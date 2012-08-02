@@ -198,6 +198,8 @@ class PoioGraidTextEdit(QtGui.QTextEdit):
                         c_span + neighbour_cell.columnSpan())
 
     def append_title(self, title):
+        #settings = QtCore.QSettings()
+        #font = str(int((settings.value("FontZoom").toInt()[0] * 12) / 100))
         self.setDocumentTitle(title)
         # margin is not working :-(
         self.append("<div style=\"font-size:14pt;\">&nbsp;</div>")
@@ -256,6 +258,8 @@ class PoioGraidTextEdit(QtGui.QTextEdit):
         self._update_number_of_table(table, number)
 
     def _insert_element_at_position(self, element, pos):
+        #settings = QtCore.QSettings()
+        #font = str(int((settings.value("FontZoom").toInt()[0] * 12) / 100))
         c = self.textCursor()
         c.setPosition(pos)
 
@@ -269,6 +273,7 @@ class PoioGraidTextEdit(QtGui.QTextEdit):
         format.setTopMargin(10)
         format.setBorder(1)
         format.setBorderStyle(QtGui.QTextFrameFormat.BorderStyle_Solid)
+        format.set
         table.setFormat(format)
 
         self._insert_annotation_cell(element,
