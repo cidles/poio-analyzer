@@ -23,12 +23,13 @@ annotated data. Poio tools are written in Python and are based on PyQt.
 
 Documentation
 -------------
-You can find more information about Poio on the `Poio website
-<http://www.cidles.eu/ltll/poio>`_.
+You can find the documentation for Poio on the `Github Pages
+<http://cidles.github.com/Poio/>`_.
 
 Develop
 -------
-- How to start with PyCharm:
+How to start with PyCharm
+=========================
 
 1. Clone Poio from Github (https://github.com/cidles/Poio.git);
 2. Clone Pyannotation from Github (https://github.com/cidles/pyannotation.git);
@@ -36,10 +37,10 @@ Develop
 4. Choose "File" -> "Open Directory" in menu and open Poio directory;
 5. Choose "File" -> "Settings" and set the "Project Interpreter" to Python 2.7;
 6. Choose "File" -> "Settings" and in the "Project Structure" add a "Content Root" that points to the PyAnnotation directory; set the PyAnnotation "src" directory as the "Sources";
-7. a) Choose "Run" -> "Edit Configurations" and add a new configuration;
-   b) Select "Python" configuration;
-   c) Give it a name;
-   d) Point the "Script" to "Poio\bin\PoioGRAID";
+7. * Choose "Run" -> "Edit Configurations" and add a new configuration;
+   * Select "Python" configuration;
+   * Give it a name;
+   * Point the "Script" to "Poio\bin\PoioGRAID";
 8. Develop and run it.
 
 
