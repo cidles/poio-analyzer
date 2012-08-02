@@ -36,7 +36,7 @@ class PoioGRAID(QtGui.QMainWindow):
 
         self.init_vars()
         self.init_connects()
-        #self.init_settings()
+        self.init_settings()
 
         self.init = 0
 
@@ -117,13 +117,13 @@ class PoioGRAID(QtGui.QMainWindow):
         Increase the zoom setting by 10 % when the menu button is clicked
         until the 200% zoom limit is reached
         """
-    settings = QtCore.QSettings()
-    currentzoom = settings.value("FontZoom").toInt()
-    zoom = currentzoom[0] + 10
-    if currentzoom[0] < 200:
-        settings.setValue("FontZoom", zoom)
-        self.ui.textedit.
-        print zoom
+        settings = QtCore.QSettings()
+        currentzoom = settings.value("FontZoom").toInt()
+        if currentzoom[0] < 200:
+            zoom = currentzoom[0] + 10
+            settings.setValue("FontZoom", zoom)
+            self.update_textedit()
+            print zoom
 
 
     def zoom_out(self):
@@ -136,6 +136,7 @@ class PoioGRAID(QtGui.QMainWindow):
         if currentzoom[0] > 50:
             zoom = currentzoom[0] - 10
             settings.setValue("FontZoom", zoom)
+            self.update_textedit()
             print zoom
 
     def reset_zoom(self):
@@ -144,6 +145,7 @@ class PoioGRAID(QtGui.QMainWindow):
         """
         settings = QtCore.QSettings()
         settings.setValue("FontZoom", 100)
+        self.update_textedit()
 
     def about_dialog(self):
         """

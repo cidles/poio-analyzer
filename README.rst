@@ -28,7 +28,7 @@ You can find more information about Poio on the `Poio website
 
 Develop
 -------
-Poio development guide:
+- How to start with PyCharm:
 
 1. Clone Poio from Github (https://github.com/cidles/Poio.git);
 2. Clone Pyannotation from Github (https://github.com/cidles/pyannotation.git);
