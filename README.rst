@@ -28,11 +28,12 @@ You can find the documentation for Poio on the `Github Pages
 
 Develop
 -------
+
 How to start with PyCharm
 =========================
 
-1. Clone Poio from Github (https://github.com/cidles/Poio.git);
-2. Clone Pyannotation from Github (https://github.com/cidles/pyannotation.git);
+1. Clone Poio from Github (https://github.com/cidles/Poio);
+2. Clone Pyannotation from Github (https://github.com/cidles/pyannotation);
 3. Start PyCharm;
 4. Choose "File" -> "Open Directory" in menu and open Poio directory;
 5. Choose "File" -> "Settings" and set the "Project Interpreter" to Python 2.7;
