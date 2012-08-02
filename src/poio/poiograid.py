@@ -73,6 +73,7 @@ class PoioGRAID(QtGui.QMainWindow):
         QtCore.QCoreApplication.setOrganizationDomain("cidles.eu");
         QtCore.QCoreApplication.setApplicationName("PoioGRAID");
         settings = QtCore.QSettings()
+        settings.setValue("FontZoom", 100)
 
     def init_connects(self):
         """
@@ -87,6 +88,9 @@ class PoioGRAID(QtGui.QMainWindow):
 
         # Application stuff
         self.ui.actionQuit.triggered.connect(self.close)
+        self.ui.actionZoom_In.triggered.connect(self.zoom_in)
+        self.ui.actionZoom_Out.triggered.connect(self.zoom_out)
+        self.ui.actionReset_Zoom.triggered.connect(self.reset_zoom)
         self.ui.actionAboutPoioGRAID.triggered.connect(self.about_dialog)
 
         # insert and delete tables and columns
@@ -107,6 +111,39 @@ class PoioGRAID(QtGui.QMainWindow):
         self.ui.actionFindAndReplace.triggered.connect(
             self.find_and_replace)
         self.ui.actionFind.triggered.connect(self.find)
+
+    def zoom_in(self):
+        """
+        Increase the zoom setting by 10 % when the menu button is clicked
+        until the 200% zoom limit is reached
+        """
+    settings = QtCore.QSettings()
+    currentzoom = settings.value("FontZoom").toInt()
+    zoom = currentzoom[0] + 10
+    if currentzoom[0] < 200:
+        settings.setValue("FontZoom", zoom)
+        self.ui.textedit.
+        print zoom
+
+
+    def zoom_out(self):
+        """
+        Decreases the zoom setting by 10 % when the menu button is clicked
+        until the 50% zoom limit is reached
+        """
+        settings = QtCore.QSettings()
+        currentzoom = settings.value("FontZoom").toInt()
+        if currentzoom[0] > 50:
+            zoom = currentzoom[0] - 10
+            settings.setValue("FontZoom", zoom)
+            print zoom
+
+    def reset_zoom(self):
+        """
+        Resets the zoom setting to the default value of 100%
+        """
+        settings = QtCore.QSettings()
+        settings.setValue("FontZoom", 100)
 
     def about_dialog(self):
         """
@@ -270,6 +307,7 @@ class PoioGRAID(QtGui.QMainWindow):
             file.close()
             self.update_textedit()
             self.filepath = filepath
+            print self.annotation_tree.tree
 
     def find_and_replace(self):
         self._dialog_find_and_replace.show()

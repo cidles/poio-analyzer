@@ -49,7 +49,7 @@ class PoioAnalyzer(QtGui.QMainWindow):
 
     def init_connects(self):
         """
-        Initialize action signals
+        Initializes all signal/slots connections of the application.
         """
         # Menu buttons
         self.ui.actionQuit.triggered.connect(self.close)
