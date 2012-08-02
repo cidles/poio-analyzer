@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'MainWindowGRAID.ui'
 #
-# Created: Wed Aug 01 16:10:01 2012
+# Created: Thu Aug 02 09:37:06 2012
 #      by: PyQt4 UI code generator 4.9.4
 #
 # WARNING! All changes made in this file will be lost!
@@ -46,6 +46,8 @@ class Ui_MainWindow(object):
         self.menuEdit.setObjectName(_fromUtf8("menuEdit"))
         self.menuAbout = QtGui.QMenu(self.menuBar)
         self.menuAbout.setObjectName(_fromUtf8("menuAbout"))
+        self.menuView = QtGui.QMenu(self.menuBar)
+        self.menuView.setObjectName(_fromUtf8("menuView"))
         MainWindow.setMenuBar(self.menuBar)
         self.toolBar = QtGui.QToolBar(MainWindow)
         self.toolBar.setObjectName(_fromUtf8("toolBar"))
@@ -116,6 +118,12 @@ class Ui_MainWindow(object):
         self.actionFind.setObjectName(_fromUtf8("actionFind"))
         self.actionFindAndReplace = QtGui.QAction(MainWindow)
         self.actionFindAndReplace.setObjectName(_fromUtf8("actionFindAndReplace"))
+        self.actionZoom_In = QtGui.QAction(MainWindow)
+        self.actionZoom_In.setObjectName(_fromUtf8("actionZoom_In"))
+        self.actionReset_Zoom = QtGui.QAction(MainWindow)
+        self.actionReset_Zoom.setObjectName(_fromUtf8("actionReset_Zoom"))
+        self.actionZoom_Out = QtGui.QAction(MainWindow)
+        self.actionZoom_Out.setObjectName(_fromUtf8("actionZoom_Out"))
         self.menuFile.addAction(self.actionNewFile)
         self.menuFile.addAction(self.actionOpenFile)
         self.menuFile.addAction(self.actionSaveFile)
@@ -136,8 +144,12 @@ class Ui_MainWindow(object):
         self.menuEdit.addSeparator()
         self.menuEdit.addAction(self.actionOptions)
         self.menuAbout.addAction(self.actionAboutPoioGRAID)
+        self.menuView.addAction(self.actionZoom_In)
+        self.menuView.addAction(self.actionReset_Zoom)
+        self.menuView.addAction(self.actionZoom_Out)
         self.menuBar.addAction(self.menuFile.menuAction())
         self.menuBar.addAction(self.menuEdit.menuAction())
+        self.menuBar.addAction(self.menuView.menuAction())
         self.menuBar.addAction(self.menuAbout.menuAction())
         self.toolBar.addAction(self.actionNewFile)
         self.toolBar.addAction(self.actionOpenFile)
@@ -158,6 +170,7 @@ class Ui_MainWindow(object):
         self.menuFile.setTitle(QtGui.QApplication.translate("MainWindow", "File", None, QtGui.QApplication.UnicodeUTF8))
         self.menuEdit.setTitle(QtGui.QApplication.translate("MainWindow", "Edit", None, QtGui.QApplication.UnicodeUTF8))
         self.menuAbout.setTitle(QtGui.QApplication.translate("MainWindow", "About", None, QtGui.QApplication.UnicodeUTF8))
+        self.menuView.setTitle(QtGui.QApplication.translate("MainWindow", "View", None, QtGui.QApplication.UnicodeUTF8))
         self.toolBar.setWindowTitle(QtGui.QApplication.translate("MainWindow", "toolBar", None, QtGui.QApplication.UnicodeUTF8))
         self.actionOpenFile.setText(QtGui.QApplication.translate("MainWindow", "Open File...", None, QtGui.QApplication.UnicodeUTF8))
         self.actionOpenFile.setToolTip(QtGui.QApplication.translate("MainWindow", "Open File", None, QtGui.QApplication.UnicodeUTF8))
@@ -191,6 +204,12 @@ class Ui_MainWindow(object):
         self.actionFind.setShortcut(QtGui.QApplication.translate("MainWindow", "Ctrl+F", None, QtGui.QApplication.UnicodeUTF8))
         self.actionFindAndReplace.setText(QtGui.QApplication.translate("MainWindow", "Find and Replace...", None, QtGui.QApplication.UnicodeUTF8))
         self.actionFindAndReplace.setShortcut(QtGui.QApplication.translate("MainWindow", "Ctrl+R", None, QtGui.QApplication.UnicodeUTF8))
+        self.actionZoom_In.setText(QtGui.QApplication.translate("MainWindow", "Zoom In", None, QtGui.QApplication.UnicodeUTF8))
+        self.actionZoom_In.setShortcut(QtGui.QApplication.translate("MainWindow", "Ctrl++", None, QtGui.QApplication.UnicodeUTF8))
+        self.actionReset_Zoom.setText(QtGui.QApplication.translate("MainWindow", "Reset Zoom", None, QtGui.QApplication.UnicodeUTF8))
+        self.actionReset_Zoom.setShortcut(QtGui.QApplication.translate("MainWindow", "Ctrl+0", None, QtGui.QApplication.UnicodeUTF8))
+        self.actionZoom_Out.setText(QtGui.QApplication.translate("MainWindow", "Zoom Out", None, QtGui.QApplication.UnicodeUTF8))
+        self.actionZoom_Out.setShortcut(QtGui.QApplication.translate("MainWindow", "Ctrl+-", None, QtGui.QApplication.UnicodeUTF8))
 
 from PoioGraidTextEdit import PoioGraidTextEdit
 import poio_rc
