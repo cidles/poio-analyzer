@@ -1,0 +1,254 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Poio GRAID &mdash; Poio 0.1.0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Poio 0.1.0 documentation" href="index.html" />
+    <link rel="prev" title="Welcome to Poio’s documentation!" href="index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="index.html" title="Welcome to Poio’s documentation!"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">Poio 0.1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="poio-graid">
+<h1>Poio GRAID<a class="headerlink" href="#poio-graid" title="Permalink to this headline">¶</a></h1>
+<p>This is the documentation for Poio GRAID. Last updated June 14, 2012.</p>
+<div class="section" id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<p>This document describes the basic funcionalities of Poio GRAID. It shows some of the
+facilities that will help you do your work and a brief description of them.
+These screenshots show you Poio GRAID&#8217;s main window, how to create a new file, how
+to add and delete utterances and the way to edit them, as well as individual
+annotations.</p>
+</div>
+<div class="section" id="create-a-new-file">
+<h2>Create a new file<a class="headerlink" href="#create-a-new-file" title="Permalink to this headline">¶</a></h2>
+<p>In order to create a new file click on the button &#8220;Create a new annotation file&#8221;
+or choose the menu option &#8220;File - New file...&#8221;.</p>
+<div class="figure">
+<a class="reference internal image-reference" href="_images/PoioGRAID_EmtpyStartWindow.png"><img alt="_images/PoioGRAID_EmtpyStartWindow.png" src="_images/PoioGRAID_EmtpyStartWindow.png" style="width: 640.0px; height: 361.5px;" /></a>
+<p class="caption"><em>Figure 1: Main window of Poio</em></p>
+</div>
+<p>A new window &#8220;Create a new file&#8221; will open (see Figure 2). The window has two options: &#8220;Plain Text&#8221; and &#8220;Toolbox-Style Text&#8221;. The first option creates a new
+file from a text, the second option creates a new file from a text with given annotations. It is called &#8220;Toolbox-Style Text&#8221; because the format for
+annotations is similar to Toolbox&#8217;s format, like this:</p>
+<p>id</p>
+<p>sl     (1) ʾána šmíyənwa xa-tunìƟa&#8217; 1# yamríwala Gozáli ʾu-Nozàli,&#8217; 2# šəmma díya yáʿni tuníƟət Gozáli ʾu-Nozàli.ˈ</p>
+<p>wfw    x I have.heard a-story 1# they.used.to.call.it Gozali and-Nozali 2# name of.it that.is story.of Gozali and-Nozali</p>
+<p>gr_1   x pro.1:a v:pred-1 deti=np:p 1# v:pred-3=pro:p other other 2#</p>
+<p>gr_2   pst 1# pst 0.h:a 2#nc</p>
+<p>ft     I have heard a story called Gozali and Nozali. Its name is the story of Gozali and Nozali</p>
+<p>com</p>
+<div class="figure">
+<img alt="_images/Poio_Createanewfile.png" src="_images/Poio_Createanewfile.png" />
+<p class="caption"><em>Figure 2: Window &#8220;Create a new file&#8221;</em></p>
+</div>
+<div class="section" id="plain-text-files">
+<h3>Plain text files<a class="headerlink" href="#plain-text-files" title="Permalink to this headline">¶</a></h3>
+<p>To add a file from plain text choose the option &#8220;Plain Text&#8221; and copy and paste any text into the text box. Each utterance should be in one line
+(see Figure 3).</p>
+<div class="figure">
+<img alt="_images/Screenshot_plaintext.png" src="_images/Screenshot_plaintext.png" />
+<p class="caption"><em>Figure 3: Adding plain text</em></p>
+</div>
+<p>After pasting the text press &#8220;OK&#8221;. The text gets parsed and is displayed with tokens for clause units and words in the main window
+(see Figure 4).</p>
+<div class="figure">
+<a class="reference internal image-reference" href="_images/parsedtext.png"><img alt="_images/parsedtext.png" src="_images/parsedtext.png" style="width: 663.2px; height: 577.6px;" /></a>
+<p class="caption"><em>Figure 4: Parsed text</em></p>
+</div>
+</div>
+<div class="section" id="toolbox-style-text">
+<h3>Toolbox-Style Text<a class="headerlink" href="#toolbox-style-text" title="Permalink to this headline">¶</a></h3>
+<p>To add a file from Toolbox-Style Text choose the option &#8220;Toolbox-Style Text&#8221;. Copy and paste the text into the text box and then press &#8220;OK&#8221;
+(see Figure 5).</p>
+<blockquote>
+<div><em>Figure 5: New file from a text with given annotations</em></div></blockquote>
+<div class="figure">
+<img alt="_images/Screenshot_textonotoolbox.png" src="_images/Screenshot_textonotoolbox.png" />
+</div>
+<p>The text gets parsed and is displayed with tokens for clause units, words and the translation in the main window (see Figure 6).</p>
+<div class="figure">
+<a class="reference internal image-reference" href="_images/Screenshot3styletext.png"><img alt="_images/Screenshot3styletext.png" src="_images/Screenshot3styletext.png" style="width: 683.9px; height: 505.4px;" /></a>
+<p class="caption"><em>Figure 6: Parsed text</em></p>
+</div>
+</div>
+</div>
+<div class="section" id="saving-and-opening-files">
+<h2>Saving and opening files<a class="headerlink" href="#saving-and-opening-files" title="Permalink to this headline">¶</a></h2>
+<p>Next to the button &#8220;Create a new annotation file&#8221; there are two buttons to open and save a file.</p>
+<p>To save a file click on the button &#8220;Save File&#8221;. A file dialog will appear, choose the folder to save the file and enter a filename.
+The file will be saved in a format called &#8220;pickle&#8221;, which is an internal format. XML formats will be supported later.</p>
+<p>To open a file again click on &#8220;Open File&#8221;. Choose the file to open. The data will be loaded and presented in the main window.</p>
+</div>
+<div class="section" id="adding-and-deleting-utterances">
+<h2>Adding and deleting utterances<a class="headerlink" href="#adding-and-deleting-utterances" title="Permalink to this headline">¶</a></h2>
+<p>The user can add utterances before and after the currently edited utterance block. To insert an utterance before the block with
+the cursor press &#8220;Insert utterance before&#8221; (see Figure 7).</p>
+<div class="figure">
+<a class="reference internal image-reference" href="_images/utterance_before.png"><img alt="_images/utterance_before.png" src="_images/utterance_before.png" style="width: 663.2px; height: 577.6px;" /></a>
+<p class="caption"><em>Figure 7: Adding utterance before cursor</em></p>
+</div>
+<p>It is also possible to insert one utterance after the block with the cursor. You just need to select the previous utterance and
+press the correct button at the top (see Figure 8).</p>
+<div class="figure">
+<a class="reference internal image-reference" href="_images/utterance_after.png"><img alt="_images/utterance_after.png" src="_images/utterance_after.png" style="width: 663.2px; height: 577.6px;" /></a>
+<p class="caption"><em>Figure 8: Adding utterance after cursor</em></p>
+</div>
+<p>It is also possible to delete one utterance. To delete the utterance block at the cursor position click &#8220;Delete utterance&#8221;.</p>
+</div>
+<div class="section" id="adding-and-deleting-columns">
+<h2>Adding and deleting columns<a class="headerlink" href="#adding-and-deleting-columns" title="Permalink to this headline">¶</a></h2>
+<p>If you need a new column for a new annotation on the level of the cursor position you can add a new one. Press &#8220;Insert empty
+column before&#8221;. Check the utterance &#8220;I bought my car last year&#8221; at the part of words (see Figure 9).</p>
+<div class="figure">
+<a class="reference internal image-reference" href="_images/Screenshot_insertcolbef.png"><img alt="_images/Screenshot_insertcolbef.png" src="_images/Screenshot_insertcolbef.png" style="width: 663.2px; height: 577.6px;" /></a>
+<p class="caption"><em>Figure 9: Adding column before</em></p>
+</div>
+<p>It is also possible to add an annotation column after the cursor position. Press &#8220;Insert empty column after&#8221; (see Figure 10).</p>
+<div class="figure">
+<a class="reference internal image-reference" href="_images/Screenshot_insertcolaft.png"><img alt="_images/Screenshot_insertcolaft.png" src="_images/Screenshot_insertcolaft.png" style="width: 663.2px; height: 577.6px;" /></a>
+<p class="caption"><em>Figure 10: Adding column after</em></p>
+</div>
+<p>With the option &#8220;Delete column&#8221; the user can delete a whole column of annotation. Be aware that all annotation of the current
+level and all sub-levels are deleted (i.e. if you delete a clause unit all words and other annotations of the clause unit
+are removed).</p>
+</div>
+<div class="section" id="find-and-replace">
+<h2>Find and replace<a class="headerlink" href="#find-and-replace" title="Permalink to this headline">¶</a></h2>
+<p>In the menu Edit, select Find and Replace (see Figure 11).</p>
+<div class="figure">
+<a class="reference internal image-reference" href="_images/Screenshot-PoioGRAID_edit.png"><img alt="_images/Screenshot-PoioGRAID_edit.png" src="_images/Screenshot-PoioGRAID_edit.png" style="width: 640.0px; height: 361.5px;" /></a>
+<p class="caption"><em>Figure 11: Option Find and Replace</em></p>
+</div>
+<p>A new window displays possibilities to search and replace text in the file. Write what you want to find into the text-field
+with the label &#8220;Find:&#8221; and click on the button &#8220;Find&#8221; to start the search.</p>
+<p>In case that the search string is found in the document, Poio GRAID will mark it with yellow color (see Figure 12). By
+pressing &#8220;Find&#8221; continuously it will look for the same text throughout the document.</p>
+<div class="figure">
+<a class="reference internal image-reference" href="_images/Screenshot_dear.png"><img alt="_images/Screenshot_dear.png" src="_images/Screenshot_dear.png" style="width: 635.0px; height: 367.5px;" /></a>
+<p class="caption"><em>Figure 12: Underlined text found</em></p>
+</div>
+<p>If no match is found the dialog will display a message &#8220;No text found.&#8221;.</p>
+<p>You can replace strings in the document by entering the search string into the text field &#8220;Find:&#8221; and the replacement
+string into the text field &#8220;Replace with:&#8221;. First, write the string into the text field &#8220;Find:&#8221; and press &#8220;Find&#8221;.
+Poio GRAID will mark the found string (see Figure 12). Then, in the text field &#8220;Replace with:&#8221; enter the replacement
+string and click on the button &#8220;Replace&#8221; to make this specific change (see Figure 13).</p>
+<div class="figure">
+<a class="reference internal image-reference" href="_images/Screenshot_replace.png"><img alt="_images/Screenshot_replace.png" src="_images/Screenshot_replace.png" style="width: 635.5px; height: 367.5px;" /></a>
+<p class="caption"><em>Figure 13: Replaced string</em></p>
+</div>
+<p>Also, you can replace the same string in the whole document and not only in a particular place by clicking &#8220;Replace All&#8221;.
+Enter the search string into the text field &#8220;Find:&#8221; and press &#8220;Find&#8221; button. Next, write the replacement string into
+the text field &#8220;Replace with:&#8221;. To finish, press &#8220;Replace All&#8221;. The dialog will display a success message with the
+number of replacements (see Figure 14).</p>
+<div class="figure">
+<a class="reference internal image-reference" href="_images/Screenshot_replaceall1.png"><img alt="_images/Screenshot_replaceall1.png" src="_images/Screenshot_replaceall1.png" style="width: 634.0px; height: 366.0px;" /></a>
+<p class="caption"><em>Figure 14: Total of replaced occurrences</em></p>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Poio GRAID</a><ul>
+<li><a class="reference internal" href="#introduction">Introduction</a></li>
+<li><a class="reference internal" href="#create-a-new-file">Create a new file</a><ul>
+<li><a class="reference internal" href="#plain-text-files">Plain text files</a></li>
+<li><a class="reference internal" href="#toolbox-style-text">Toolbox-Style Text</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#saving-and-opening-files">Saving and opening files</a></li>
+<li><a class="reference internal" href="#adding-and-deleting-utterances">Adding and deleting utterances</a></li>
+<li><a class="reference internal" href="#adding-and-deleting-columns">Adding and deleting columns</a></li>
+<li><a class="reference internal" href="#find-and-replace">Find and replace</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="index.html"
+                        title="previous chapter">Welcome to Poio&#8217;s documentation!</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/poiograid.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="index.html" title="Welcome to Poio’s documentation!"
+             >previous</a> |</li>
+        <li><a href="index.html">Poio 0.1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2012, Peter Bouda.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>
