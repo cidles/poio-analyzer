@@ -72,8 +72,7 @@ class PoioGRAID(QtGui.QMainWindow):
             "Interdisciplinary Centre for Social and Language Documentation");
         QtCore.QCoreApplication.setOrganizationDomain("cidles.eu");
         QtCore.QCoreApplication.setApplicationName("PoioGRAID");
-        settings = QtCore.QSettings()
-        settings.setValue("FontZoom", 100)
+        #settings = QtCore.QSettings()
 
     def init_connects(self):
         """
@@ -112,6 +111,13 @@ class PoioGRAID(QtGui.QMainWindow):
     def about_dialog(self):
         """
         Display the About dialog.
+
+        ...
+
+        Parameters
+        ----------
+        about : QMessageBox
+            About PoioGRAID messagebox
         """
         about = QtGui.QMessageBox(self)
         about.setTextFormat(QtCore.Qt.RichText)
@@ -143,6 +149,12 @@ class PoioGRAID(QtGui.QMainWindow):
         """
         Delete one utterance from the text edit widget and from the annotation
         tree.
+
+        ...
+
+        Parameters
+        ----------
+        deleted_id : bool
         """
         deleted_id = self.ui.textedit.delete_current_element()
         if deleted_id:
@@ -152,6 +164,13 @@ class PoioGRAID(QtGui.QMainWindow):
         """
         Insert an utteranance *before* the currently edited utterance in the
         text view. Then adds the utterance to the annotation tree.
+
+        ...
+
+        Parameters
+        ----------
+        element : list
+        current_id : bool
         """
         element = self.annotation_tree.empty_element()
         current_id = self.ui.textedit.insert_element(element)
@@ -162,6 +181,13 @@ class PoioGRAID(QtGui.QMainWindow):
         """
         Insert an utteranance *after* the currently edited utterance in the
         text view. Then adds the utterance to the annotation tree.
+
+        ...
+
+        Parameters
+        ----------
+        element : list
+        current_id : bool
         """
         element = self.annotation_tree.empty_element()
         current_id = self.ui.textedit.insert_element(element, True)
@@ -180,7 +206,13 @@ class PoioGRAID(QtGui.QMainWindow):
         """
         Inserts an empty column at the current cursor position *before* the
         currently edited element. Then insert the element into the annotation
-         tree.
+        tree.
+
+        ...
+
+        Parameters
+        ----------
+        next_id : int
         """
         next_id = self.ui.textedit.insert_column_at_cursor(
             self.annotation_tree.next_annotation_id, False)
@@ -190,7 +222,13 @@ class PoioGRAID(QtGui.QMainWindow):
         """
         Inserts an empty column at the current cursor position *after* the
         currently edited element. Then insert the element into the annotation
-         tree.
+        tree.
+
+        ...
+
+        Parameters
+        ----------
+        next_id : int
         """
         next_id = self.ui.textedit.insert_column_at_cursor(
             self.annotation_tree.next_annotation_id, True)
@@ -201,6 +239,14 @@ class PoioGRAID(QtGui.QMainWindow):
         Create a new file from a given input text. The user has to enter the
         text in an input dialog. There are two types of input text: plain text
         or tb style text (with markup like ``\sl`` at the beginning of lines).
+
+        ...
+
+        Parameters
+        ----------
+        dialog : Qdialog
+        ui : Ui_NewFileGraid
+        ret : int
         """
         dialog = QtGui.QDialog(self)
         ui = Ui_NewFileGraid()
@@ -224,6 +270,13 @@ class PoioGRAID(QtGui.QMainWindow):
         """
         Save the current data into a file. If no filename is specified yet
         then ask for the path and filename by opening a file dialog.
+
+        ...
+
+        Parameters
+        ----------
+        tree : list
+        file : Open file
         """
         if not self.filepath:
             self.save_file_as()
@@ -234,11 +287,16 @@ class PoioGRAID(QtGui.QMainWindow):
             file.close()
             self.statusBar().showMessage(self.tr("File saved."), 5)
 
-
     def save_file_as(self):
         """
         Open a file dialog and ask for path and filename for the file. Then
         call `PoioGRAID.save_file()`.
+
+        ...
+
+        Parameters
+        ----------
+        filepath : str
         """
         filepath = QtGui.QFileDialog.getSaveFileName(
             self,
@@ -258,6 +316,13 @@ class PoioGRAID(QtGui.QMainWindow):
         """
         Display a file dialog and let the user choose a file. Load the data
         into the annotation tree and then update the text edit widget.
+
+        ...
+
+        Parameters
+        ----------
+        filepath : str
+        file : Open file
         """
         filepath = QtGui.QFileDialog.getOpenFileName(
             self,
@@ -271,12 +336,17 @@ class PoioGRAID(QtGui.QMainWindow):
             file.close()
             self.update_textedit()
             self.filepath = filepath
-            print self.annotation_tree.tree
 
     def find_and_replace(self):
+        """
+        Shows find and replace dialog
+        """
         self._dialog_find_and_replace.show()
 
     def find(self):
+        """
+        Shows find dialog
+        """
         self._dialog_find.show()
 
     # Private functions #######################################################
@@ -284,6 +354,17 @@ class PoioGRAID(QtGui.QMainWindow):
     def _parse_plain_text(self, text):
         """
         Parses plain text data into an annotation tree.
+
+        ...
+
+        Parameters
+        ----------
+        progress : QProgressDialog
+        line : str
+        utterance : list
+        clause_unit :
+        words :
+        elements
         """
         lines = text.split("\n")
 
@@ -334,6 +415,16 @@ class PoioGRAID(QtGui.QMainWindow):
         """
         Parses tb style data into an annotation tree. In tb style data lines
         start with markup like ``\sl``.
+
+        ...
+
+        Parameters
+        ----------
+        block : list
+        lines : list
+        line : list
+        title : list
+        utterance :
         """
         block = list()
 
@@ -365,6 +456,15 @@ class PoioGRAID(QtGui.QMainWindow):
         """
         Helper function for `PoioGRAID._parse_tb_style_text()`. Parse one
         paragraph of tb style data.
+        ...
+
+        Parameters
+        ----------
+        block : dict
+        utterance :
+        translation :
+        comment :
+
         """
         element_tb = dict()
         utterance = u""

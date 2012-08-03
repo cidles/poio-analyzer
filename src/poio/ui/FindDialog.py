@@ -13,6 +13,9 @@ from FindReplaceDialog import FindReplaceDialog
 class FindDialog(FindReplaceDialog):
 
     def __init__(self, parent):
+        """
+        Initialize the Find Dialog
+        """
         FindReplaceDialog.__init__(self, parent)
         self.ui.findReplaceForm.hide_replace_widgets()
         self.setWindowTitle(self.tr("Find"))
