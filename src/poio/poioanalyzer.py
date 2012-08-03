@@ -103,6 +103,19 @@ class PoioAnalyzer(QtGui.QMainWindow):
         self.update_result_view()
 
     def add_files(self):
+        """
+        Loads the file as filepath;
+        Tells the user the time it took to load the file selected.
+
+        Parameters
+        ----------
+        filepaths : QStringList
+            Stores the file paths the user has chosen
+        start : float
+            Start time
+        end : float
+            End time
+        """
         # PySide version
         #filepaths, types = QtGui.QFileDialog.getOpenFileNames(self, self.tr("Add Files"), "", self.tr("Elan files (*.eaf);;Toolbox files (*.txt);;All files (*.*)"))
         # PyQt version
@@ -119,6 +132,16 @@ class PoioAnalyzer(QtGui.QMainWindow):
         print "Time elapsed = ", end - start, "seconds"
 
     def update_corpus_reader(self):
+        """
+        Updates the shown opened files view
+
+        ...
+
+        Parameters
+        ----------
+        itemsCount : QProgressDialog
+        progress : QStringList
+        """
         itemsCount = self.project.rowCount()
         progress = QtGui.QProgressDialog(self.tr("Loading Files..."), self.tr("Abort"), 0, itemsCount, self.parent())
         progress.setWindowModality(QtCore.Qt.WindowModal)
@@ -136,6 +159,15 @@ class PoioAnalyzer(QtGui.QMainWindow):
         #self.updateCorpusReaderFilter()
 
     def set_current_file_in_result_view(self, modelIndex):
+        """
+        Sets what shows up in the result view
+
+        ...
+
+        Parameters
+        ----------
+        e : QStringList
+        """
         e_id = "#file_{0}".format(modelIndex.row())
         e = self.ui.webviewResult.page().mainFrame().findFirstElement(e_id)
         if not e.isNull():
@@ -144,8 +176,18 @@ class PoioAnalyzer(QtGui.QMainWindow):
     def update_result_view(self):
         """
         Updates the view screen with the refreshed data and zoom settings
+
+        ...
+
+        Parameters
+        ----------
+        zoom : str
+            FontZoom value
+        html : str
+            HTML tags
+        css : QByteArray
+            Css Style Sheet
         """
-        files = []
         settings = QtCore.QSettings()
         zoom = str(settings.value("FontZoom").toInt()[0])
         html = "<html><head><meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" /></head><body>\n"
@@ -169,6 +211,15 @@ class PoioAnalyzer(QtGui.QMainWindow):
         """
         Increase the zoom setting by 10 % when the menu button is clicked
         until the 200% zoom limit is reached
+
+        ...
+
+        Parameters
+        ----------
+        currentzoom : tuple
+            Stored current Font Zoom
+        zoom : int
+            Increased Zoom value
         """
         settings = QtCore.QSettings()
         currentzoom = settings.value("FontZoom").toInt()
@@ -182,6 +233,15 @@ class PoioAnalyzer(QtGui.QMainWindow):
         """
         Decreases the zoom setting by 10 % when the menu button is clicked
         until the 50% zoom limit is reached
+
+        ...
+
+        Parameters
+        ----------
+        currentzoom : tuple
+            Stored current Font Zoom
+        zoom : int
+            Decreased Zoom value
         """
         settings = QtCore.QSettings()
         currentzoom = settings.value("FontZoom").toInt()
@@ -203,7 +263,19 @@ class PoioAnalyzer(QtGui.QMainWindow):
     def export_search_results(self):
         """
         Exports the current annotationtree as HTML
+
+        ...
+
+        Parameters
+        ----------
+        export_file : str
+            Path to the exported file
+        OUT : Open file
+            Opened file for saving data
+        html : str
+            HTML
         """
+
         export_file =  QtGui.QFileDialog.getSaveFileName(self, self.tr("Export Search Result"), "", self.tr("HTML file (*.html)"))
         export_file = unicode(export_file)
         OUT  = codecs.open(export_file, "w", "utf-8")
@@ -214,7 +286,6 @@ class PoioAnalyzer(QtGui.QMainWindow):
         html += "</body></html>"
         OUT.write(html)
         OUT.close()
-
     #def findFromStart(self, exp):
     #    self.ui.texteditInterlinear.setTextCursor(QtGui.QTextCursor(self.ui.texteditInterlinear.document()))
     #    if not self.ui.texteditInterlinear.find(exp) and exp != "":
@@ -229,8 +300,18 @@ class PoioAnalyzer(QtGui.QMainWindow):
 
     def apply_filter(self):
         """
-        Check for the search options
+        Check for the search options and update the resul view
+
+        ...
+
+        Parameters
+        ----------
+        filter chain : list
+            Filters list
+        currentFilter : AnnotationTreeFilter
+            Opened file for saving data
         """
+
         filterChain = []
         for i in range(0, self.ui.tabWidget.currentIndex()+1):
             currentFilter = pyannotation.annotationtree.AnnotationTreeFilter(self.data_structure_type)
@@ -262,15 +343,29 @@ class PoioAnalyzer(QtGui.QMainWindow):
     def search_tab_changed(self, index):
         """
         Check if the search tab changed
+
         """
+
         if index == self.ui.tabWidget.count() - 1:
             self.add_search_tab()
+
         else:
             self.apply_filter()
 
     def add_search_tab(self):
         """
+        Add a search tab
 
+        ...
+
+        Parameters
+        ----------
+        nr_of_new_tab : int
+            Number of new tabs
+        widget_search :QWidget
+            Search Tab
+        ui : Ui_TabWidgetSearch
+        label : QLabel
         """
         nr_of_new_tab = self.ui.tabWidget.count()
         widget_search = QtGui.QWidget()
@@ -308,6 +403,15 @@ class PoioAnalyzer(QtGui.QMainWindow):
         self.ui.tabWidget.setCurrentIndex(nr_of_new_tab - 1)
 
     def update_search_tab_widget_names(self):
+        """
+        Updates the search tab
+
+        ...
+
+        Parameters
+        ---------
+        widget : tabWidget
+        """
         for i in range(0, self.ui.tabWidget.count()-1):
             widget = self.ui.tabWidget.widget(i)
             for childWidget in widget.findChildren(QtGui.QWidget):
@@ -315,6 +419,18 @@ class PoioAnalyzer(QtGui.QMainWindow):
             self.ui.tabWidget.setTabText(i, "Search %i" % (i+1))
 
     def search_tab_closed(self):
+        """
+        Closes the search tab
+
+        ...
+
+        Parameters
+        ---------
+        currentIndex : int
+            Index of the current tab
+        widgetSearch : tabWidget
+            Current tab
+        """
         # always leave at least one Search tab open
         if self.ui.tabWidget.indexOf(self.ui.tabNewSearch) < 2:
             return
@@ -330,6 +446,16 @@ class PoioAnalyzer(QtGui.QMainWindow):
         self.update_search_tab_widget_names()
 
     def search_tab_cleared(self):
+        """
+        Clears the search tab
+
+        ...
+
+        Parameters
+        ---------
+        widget : tabWidget
+            Current tab
+        """
         widget = self.ui.tabWidget.currentWidget()
         for childWidget in widget.findChildren(QtGui.QWidget):
             if re.match(u"lineeditSearch", childWidget.objectName()):

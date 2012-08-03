@@ -7,6 +7,20 @@ import pyannotation.data
 class PoioFile(object):
 
     def __init__(self, filepath = ""):
+        """
+        Initializes PoioFile
+
+        ...
+
+        Parameters
+        ----------
+        self.filepath : str
+            File Path
+        self.isNew : bool
+        self.type : int
+            Data Format
+        f : Open file
+        """
         self.filepath = filepath
         self.isNew = True
         self.type = None
@@ -24,5 +38,8 @@ class PoioFile(object):
             self.type = pyannotation.data.KURA
 
     def setIsNew(self, value = True):
+        """
+        Defines isNew
+        """
         self.isNew = value
 

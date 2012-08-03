@@ -8,15 +8,26 @@ from poio.poiofile import PoioFile
 class PoioProject(QtCore.QAbstractListModel):
 
     def __init__(self, projectdir, parent = None):
+        """
+        The consctructor of the main application object.
+        Calls a lot of other init methods.
+        """
         QtCore.QAbstractListModel.__init__(self, parent)
         self.projectfiles = []
         self.projectdir = projectdir
         self.corpusreader = None
 
     def flags(self, index):
+        """
+
+        """
         return QtCore.Qt.ItemIsSelectable | QtCore.Qt.ItemIsEnabled
+
     
     def data(self, index, role = QtCore.Qt.DisplayRole):
+        """
+
+        """
         if role == QtCore.Qt.DisplayRole:
             if index.row() < len(self.projectfiles):
                 return os.path.basename(self.projectfiles[index.row()].filepath)
