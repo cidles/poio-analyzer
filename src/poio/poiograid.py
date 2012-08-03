@@ -88,9 +88,6 @@ class PoioGRAID(QtGui.QMainWindow):
 
         # Application stuff
         self.ui.actionQuit.triggered.connect(self.close)
-        self.ui.actionZoom_In.triggered.connect(self.zoom_in)
-        self.ui.actionZoom_Out.triggered.connect(self.zoom_out)
-        self.ui.actionReset_Zoom.triggered.connect(self.reset_zoom)
         self.ui.actionAboutPoioGRAID.triggered.connect(self.about_dialog)
 
         # insert and delete tables and columns
@@ -111,41 +108,6 @@ class PoioGRAID(QtGui.QMainWindow):
         self.ui.actionFindAndReplace.triggered.connect(
             self.find_and_replace)
         self.ui.actionFind.triggered.connect(self.find)
-
-    def zoom_in(self):
-        """
-        Increase the zoom setting by 10 % when the menu button is clicked
-        until the 200% zoom limit is reached
-        """
-        settings = QtCore.QSettings()
-        currentzoom = settings.value("FontZoom").toInt()
-        if currentzoom[0] < 200:
-            zoom = currentzoom[0] + 10
-            settings.setValue("FontZoom", zoom)
-            self.update_textedit()
-            print zoom
-
-
-    def zoom_out(self):
-        """
-        Decreases the zoom setting by 10 % when the menu button is clicked
-        until the 50% zoom limit is reached
-        """
-        settings = QtCore.QSettings()
-        currentzoom = settings.value("FontZoom").toInt()
-        if currentzoom[0] > 50:
-            zoom = currentzoom[0] - 10
-            settings.setValue("FontZoom", zoom)
-            self.update_textedit()
-            print zoom
-
-    def reset_zoom(self):
-        """
-        Resets the zoom setting to the default value of 100%
-        """
-        settings = QtCore.QSettings()
-        settings.setValue("FontZoom", 100)
-        self.update_textedit()
 
     def about_dialog(self):
         """
@@ -266,7 +228,7 @@ class PoioGRAID(QtGui.QMainWindow):
         if not self.filepath:
             self.save_file_as()
         else:
-            tree = self.ui.textedit.anntation_tree_from_document()
+            tree = self.ui.textedit.annotation_tree_from_document()
             file = open(self.filepath, "wb")
             pickle.dump(tree, file)
             file.close()

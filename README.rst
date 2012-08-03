@@ -41,7 +41,7 @@ How to start with PyCharm
 7. * Choose "Run" -> "Edit Configurations" and add a new configuration;
    * Select "Python" configuration;
    * Give it a name;
-   * Point the "Script" to "Poio\bin\PoioGRAID";
+   * Point the "Script" to "Poio\\bin\\PoioGRAID";
 8. Develop and run it.
 
 
