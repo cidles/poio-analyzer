@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'MainAnalyzerHTML.ui'
 #
-# Created: Fri Aug 03 10:49:15 2012
+# Created: Mon Aug 06 15:11:16 2012
 #      by: PyQt4 UI code generator 4.9.4
 #
 # WARNING! All changes made in this file will be lost!
@@ -196,9 +196,12 @@ class Ui_MainWindow(object):
         self.actionZoom_Out.setObjectName(_fromUtf8("actionZoom_Out"))
         self.actionReset_Zoom = QtGui.QAction(MainWindow)
         self.actionReset_Zoom.setObjectName(_fromUtf8("actionReset_Zoom"))
+        self.actionPrint = QtGui.QAction(MainWindow)
+        self.actionPrint.setObjectName(_fromUtf8("actionPrint"))
         self.menuFiel.addAction(self.actionNewProject)
         self.menuFiel.addAction(self.actionSaveProject)
         self.menuFiel.addSeparator()
+        self.menuFiel.addAction(self.actionPrint)
         self.menuFiel.addAction(self.actionExportSearchResult)
         self.menuFiel.addSeparator()
         self.menuFiel.addAction(self.actionSaveProjectAs)
@@ -263,6 +266,8 @@ class Ui_MainWindow(object):
         self.actionZoom_Out.setShortcut(QtGui.QApplication.translate("MainWindow", "Ctrl+-", None, QtGui.QApplication.UnicodeUTF8))
         self.actionReset_Zoom.setText(QtGui.QApplication.translate("MainWindow", "Reset Zoom", None, QtGui.QApplication.UnicodeUTF8))
         self.actionReset_Zoom.setShortcut(QtGui.QApplication.translate("MainWindow", "Ctrl+0", None, QtGui.QApplication.UnicodeUTF8))
+        self.actionPrint.setText(QtGui.QApplication.translate("MainWindow", "Print", None, QtGui.QApplication.UnicodeUTF8))
+        self.actionPrint.setShortcut(QtGui.QApplication.translate("MainWindow", "Ctrl+P", None, QtGui.QApplication.UnicodeUTF8))
 
 from PyQt4 import QtWebKit
 import poioanalyzer_rc

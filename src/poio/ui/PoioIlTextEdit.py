@@ -41,7 +41,7 @@ class PoioIlTextEdit(QtGui.QTextEdit):
 
         Parameters
         ----------
-        text : str
+        source :
         """
         text = unicode(source.text())
         text = re.sub(r"[\r\n\a]", "", text)
@@ -51,13 +51,6 @@ class PoioIlTextEdit(QtGui.QTextEdit):
     def checkCursorPosition(self):
         """
         Check for the cursor position
-
-        ...
-
-        Parameters
-        ----------
-        c :
-        t :
         """
         if self.isReadOnly():
             return
@@ -72,13 +65,6 @@ class PoioIlTextEdit(QtGui.QTextEdit):
     def utteranceIdOfCursor(self):
         """
         Checks the Id of the utterance
-
-        ...
-
-        Parameters
-        ----------
-        c :
-        t :
         """
         c = self.textCursor()
         t = c.currentTable()
@@ -89,16 +75,6 @@ class PoioIlTextEdit(QtGui.QTextEdit):
     def getCurrentUtteranceId(self):
         """
         Gets the Id of the current Utterance
-
-        ...
-
-        Parameters
-        ----------
-        c :
-        t :
-        utteranceCell :
-        utteranceId : str
-
         """
         c = self.textCursor()
         if c == None:
@@ -114,17 +90,6 @@ class PoioIlTextEdit(QtGui.QTextEdit):
     def getCurrentWordId(self):
         """
         Gets the Id of the current Word
-
-        ...
-
-        Parameters
-        ----------
-        c :
-        t :
-        currentCell :
-        wordidCell :
-        wordId : str
-
         """
         c = self.textCursor()
         if c == None:
@@ -145,17 +110,6 @@ class PoioIlTextEdit(QtGui.QTextEdit):
     def deleteCurrentWord(self):
         """
         Deletes the current Word
-
-        ...
-
-        Parameters
-        ----------
-        c :
-        t :
-        currentCell :
-        wordidCell :
-        wordId : str
-
         """
         stringDocumenttext = unicode(self.document().toPlainText())
         c = self.textCursor()
@@ -183,18 +137,6 @@ class PoioIlTextEdit(QtGui.QTextEdit):
     def deleteCurrentUtterance(self):
         """
         Gets the Id of the current Word
-
-        ...
-
-        Parameters
-        ----------
-        c :
-        t :
-        utteranceCell :
-        utteranceId : str
-        iStart : int
-        iEnd : int
-
         """
         stringDocumenttext = unicode(self.document().toPlainText())
         c = self.textCursor()
@@ -216,6 +158,11 @@ class PoioIlTextEdit(QtGui.QTextEdit):
     def appendTitle(self, title):
         """
         Adds a title
+        ...
+
+        Parameters
+        ----------
+        title : str
         """
         self.setDocumentTitle(title)
         # margin is not working :-(
@@ -231,8 +178,7 @@ class PoioIlTextEdit(QtGui.QTextEdit):
 
         Parameters
         ----------
-        t : template
-        text :
+        utterances :
         """
         t = Template(os.path.abspath("html"), "PoioIlUtterances.html")
         text = t.evoque(vars(), quoting="str")
@@ -246,8 +192,10 @@ class PoioIlTextEdit(QtGui.QTextEdit):
 
         Parameters
         ----------
-        t : template
-        text :
+        id :
+        utterance :
+        ilElements :
+        translations :
         """
         t = Template(os.path.abspath("html"), "PoioIlUtterance.html")
         countwords = len(ilElements)
@@ -342,14 +290,6 @@ class PoioIlTextEdit(QtGui.QTextEdit):
     def getAnnotationDict(self):
         """
         Gets the Annotation Dictionary
-
-        ...
-
-        Parameters
-        ----------
-        root :
-        stringDocumenttext : str
-        dict : dict
         """
         root = self.document().rootFrame()
         stringDocumenttext = unicode(self.document().toPlainText())
@@ -413,14 +353,6 @@ class PoioIlTextEdit(QtGui.QTextEdit):
     def getAnnotationDict_old(self):
         """
         Gets the Annotation Dictionary_old
-
-        ...
-
-        Parameters
-        ----------
-        root :
-        stringDocumenttext : str
-        ret : dict
         """
         html = unicode(self.toHtml())
         parser = etree.HTMLParser()
@@ -446,14 +378,6 @@ class PoioIlTextEdit(QtGui.QTextEdit):
     def getAnnotationTree(self):
         """
         Gets the Annotation Tree
-
-        ...
-
-        Parameters
-        ----------
-        root :
-        stringDocumenttext : str
-        tree : list
         """
         root = self.document().rootFrame()
         stringDocumenttext = unicode(self.document().toPlainText())

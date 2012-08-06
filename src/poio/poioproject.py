@@ -11,6 +11,12 @@ class PoioProject(QtCore.QAbstractListModel):
         """
         The consctructor of the main application object.
         Calls a lot of other init methods.
+
+        ...
+
+        Parameters
+        ----------
+        parent : QModelIndex
         """
         QtCore.QAbstractListModel.__init__(self, parent)
         self.projectfiles = []
@@ -19,14 +25,27 @@ class PoioProject(QtCore.QAbstractListModel):
 
     def flags(self, index):
         """
+        Flags
 
+        ...
+
+        Parameters
+        ----------
+        index :
         """
         return QtCore.Qt.ItemIsSelectable | QtCore.Qt.ItemIsEnabled
 
     
     def data(self, index, role = QtCore.Qt.DisplayRole):
         """
+        Returns data
 
+        ...
+
+        Parameters
+        ----------
+        index :
+        role : int
         """
         if role == QtCore.Qt.DisplayRole:
             if index.row() < len(self.projectfiles):
@@ -35,6 +54,17 @@ class PoioProject(QtCore.QAbstractListModel):
                 return QtCore.QVariant()
 
     def setData(self, index, value, role = QtCore.Qt.EditRole):
+        """
+        Sets the data in the list of the open files
+
+        ...
+
+        Parameters
+        ----------
+        index :
+        value :
+        role : int
+        """
         if role == QtCore.Qt.EditRole:
             if index.row() < len(self.projectfiles):
                 self.projectfiles[index.row()] = PoioFile(value)
@@ -44,13 +74,42 @@ class PoioProject(QtCore.QAbstractListModel):
                 return False
             
     def headerData(self, section, orientation, role = QtCore.Qt.DisplayRole):
+        """
+        Returns the header
+
+        ...
+
+        Parameters
+        ----------
+        section :
+        orientation :
+        role : int
+        """
         if role == QtCore.Qt.DisplayRole:
             return "File path"
         
     def rowCount(self, parent = QtCore.QModelIndex()):
+        """
+        Returns the number of rows
+        ...
+
+        Parameters
+        ----------
+        parent : QModelIndex
+        """
         return len(self.projectfiles)
         
     def insertRows(self, row, count, parent = QtCore.QModelIndex()):
+        """
+        Insert rows
+        ...
+
+        Parameters
+        ----------
+        row : int
+        count : int
+        parent : QModelIndex
+        """
         if row >= 0 and row <= self.rowCount():
             self.beginInsertRows(parent, row, row+count)
             for i in range(0,count):
@@ -61,6 +120,16 @@ class PoioProject(QtCore.QAbstractListModel):
             return False
 
     def removeRows(self, row, count, parent = QtCore.QModelIndex()):
+        """
+        Remove Rows
+        ...
+
+        Parameters
+        ----------
+        row : int
+        count : int
+        parent : QModelIndex
+        """
         if row >= 0 and (row+count)<=self.rowCount():
             self.beginRemoveRows(parent, row, row+count)
             for i in range(0,count):
@@ -71,6 +140,14 @@ class PoioProject(QtCore.QAbstractListModel):
             return False
         
     def addFilePath(self, poiofilepath):
+        """
+        Add a file to the project if it doesn't exist yet
+        ...
+
+        Parameters
+        ----------
+        poiofilepath : str
+        """
         # does the file exist in the project?
         for poiofile in self.projectfiles:
             if poiofile.filepath == poiofilepath:
@@ -81,18 +158,46 @@ class PoioProject(QtCore.QAbstractListModel):
         return False
 
     def addFilePaths(self, poiofilepaths):
+        """
+        Add multiple files to the project
+        ...
+
+        Parameters
+        ----------
+        poiofilepaths : list
+        """
         for filepath in poiofilepaths:
             self.addFilePath(unicode(filepath))
 
     def removeFilePathAt(self, index):
+        """
+        Remove file from the open files list
+                ...
+
+        Parameters
+        ----------
+        index : int
+        """
         self.removeRows(index, 1)
         
     def poioFileAt(self, row):
+        """
+        Returns the Poio file at the given row
+
+        ...
+
+        Parameters
+        ----------
+        row : int
+        """
         if row < self.rowCount():
             return self.projectfiles[row]
         else:
             return None
 
     def setAllFilesAsNew(self):
+        """
+        Set all files as new
+        """
         for file in self.projectfiles:
             file.setIsNew(True)

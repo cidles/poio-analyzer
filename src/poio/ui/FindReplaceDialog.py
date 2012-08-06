@@ -23,12 +23,23 @@ class FindReplaceDialog(QtGui.QDialog):
     def set_text_edit(self, textedit):
         """
         Manage Find and Replace Dialog
+        ...
+
+        Parameters
+        ----------
+        textedit : str
         """
         self.ui.findReplaceForm.set_text_edit(textedit)
 
     def changeEvent(self, event):
         """
         If the language has changed retranlate the UI accordingly
+
+        ...
+
+        Parameters
+        ----------
+        event : QEvent
         """
         QtGui.QDialog.changeEvent(self, event)
         if event.type() == QtCore.QEvent.LanguageChange:

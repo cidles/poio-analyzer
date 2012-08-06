@@ -20,6 +20,9 @@ class PoioGraidTextEdit(QtGui.QTextEdit):
     NUMBERS_COLUMN = 0
 
     def __init__(self, parent):
+        """
+        Initializes the Text Edit
+        """
         QtGui.QTextEdit.__init__(self, parent)
         self.setLineWrapMode(QtGui.QTextEdit.NoWrap)
         self.setAcceptRichText(False)
@@ -42,6 +45,15 @@ class PoioGraidTextEdit(QtGui.QTextEdit):
             self.check_cursor_position)
 
     def keyPressEvent(self, event):
+        """
+        Event handler for "Return Key", "Enter Key" and "Tab Key"
+
+        ...
+
+        Parameters
+        ----------
+        event : QEvent
+        """
         c = self.textCursor()
         t = c.currentTable()
 
@@ -68,12 +80,24 @@ class PoioGraidTextEdit(QtGui.QTextEdit):
         QtGui.QTextEdit.keyPressEvent(self, event)
 
     def insertFromMimeData(self, source):
+        """
+        Insert text from Mime Data
+
+        ...
+
+        Parameters
+        ----------
+        source :
+        """
         text = unicode(source.text())
         text = re.sub(r"[\r\n\a]", "", text)
         self.insertPlainText(text)
         #QtGui.QTextEdit.insertFromMimeData(self, source)
         
     def check_cursor_position(self):
+        """
+        Check the cursor position
+        """
         c = self.textCursor()
         t = c.currentTable()
 
@@ -86,6 +110,14 @@ class PoioGraidTextEdit(QtGui.QTextEdit):
     def insert_column_at_cursor(self, id, after):
         """
         Inserts column before or after the current cursor position.
+
+        ...
+
+        Parameters
+        ----------
+        id : int
+        after : bool
+
         """
         if not self.structure_type_handler:
             raise NoStructureTypeHandlerError
@@ -147,6 +179,9 @@ class PoioGraidTextEdit(QtGui.QTextEdit):
         return id
 
     def delete_column_at_cursor(self):
+        """
+        Removes the column with the current cursor.
+        """
         cursor = self.textCursor()
         table = cursor.currentTable()
         if table:
@@ -199,12 +234,24 @@ class PoioGraidTextEdit(QtGui.QTextEdit):
                         c_span + neighbour_cell.columnSpan())
 
     def append_title(self, title):
+        """
+        Add title to the document
+
+        ...
+
+        Parameters
+        ----------
+        title : str
+        """
         self.setDocumentTitle(title)
         # margin is not working :-(
         self.append("<div style=\"font-size:14pt;\">&nbsp;</div>")
         self.append("<div style=\"font-size:14pt;font-weight:bold;text-decoration:underline;\" id=\"title\" class=\"title\">" + title + "</div>")
 
     def delete_current_element(self):
+        """
+        Remove element with the current cursor
+        """
         cursor = self.textCursor()
         table = cursor.currentTable()
         current_id = None
@@ -219,6 +266,16 @@ class PoioGraidTextEdit(QtGui.QTextEdit):
         return current_id
 
     def insert_element(self, element, after = False):
+        """
+        Adds element at the current cursor
+
+        ...
+
+        Parameters
+        ----------
+        element :
+        after : bool
+        """
         if not self.structure_type_handler:
             raise NoStructureTypeHandlerError
 
@@ -242,6 +299,15 @@ class PoioGraidTextEdit(QtGui.QTextEdit):
         return current_id
 
     def append_element(self, element):
+        """
+        Adds element at the end of the file
+
+        ...
+
+        Parameters
+        ----------
+        element :
+        """
         if not self.structure_type_handler:
             raise NoStructureTypeHandlerError
 
@@ -257,6 +323,16 @@ class PoioGraidTextEdit(QtGui.QTextEdit):
         self._update_number_of_table(table, number)
 
     def _insert_element_at_position(self, element, pos):
+        """
+        Adds element at the given position
+
+        ...
+
+        Parameters
+        ----------
+        element :
+        pos :
+        """
         c = self.textCursor()
         c.setPosition(pos)
 
@@ -301,6 +377,9 @@ class PoioGraidTextEdit(QtGui.QTextEdit):
         return table
 
     def update_numbers(self):
+        """
+        Updates the number of the utterances
+        """
         root = self.document().rootFrame()
         #string_document_text = unicode(self.document().toPlainText())
         tree = []
@@ -311,6 +390,16 @@ class PoioGraidTextEdit(QtGui.QTextEdit):
                 number += 1
 
     def _update_number_of_table(self, table, number):
+        """
+        Updates the number of a utterance
+
+        ...
+
+        Parameters
+        ----------
+        table :
+        number : int
+        """
         c = table.cellAt(0, PoioGraidTextEdit.NUMBERS_COLUMN)
         cursor = c.firstCursorPosition()
         cursor.setPosition(
@@ -320,6 +409,19 @@ class PoioGraidTextEdit(QtGui.QTextEdit):
 
     def _insert_annotation_cell(self, elements, flat_hierarchy, hierarchy,
                                 table, column):
+        """
+        Adds annotation cell
+
+        ...
+
+        Parameters
+        ----------
+        elements :
+        flat_hierarchy :
+        hierarchy :
+        table:
+        column :
+        """
         inserted = 0
         for i, t in enumerate(hierarchy):
             if type(t) is list:
@@ -339,6 +441,18 @@ class PoioGraidTextEdit(QtGui.QTextEdit):
         return inserted
 
     def _insert_annotation_cell2(self, e, table, row, column):
+        """
+        Adds a annotation
+
+        ...
+
+        Parameters
+        ----------
+        e :
+        table :
+        row :
+        column :
+        """
         if (column + 1) > table.columns():
             table.appendColumns(1)
         c = table.cellAt(row, column)
@@ -348,6 +462,9 @@ class PoioGraidTextEdit(QtGui.QTextEdit):
         c.setFormat(f)
 
     def annotation_tree_from_document(self):
+        """
+        Returns the tree from a document
+        """
         if not self.structure_type_handler:
             raise NoStructureTypeHandlerError
 
@@ -368,6 +485,21 @@ class PoioGraidTextEdit(QtGui.QTextEdit):
 
     def _annotation_cell(self, elements, flat_hierarchy, hierarchy, table,
                          row, column, column_span):
+        """
+        Adds annotation cell
+
+        ...
+
+        Parameters
+        ----------
+        elements :
+        flat_hierarchy :
+        hierarchy :
+        table:
+        row :
+        column :
+        column_span :
+        """
         #processed = 0
         for i, t in enumerate(hierarchy):
             if type(t) is list:
@@ -392,6 +524,17 @@ class PoioGraidTextEdit(QtGui.QTextEdit):
         #return processed
 
     def _annotation_cell2(self, table, row, column):
+        """
+        Adds annotation cell
+
+        ...
+
+        Parameters
+        ----------
+        table :
+        row :
+        column :
+        """
         element = dict()
         c = table.cellAt(row, column)
         start = int(c.firstCursorPosition().position())
