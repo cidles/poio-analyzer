@@ -49,6 +49,12 @@ class FindReplaceForm(QtGui.QWidget):
     def set_text_edit(self, textedit):
         """
         Set the text edit and enable the buttons
+
+        ...
+
+        Parameters
+        ----------
+        textedit : str
         """
         self.textedit = textedit
         self.textedit.copyAvailable.connect(self.ui.replaceButton.setEnabled)
@@ -60,6 +66,12 @@ class FindReplaceForm(QtGui.QWidget):
     def changeEvent(self, event):
         """
         If the language has changed retranlate the UI accordingly
+
+        ...
+
+        Parameters
+        ----------
+        event : QEvent
         """
         QtGui.QWidget.changeEvent(self, event)
         if event.type() == QtCore.QEvent.LanguageChange:
@@ -73,7 +85,13 @@ class FindReplaceForm(QtGui.QWidget):
 
     def regexp_selected(self, sel):
         """
-        Validate rege xp
+        Validate regexp
+
+        ...
+
+        Parameters
+        ----------
+        sel : bool
         """
         if sel:
             self.validate_regexp(self.ui.textToFind.text())
@@ -83,6 +101,12 @@ class FindReplaceForm(QtGui.QWidget):
     def validate_regexp(self, regexp):
         """
         Check if regexp is valid
+
+        ...
+
+        Parameters
+        ----------
+        regexp : str
         """
         if (not self.ui.regexCheckBox.isChecked()) or regexp.size() == 0:
             self.ui.errorLabel.setText("")
@@ -99,6 +123,12 @@ class FindReplaceForm(QtGui.QWidget):
     def show_error(self, error):
         """
         Diplay error message
+
+        ...
+
+        Parameters
+        ----------
+        error : str
         """
         if (error == ""):
             self.ui.errorLabel.setText("")
@@ -108,6 +138,12 @@ class FindReplaceForm(QtGui.QWidget):
     def show_message(self, message):
         """
         Display message
+
+        ...
+
+        Parameters
+        ----------
+        message : str
         """
         if (message == ""):
             self.ui.errorLabel.setText("")
@@ -116,13 +152,13 @@ class FindReplaceForm(QtGui.QWidget):
 
     def find(self, next = None):
         """
+        Search / find text
+
+        ...
+
         Parameters
         ----------
-        next = bool
-        back : bool
-        toSearch : str
-        result : bool
-        flags : Flags
+        next : None
         """
 
         if not self.textedit:

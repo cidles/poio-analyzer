@@ -7,7 +7,8 @@ import copy
 import codecs
 import time
 from PyQt4 import QtCore, QtGui
-from PyQt4.QtCore import QSettings
+from PyQt4.QtCore import QSettings, QString
+from PyQt4.QtGui import QPrinter, QPrintDialog, QAbstractPrintDialog, QTextDocument, QPageSetupDialog, QDialog
 
 import pyannotation.corpus
 import pyannotation.annotationtree
@@ -52,6 +53,7 @@ class PoioAnalyzer(QtGui.QMainWindow):
         Initializes all signal/slots connections of the application.
         """
         # Menu buttons
+        self.ui.actionPrint.triggered.connect(self.printdoc)
         self.ui.actionQuit.triggered.connect(self.close)
         self.ui.actionAboutPoioAnalyzer.triggered.connect(self.about_dialog)
         self.ui.actionZoom_In.triggered.connect(self.zoom_in)
@@ -106,15 +108,6 @@ class PoioAnalyzer(QtGui.QMainWindow):
         """
         Loads the file as filepath;
         Tells the user the time it took to load the file selected.
-
-        Parameters
-        ----------
-        filepaths : QStringList
-            Stores the file paths the user has chosen
-        start : float
-            Start time
-        end : float
-            End time
         """
         # PySide version
         #filepaths, types = QtGui.QFileDialog.getOpenFileNames(self, self.tr("Add Files"), "", self.tr("Elan files (*.eaf);;Toolbox files (*.txt);;All files (*.*)"))
@@ -134,13 +127,6 @@ class PoioAnalyzer(QtGui.QMainWindow):
     def update_corpus_reader(self):
         """
         Updates the shown opened files view
-
-        ...
-
-        Parameters
-        ----------
-        itemsCount : QProgressDialog
-        progress : QStringList
         """
         itemsCount = self.project.rowCount()
         progress = QtGui.QProgressDialog(self.tr("Loading Files..."), self.tr("Abort"), 0, itemsCount, self.parent())
@@ -166,7 +152,7 @@ class PoioAnalyzer(QtGui.QMainWindow):
 
         Parameters
         ----------
-        e : QStringList
+        modelIndex :
         """
         e_id = "#file_{0}".format(modelIndex.row())
         e = self.ui.webviewResult.page().mainFrame().findFirstElement(e_id)
@@ -176,17 +162,6 @@ class PoioAnalyzer(QtGui.QMainWindow):
     def update_result_view(self):
         """
         Updates the view screen with the refreshed data and zoom settings
-
-        ...
-
-        Parameters
-        ----------
-        zoom : str
-            FontZoom value
-        html : str
-            HTML tags
-        css : QByteArray
-            Css Style Sheet
         """
         settings = QtCore.QSettings()
         zoom = str(settings.value("FontZoom").toInt()[0])
@@ -207,19 +182,11 @@ class PoioAnalyzer(QtGui.QMainWindow):
             + unicode(css.toBase64())))
         self.ui.webviewResult.setHtml(html)
 
+
     def zoom_in(self):
         """
         Increase the zoom setting by 10 % when the menu button is clicked
         until the 200% zoom limit is reached
-
-        ...
-
-        Parameters
-        ----------
-        currentzoom : tuple
-            Stored current Font Zoom
-        zoom : int
-            Increased Zoom value
         """
         settings = QtCore.QSettings()
         currentzoom = settings.value("FontZoom").toInt()
@@ -233,15 +200,6 @@ class PoioAnalyzer(QtGui.QMainWindow):
         """
         Decreases the zoom setting by 10 % when the menu button is clicked
         until the 50% zoom limit is reached
-
-        ...
-
-        Parameters
-        ----------
-        currentzoom : tuple
-            Stored current Font Zoom
-        zoom : int
-            Decreased Zoom value
         """
         settings = QtCore.QSettings()
         currentzoom = settings.value("FontZoom").toInt()
@@ -249,7 +207,6 @@ class PoioAnalyzer(QtGui.QMainWindow):
             zoom = currentzoom[0] - 10
             settings.setValue("FontZoom", zoom)
             self.update_result_view()
-
 
 
     def reset_zoom(self):
@@ -260,20 +217,27 @@ class PoioAnalyzer(QtGui.QMainWindow):
         settings.setValue("FontZoom", 100)
         self.update_result_view()
 
+
+    def printdoc(self):
+        """
+        Prints the document in the view
+        """
+        printer = QPrinter()
+
+        setup = QPageSetupDialog(printer)
+        setup.setWindowTitle(QString("Print - Page Settings"))
+
+        if setup.exec_() == QDialog.Accepted:
+            dialog = QPrintDialog(printer, self)
+            dialog.setWindowTitle(QString("Print Document"))
+
+            if dialog.exec_() == QDialog.Accepted:
+                self.ui.webviewResult.print_(printer)
+
+
     def export_search_results(self):
         """
         Exports the current annotationtree as HTML
-
-        ...
-
-        Parameters
-        ----------
-        export_file : str
-            Path to the exported file
-        OUT : Open file
-            Opened file for saving data
-        html : str
-            HTML
         """
 
         export_file =  QtGui.QFileDialog.getSaveFileName(self, self.tr("Export Search Result"), "", self.tr("HTML file (*.html)"))
@@ -301,15 +265,6 @@ class PoioAnalyzer(QtGui.QMainWindow):
     def apply_filter(self):
         """
         Check for the search options and update the resul view
-
-        ...
-
-        Parameters
-        ----------
-        filter chain : list
-            Filters list
-        currentFilter : AnnotationTreeFilter
-            Opened file for saving data
         """
 
         filterChain = []
@@ -344,6 +299,11 @@ class PoioAnalyzer(QtGui.QMainWindow):
         """
         Check if the search tab changed
 
+        ...
+
+        Parameters
+        ----------
+        index : int
         """
 
         if index == self.ui.tabWidget.count() - 1:
@@ -355,17 +315,6 @@ class PoioAnalyzer(QtGui.QMainWindow):
     def add_search_tab(self):
         """
         Add a search tab
-
-        ...
-
-        Parameters
-        ----------
-        nr_of_new_tab : int
-            Number of new tabs
-        widget_search :QWidget
-            Search Tab
-        ui : Ui_TabWidgetSearch
-        label : QLabel
         """
         nr_of_new_tab = self.ui.tabWidget.count()
         widget_search = QtGui.QWidget()
@@ -405,12 +354,6 @@ class PoioAnalyzer(QtGui.QMainWindow):
     def update_search_tab_widget_names(self):
         """
         Updates the search tab
-
-        ...
-
-        Parameters
-        ---------
-        widget : tabWidget
         """
         for i in range(0, self.ui.tabWidget.count()-1):
             widget = self.ui.tabWidget.widget(i)
@@ -421,15 +364,6 @@ class PoioAnalyzer(QtGui.QMainWindow):
     def search_tab_closed(self):
         """
         Closes the search tab
-
-        ...
-
-        Parameters
-        ---------
-        currentIndex : int
-            Index of the current tab
-        widgetSearch : tabWidget
-            Current tab
         """
         # always leave at least one Search tab open
         if self.ui.tabWidget.indexOf(self.ui.tabNewSearch) < 2:
@@ -448,13 +382,6 @@ class PoioAnalyzer(QtGui.QMainWindow):
     def search_tab_cleared(self):
         """
         Clears the search tab
-
-        ...
-
-        Parameters
-        ---------
-        widget : tabWidget
-            Current tab
         """
         widget = self.ui.tabWidget.currentWidget()
         for childWidget in widget.findChildren(QtGui.QWidget):
@@ -465,7 +392,7 @@ class PoioAnalyzer(QtGui.QMainWindow):
     def about_dialog(self):
         """
         Popup a message box containing the "About Information"
-        of Poio Annalyser
+        of Poio Analyser
         """
         QtGui.QMessageBox.about(self,
             "Poio Analyzer",

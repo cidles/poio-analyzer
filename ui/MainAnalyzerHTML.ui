@@ -260,6 +260,7 @@
     <addaction name="actionNewProject"/>
     <addaction name="actionSaveProject"/>
     <addaction name="separator"/>
+    <addaction name="actionPrint"/>
     <addaction name="actionExportSearchResult"/>
     <addaction name="separator"/>
     <addaction name="actionSaveProjectAs"/>
@@ -394,6 +395,14 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+0</string>
+   </property>
+  </action>
+  <action name="actionPrint">
+   <property name="text">
+    <string>Print</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+P</string>
    </property>
   </action>
  </widget>

@@ -14,12 +14,7 @@ class PoioFile(object):
 
         Parameters
         ----------
-        self.filepath : str
-            File Path
-        self.isNew : bool
-        self.type : int
-            Data Format
-        f : Open file
+        filepath : str
         """
         self.filepath = filepath
         self.isNew = True
@@ -40,6 +35,12 @@ class PoioFile(object):
     def setIsNew(self, value = True):
         """
         Defines isNew
+
+        ...
+
+        Parameters
+        ----------
+        value : bool
         """
         self.isNew = value
 
