@@ -21,32 +21,40 @@ Before we get to the example is important to be familiar with the data structure
 The data structure used in it is based in GRAID annotations (For more detailed information http://www.linguistik.uni-kiel.de/GRAID_manual6.0_08sept.pdf)
 
 Data Structure [GRAID Structure]
-::
+
+.. code-block:: python
+
 	[ 'utterance',
 		[ 'clause unit',
 			[ 'word', 'wfw', 'graid1' ],
 		'graid2' ],
 	  'translation', 'comment' ]
-   
+
 Retrieve Elements
 =================
 
 The first step is to initialize the variable:
-::
+
+.. code-block:: python
+
 	annotation_tree = annotationtree.AnnotationTree(data.GRAID)
 
 The AnnotationTree will contain the hierarchy and relations between the elements between which sentence, word, wfw and it's translation.
 In this step what is done is to set the data structure type of the tree with **AnnotationTree(data.GRAID)**.
 
 The second step is to open the file (in the example_data folder there are some example files):
-::
+
+.. code-block:: python
+
 	file = open('example_file.pickle', "rb")
 	annotation_tree.tree = pickle.load(file)
 
 At this point is important to know that the file should be a **pickle** file and must be previously created with PoioUI (https://github.com/cidles/Poio).
 
 The third step is to examine the resulted elements:
-::
+
+.. code-block:: python
+
 	for element in annotation_tree.elements():
 		print(element)
 
@@ -57,11 +65,15 @@ Results
 The result to the second element should be like this (using the provided file :download:`Balochi Text1.pickle<_resources/Balochi Text1.pickle>`):
 
 Original Result:
-::
+
+.. code-block:: python
+
 	[{'id': 20, 'annotation': u'ki\tyag\tb\u0101di\u0161\u0101=(y)\u0113=at'}, [[{'id': 18, 'annotation': u'ki\tyag\tb\u0101di\u0161\u0101=(y)\u0113=at'}, [[{'id': 9, 'annotation': u'ki'}, {'id': 10, 'annotation': u'SUB'}, {'id': 11, 'annotation': u'comp'}], [{'id': 12, 'annotation': u'yag'}, {'id': 13, 'annotation': u'one'}, {'id': 14, 'annotation': u'deti'}], [{'id': 15, 'annotation': u'b\u0101di\u0161\u0101=(y)\u0113=at'}, {'id': 16, 'annotation': u'king=IND=COP.PST.3SG'}, {'id': 17, 'annotation': u'np.h:s=cop:predp'}]], {'id': 19, 'annotation': u''}]], {'id': 21, 'annotation': u'that there was a king.'}, {'id': 22, 'annotation': u''}]
 
 Indenting to the data structure format:
-::
+
+.. code-block:: python
+
 	[{'id': 20, 'annotation': u'ki\tyag\tb\u0101di\u0161\u0101=(y)\u0113=at'},
 		[[{'id': 18, 'annotation': u'ki\tyag\tb\u0101di\u0161\u0101=(y)\u0113=at'},
 			[[{'id': 9, 'annotation': u'ki'}, {'id': 10, 'annotation': u'SUB'}, {'id': 11, 'annotation': u'comp'}],
@@ -71,7 +83,9 @@ Indenting to the data structure format:
 	 {'id': 21, 'annotation': u'that there was a king.'}, {'id': 22, 'annotation': u''}]
 
 Changing 'annotation' to the GRAID annotations like in the data structure:
-::
+
+.. code-block:: python
+
 	[{'id': 20, 'utterance': u'ki\tyag\tb\u0101di\u0161\u0101=(y)\u0113=at'},
 		[[{'id': 18, 'clause unit': u'ki\tyag\tb\u0101di\u0161\u0101=(y)\u0113=at'},
 			[[{'id': 9, 'word': u'ki'}, {'id': 10, 'wfw': u'SUB'}, {'id': 11, 'graid1': u'comp'}],

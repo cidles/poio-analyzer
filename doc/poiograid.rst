@@ -83,13 +83,13 @@ To add a file from Toolbox-Style Text choose the option "Toolbox-Style Text". Co
 (see Figure 5). 
 
 
-   *Figure 5: New file from a text with given annotations* 
-.. figure:: _static/images/Screenshot_textonotoolbox.png 
+.. figure:: _static/images/Screenshot_textonotoolbox.png
 
+   *Figure 5: New file from a text with given annotations*
 
-The text gets parsed and is displayed with tokens for clause units, words and the translation in the main window (see Figure 6). 
+The text gets parsed and is displayed with tokens for clause units, words and the translation in the main window (see Figure 6).
 
-.. figure:: _static/images/Screenshot3styletext.png 
+.. figure:: _static/images/Screenshot3styletext.png
    :scale: 70%
 
    *Figure 6: Parsed text* 
