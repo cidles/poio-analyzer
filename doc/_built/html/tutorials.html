@@ -1,0 +1,188 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Tutorials &mdash; Poio 0.1.0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Poio 0.1.0 documentation" href="index.html" />
+    <link rel="prev" title="Poio GRAID" href="poiograid.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="poiograid.html" title="Poio GRAID"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">Poio 0.1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="tutorials">
+<h1>Tutorials<a class="headerlink" href="#tutorials" title="Permalink to this headline">¶</a></h1>
+<p>This is the documentation for Python Linguistic Annotation Libary (PyAnnotation).</p>
+<div class="section" id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<p>This document represents a simple example how to access to the result elements with Python Linguistic Annotation Libary (PyAnnotation).</p>
+<p>The Installion Guide can be consulted in <a class="reference external" href="https://github.com/cidles/Poio">https://github.com/cidles/Poio</a></p>
+<p>Before we get to the example is important to be familiar with the data structure used in PyAnnotation.</p>
+<p>The data structure used in it is based in GRAID annotations (For more detailed information <a class="reference external" href="http://www.linguistik.uni-kiel.de/GRAID_manual6.0_08sept.pdf">http://www.linguistik.uni-kiel.de/GRAID_manual6.0_08sept.pdf</a>)</p>
+<p>Data Structure [GRAID Structure]</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="p">[</span> <span class="s">&#39;utterance&#39;</span><span class="p">,</span>
+        <span class="p">[</span> <span class="s">&#39;clause unit&#39;</span><span class="p">,</span>
+                <span class="p">[</span> <span class="s">&#39;word&#39;</span><span class="p">,</span> <span class="s">&#39;wfw&#39;</span><span class="p">,</span> <span class="s">&#39;graid1&#39;</span> <span class="p">],</span>
+        <span class="s">&#39;graid2&#39;</span> <span class="p">],</span>
+  <span class="s">&#39;translation&#39;</span><span class="p">,</span> <span class="s">&#39;comment&#39;</span> <span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="retrieve-elements">
+<h2>Retrieve Elements<a class="headerlink" href="#retrieve-elements" title="Permalink to this headline">¶</a></h2>
+<p>The first step is to initialize the variable:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">annotation_tree</span> <span class="o">=</span> <span class="n">annotationtree</span><span class="o">.</span><span class="n">AnnotationTree</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">GRAID</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The AnnotationTree will contain the hierarchy and relations between the elements between which sentence, word, wfw and it&#8217;s translation.
+In this step what is done is to set the data structure type of the tree with <strong>AnnotationTree(data.GRAID)</strong>.</p>
+<p>The second step is to open the file (in the example_data folder there are some example files):</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="nb">file</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s">&#39;example_file.pickle&#39;</span><span class="p">,</span> <span class="s">&quot;rb&quot;</span><span class="p">)</span>
+<span class="n">annotation_tree</span><span class="o">.</span><span class="n">tree</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="nb">file</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>At this point is important to know that the file should be a <strong>pickle</strong> file and must be previously created with PoioUI (<a class="reference external" href="https://github.com/cidles/Poio">https://github.com/cidles/Poio</a>).</p>
+<p>The third step is to examine the resulted elements:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">for</span> <span class="n">element</span> <span class="ow">in</span> <span class="n">annotation_tree</span><span class="o">.</span><span class="n">elements</span><span class="p">():</span>
+        <span class="k">print</span><span class="p">(</span><span class="n">element</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="section" id="results">
+<h3>Results<a class="headerlink" href="#results" title="Permalink to this headline">¶</a></h3>
+<p>The result to the second element should be like this (using the provided file <a class="reference download internal" href="_downloads/Balochi Text1.pickle"><tt class="xref download docutils literal"><span class="pre">Balochi</span> <span class="pre">Text1.pickle</span></tt></a>):</p>
+<p>Original Result:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="p">[{</span><span class="s">&#39;id&#39;</span><span class="p">:</span> <span class="mi">20</span><span class="p">,</span> <span class="s">&#39;annotation&#39;</span><span class="p">:</span> <span class="s">u&#39;ki</span><span class="se">\t</span><span class="s">yag</span><span class="se">\t</span><span class="s">b</span><span class="se">\u0101</span><span class="s">di</span><span class="se">\u0161\u0101</span><span class="s">=(y)</span><span class="se">\u0113</span><span class="s">=at&#39;</span><span class="p">},</span> <span class="p">[[{</span><span class="s">&#39;id&#39;</span><span class="p">:</span> <span class="mi">18</span><span class="p">,</span> <span class="s">&#39;annotation&#39;</span><span class="p">:</span> <span class="s">u&#39;ki</span><span class="se">\t</span><span class="s">yag</span><span class="se">\t</span><span class="s">b</span><span class="se">\u0101</span><span class="s">di</span><span class="se">\u0161\u0101</span><span class="s">=(y)</span><span class="se">\u0113</span><span class="s">=at&#39;</span><span class="p">},</span> <span class="p">[[{</span><span class="s">&#39;id&#39;</span><span class="p">:</span> <span class="mi">9</span><span class="p">,</span> <span class="s">&#39;annotation&#39;</span><span class="p">:</span> <span class="s">u&#39;ki&#39;</span><span class="p">},</span> <span class="p">{</span><span class="s">&#39;id&#39;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span> <span class="s">&#39;annotation&#39;</span><span class="p">:</span> <span class="s">u&#39;SUB&#39;</span><span class="p">},</span> <span class="p">{</span><span class="s">&#39;id&#39;</span><span class="p">:</span> <span class="mi">11</span><span class="p">,</span> <span class="s">&#39;annotation&#39;</span><span class="p">:</span> <span class="s">u&#39;comp&#39;</span><span class="p">}],</span> <span class="p">[{</span><span class="s">&#39;id&#39;</span><span class="p">:</span> <span class="mi">12</span><span class="p">,</span> <span class="s">&#39;annotation&#39;</span><span class="p">:</span> <span class="s">u&#39;yag&#39;</span><span class="p">},</span> <span class="p">{</span><span class="s">&#39;id&#39;</span><span class="p">:</span> <span class="mi">13</span><span class="p">,</span> <span class="s">&#39;annotation&#39;</span><span class="p">:</span> <span class="s">u&#39;one&#39;</span><span class="p">},</span> <span class="p">{</span><span class="s">&#39;id&#39;</span><span class="p">:</span> <span class="mi">14</span><span class="p">,</span> <span class="s">&#39;annotation&#39;</span><span class="p">:</span> <span class="s">u&#39;deti&#39;</span><span class="p">}],</span> <span class="p">[{</span><span class="s">&#39;id&#39;</span><span class="p">:</span> <span class="mi">15</span><span class="p">,</span> <span class="s">&#39;annotation&#39;</span><span class="p">:</span> <span class="s">u&#39;b</span><span class="se">\u0101</span><span class="s">di</span><span class="se">\u0161\u0101</span><span class="s">=(y)</span><span class="se">\u0113</span><span class="s">=at&#39;</span><span class="p">},</span> <span class="p">{</span><span class="s">&#39;id&#39;</span><span class="p">:</span> <span class="mi">16</span><span class="p">,</span> <span class="s">&#39;annotation&#39;</span><span class="p">:</span> <span class="s">u&#39;king=IND=COP.PST.3SG&#39;</span><span class="p">},</span> <span class="p">{</span><span class="s">&#39;id&#39;</span><span class="p">:</span> <span class="mi">17</span><span class="p">,</span> <span class="s">&#39;annotation&#39;</span><span class="p">:</span> <span class="s">u&#39;np.h:s=cop:predp&#39;</span><span class="p">}]],</span> <span class="p">{</span><span class="s">&#39;id&#39;</span><span class="p">:</span> <span class="mi">19</span><span class="p">,</span> <span class="s">&#39;annotation&#39;</span><span class="p">:</span> <span class="s">u&#39;&#39;</span><span class="p">}]],</span> <span class="p">{</span><span class="s">&#39;id&#39;</span><span class="p">:</span> <span class="mi">21</span><span class="p">,</span> <span class="s">&#39;annotation&#39;</span><span class="p">:</span> <span class="s">u&#39;that there was a king.&#39;</span><span class="p">},</span> <span class="p">{</span><span class="s">&#39;id&#39;</span><span class="p">:</span> <span class="mi">22</span><span class="p">,</span> <span class="s">&#39;annotation&#39;</span><span class="p">:</span> <span class="s">u&#39;&#39;</span><span class="p">}]</span>
+</pre></div>
+</div>
+<p>Indenting to the data structure format:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="p">[{</span><span class="s">&#39;id&#39;</span><span class="p">:</span> <span class="mi">20</span><span class="p">,</span> <span class="s">&#39;annotation&#39;</span><span class="p">:</span> <span class="s">u&#39;ki</span><span class="se">\t</span><span class="s">yag</span><span class="se">\t</span><span class="s">b</span><span class="se">\u0101</span><span class="s">di</span><span class="se">\u0161\u0101</span><span class="s">=(y)</span><span class="se">\u0113</span><span class="s">=at&#39;</span><span class="p">},</span>
+        <span class="p">[[{</span><span class="s">&#39;id&#39;</span><span class="p">:</span> <span class="mi">18</span><span class="p">,</span> <span class="s">&#39;annotation&#39;</span><span class="p">:</span> <span class="s">u&#39;ki</span><span class="se">\t</span><span class="s">yag</span><span class="se">\t</span><span class="s">b</span><span class="se">\u0101</span><span class="s">di</span><span class="se">\u0161\u0101</span><span class="s">=(y)</span><span class="se">\u0113</span><span class="s">=at&#39;</span><span class="p">},</span>
+                <span class="p">[[{</span><span class="s">&#39;id&#39;</span><span class="p">:</span> <span class="mi">9</span><span class="p">,</span> <span class="s">&#39;annotation&#39;</span><span class="p">:</span> <span class="s">u&#39;ki&#39;</span><span class="p">},</span> <span class="p">{</span><span class="s">&#39;id&#39;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span> <span class="s">&#39;annotation&#39;</span><span class="p">:</span> <span class="s">u&#39;SUB&#39;</span><span class="p">},</span> <span class="p">{</span><span class="s">&#39;id&#39;</span><span class="p">:</span> <span class="mi">11</span><span class="p">,</span> <span class="s">&#39;annotation&#39;</span><span class="p">:</span> <span class="s">u&#39;comp&#39;</span><span class="p">}],</span>
+                 <span class="p">[{</span><span class="s">&#39;id&#39;</span><span class="p">:</span> <span class="mi">12</span><span class="p">,</span> <span class="s">&#39;annotation&#39;</span><span class="p">:</span> <span class="s">u&#39;yag&#39;</span><span class="p">},</span> <span class="p">{</span><span class="s">&#39;id&#39;</span><span class="p">:</span> <span class="mi">13</span><span class="p">,</span> <span class="s">&#39;annotation&#39;</span><span class="p">:</span> <span class="s">u&#39;one&#39;</span><span class="p">},</span> <span class="p">{</span><span class="s">&#39;id&#39;</span><span class="p">:</span> <span class="mi">14</span><span class="p">,</span> <span class="s">&#39;annotation&#39;</span><span class="p">:</span> <span class="s">u&#39;deti&#39;</span><span class="p">}],</span>
+                 <span class="p">[{</span><span class="s">&#39;id&#39;</span><span class="p">:</span> <span class="mi">15</span><span class="p">,</span> <span class="s">&#39;annotation&#39;</span><span class="p">:</span> <span class="s">u&#39;b</span><span class="se">\u0101</span><span class="s">di</span><span class="se">\u0161\u0101</span><span class="s">=(y)</span><span class="se">\u0113</span><span class="s">=at&#39;</span><span class="p">},</span> <span class="p">{</span><span class="s">&#39;id&#39;</span><span class="p">:</span> <span class="mi">16</span><span class="p">,</span> <span class="s">&#39;annotation&#39;</span><span class="p">:</span> <span class="s">u&#39;king=IND=COP.PST.3SG&#39;</span><span class="p">},</span> <span class="p">{</span><span class="s">&#39;id&#39;</span><span class="p">:</span> <span class="mi">17</span><span class="p">,</span> <span class="s">&#39;annotation&#39;</span><span class="p">:</span> <span class="s">u&#39;np.h:s=cop:predp&#39;</span><span class="p">}]],</span>
+          <span class="p">{</span><span class="s">&#39;id&#39;</span><span class="p">:</span> <span class="mi">19</span><span class="p">,</span> <span class="s">&#39;annotation&#39;</span><span class="p">:</span> <span class="s">u&#39;&#39;</span><span class="p">}]],</span>
+ <span class="p">{</span><span class="s">&#39;id&#39;</span><span class="p">:</span> <span class="mi">21</span><span class="p">,</span> <span class="s">&#39;annotation&#39;</span><span class="p">:</span> <span class="s">u&#39;that there was a king.&#39;</span><span class="p">},</span> <span class="p">{</span><span class="s">&#39;id&#39;</span><span class="p">:</span> <span class="mi">22</span><span class="p">,</span> <span class="s">&#39;annotation&#39;</span><span class="p">:</span> <span class="s">u&#39;&#39;</span><span class="p">}]</span>
+</pre></div>
+</div>
+<p>Changing &#8216;annotation&#8217; to the GRAID annotations like in the data structure:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="p">[{</span><span class="s">&#39;id&#39;</span><span class="p">:</span> <span class="mi">20</span><span class="p">,</span> <span class="s">&#39;utterance&#39;</span><span class="p">:</span> <span class="s">u&#39;ki</span><span class="se">\t</span><span class="s">yag</span><span class="se">\t</span><span class="s">b</span><span class="se">\u0101</span><span class="s">di</span><span class="se">\u0161\u0101</span><span class="s">=(y)</span><span class="se">\u0113</span><span class="s">=at&#39;</span><span class="p">},</span>
+        <span class="p">[[{</span><span class="s">&#39;id&#39;</span><span class="p">:</span> <span class="mi">18</span><span class="p">,</span> <span class="s">&#39;clause unit&#39;</span><span class="p">:</span> <span class="s">u&#39;ki</span><span class="se">\t</span><span class="s">yag</span><span class="se">\t</span><span class="s">b</span><span class="se">\u0101</span><span class="s">di</span><span class="se">\u0161\u0101</span><span class="s">=(y)</span><span class="se">\u0113</span><span class="s">=at&#39;</span><span class="p">},</span>
+                <span class="p">[[{</span><span class="s">&#39;id&#39;</span><span class="p">:</span> <span class="mi">9</span><span class="p">,</span> <span class="s">&#39;word&#39;</span><span class="p">:</span> <span class="s">u&#39;ki&#39;</span><span class="p">},</span> <span class="p">{</span><span class="s">&#39;id&#39;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span> <span class="s">&#39;wfw&#39;</span><span class="p">:</span> <span class="s">u&#39;SUB&#39;</span><span class="p">},</span> <span class="p">{</span><span class="s">&#39;id&#39;</span><span class="p">:</span> <span class="mi">11</span><span class="p">,</span> <span class="s">&#39;graid1&#39;</span><span class="p">:</span> <span class="s">u&#39;comp&#39;</span><span class="p">}],</span>
+                 <span class="p">[{</span><span class="s">&#39;id&#39;</span><span class="p">:</span> <span class="mi">12</span><span class="p">,</span> <span class="s">&#39;word&#39;</span><span class="p">:</span> <span class="s">u&#39;yag&#39;</span><span class="p">},</span> <span class="p">{</span><span class="s">&#39;id&#39;</span><span class="p">:</span> <span class="mi">13</span><span class="p">,</span> <span class="s">&#39;wfw&#39;</span><span class="p">:</span> <span class="s">u&#39;one&#39;</span><span class="p">},</span> <span class="p">{</span><span class="s">&#39;id&#39;</span><span class="p">:</span> <span class="mi">14</span><span class="p">,</span> <span class="s">&#39;graid1&#39;</span><span class="p">:</span> <span class="s">u&#39;deti&#39;</span><span class="p">}],</span>
+                 <span class="p">[{</span><span class="s">&#39;id&#39;</span><span class="p">:</span> <span class="mi">15</span><span class="p">,</span> <span class="s">&#39;word&#39;</span><span class="p">:</span> <span class="s">u&#39;b</span><span class="se">\u0101</span><span class="s">di</span><span class="se">\u0161\u0101</span><span class="s">=(y)</span><span class="se">\u0113</span><span class="s">=at&#39;</span><span class="p">},</span> <span class="p">{</span><span class="s">&#39;id&#39;</span><span class="p">:</span> <span class="mi">16</span><span class="p">,</span> <span class="s">&#39;wfw&#39;</span><span class="p">:</span> <span class="s">u&#39;king=IND=COP.PST.3SG&#39;</span><span class="p">},</span> <span class="p">{</span><span class="s">&#39;id&#39;</span><span class="p">:</span> <span class="mi">17</span><span class="p">,</span> <span class="s">&#39;graid1&#39;</span><span class="p">:</span> <span class="s">u&#39;np.h:s=cop:predp&#39;</span><span class="p">}]],</span>
+          <span class="p">{</span><span class="s">&#39;id&#39;</span><span class="p">:</span> <span class="mi">19</span><span class="p">,</span> <span class="s">&#39;graid2&#39;</span><span class="p">:</span> <span class="s">u&#39;&#39;</span><span class="p">}]],</span>
+ <span class="p">{</span><span class="s">&#39;id&#39;</span><span class="p">:</span> <span class="mi">21</span><span class="p">,</span> <span class="s">&#39;translation&#39;</span><span class="p">:</span> <span class="s">u&#39;that there was a king.&#39;</span><span class="p">},</span> <span class="p">{</span><span class="s">&#39;id&#39;</span><span class="p">:</span> <span class="mi">22</span><span class="p">,</span> <span class="s">&#39;comment&#39;</span><span class="p">:</span> <span class="s">u&#39;&#39;</span><span class="p">}]</span>
+</pre></div>
+</div>
+<p>In the end the realtion should be like this:</p>
+<div class="figure align-center">
+<a class="reference internal image-reference" href="_images/relation.png"><img alt="_images/relation.png" src="_images/relation.png" style="width: 350.0px;" /></a>
+<p class="caption"><em>Figure 1: Relation between the results and the data structure</em></p>
+</div>
+</div>
+</div>
+<div class="section" id="resources">
+<h2>Resources<a class="headerlink" href="#resources" title="Permalink to this headline">¶</a></h2>
+<p>Source File <a class="reference download internal" href="_downloads/PyAnnotationExample.py"><tt class="xref download docutils literal"><span class="pre">PyAnnotationExample.py</span></tt></a>.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Tutorials</a><ul>
+<li><a class="reference internal" href="#introduction">Introduction</a></li>
+<li><a class="reference internal" href="#retrieve-elements">Retrieve Elements</a><ul>
+<li><a class="reference internal" href="#results">Results</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#resources">Resources</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="poiograid.html"
+                        title="previous chapter">Poio GRAID</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/tutorials.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="poiograid.html" title="Poio GRAID"
+             >previous</a> |</li>
+        <li><a href="index.html">Poio 0.1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2012, Centro Interdisciplinar de Documentação Linguística e Social.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>
