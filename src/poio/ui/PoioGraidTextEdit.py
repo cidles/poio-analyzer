@@ -87,7 +87,7 @@ class PoioGraidTextEdit(QtGui.QTextEdit):
 
         Parameters
         ----------
-        source :
+        source : QMimeData
         """
         text = unicode(source.text())
         text = re.sub(r"[\r\n\a]", "", text)
@@ -145,7 +145,6 @@ class PoioGraidTextEdit(QtGui.QTextEdit):
                     new_column_pos = c + c_span
                 else:
                     c += 1
-
                 table.insertColumns(new_column_pos, 1)
                 # set text format to normal text and add id
                 for row in range(table.rows()):
@@ -175,7 +174,6 @@ class PoioGraidTextEdit(QtGui.QTextEdit):
                         if c_parent == c:
                             table.mergeCells(r_parent,
                                 c_parent - 1, 1, c_span_parent + 1)
-
         return id
 
     def delete_column_at_cursor(self):
@@ -273,7 +271,7 @@ class PoioGraidTextEdit(QtGui.QTextEdit):
 
         Parameters
         ----------
-        element :
+        element : list
         after : bool
         """
         if not self.structure_type_handler:
@@ -306,7 +304,7 @@ class PoioGraidTextEdit(QtGui.QTextEdit):
 
         Parameters
         ----------
-        element :
+        element : list
         """
         if not self.structure_type_handler:
             raise NoStructureTypeHandlerError
@@ -330,8 +328,8 @@ class PoioGraidTextEdit(QtGui.QTextEdit):
 
         Parameters
         ----------
-        element :
-        pos :
+        element : list
+        pos : int
         """
         c = self.textCursor()
         c.setPosition(pos)
@@ -397,7 +395,7 @@ class PoioGraidTextEdit(QtGui.QTextEdit):
 
         Parameters
         ----------
-        table :
+        table : QTextTable
         number : int
         """
         c = table.cellAt(0, PoioGraidTextEdit.NUMBERS_COLUMN)
@@ -416,11 +414,11 @@ class PoioGraidTextEdit(QtGui.QTextEdit):
 
         Parameters
         ----------
-        elements :
-        flat_hierarchy :
-        hierarchy :
-        table:
-        column :
+        elements : list
+        flat_hierarchy :list
+        hierarchy : list
+        table: QTextTable
+        column : int
         """
         inserted = 0
         for i, t in enumerate(hierarchy):
@@ -448,10 +446,10 @@ class PoioGraidTextEdit(QtGui.QTextEdit):
 
         Parameters
         ----------
-        e :
-        table :
-        row :
-        column :
+        e : dict
+        table : QTextTable
+        row : int
+        column : int
         """
         if (column + 1) > table.columns():
             table.appendColumns(1)
@@ -492,13 +490,13 @@ class PoioGraidTextEdit(QtGui.QTextEdit):
 
         Parameters
         ----------
-        elements :
-        flat_hierarchy :
-        hierarchy :
-        table:
-        row :
-        column :
-        column_span :
+        elements : list
+        flat_hierarchy : list
+        hierarchy : list
+        table: QTextTable
+        row : int
+        column : int
+        column_span : int
         """
         #processed = 0
         for i, t in enumerate(hierarchy):
@@ -531,9 +529,9 @@ class PoioGraidTextEdit(QtGui.QTextEdit):
 
         Parameters
         ----------
-        table :
-        row :
-        column :
+        table : QTextTable
+        row : int
+        column : int
         """
         element = dict()
         c = table.cellAt(row, column)

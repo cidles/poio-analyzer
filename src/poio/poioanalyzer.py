@@ -266,7 +266,6 @@ class PoioAnalyzer(QtGui.QMainWindow):
         """
         Check for the search options and update the resul view
         """
-
         filterChain = []
         for i in range(0, self.ui.tabWidget.currentIndex()+1):
             currentFilter = pyannotation.annotationtree.AnnotationTreeFilter(self.data_structure_type)
