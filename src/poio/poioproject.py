@@ -31,7 +31,7 @@ class PoioProject(QtCore.QAbstractListModel):
 
         Parameters
         ----------
-        index :
+        index : QModelIndex
         """
         return QtCore.Qt.ItemIsSelectable | QtCore.Qt.ItemIsEnabled
 
@@ -44,7 +44,7 @@ class PoioProject(QtCore.QAbstractListModel):
 
         Parameters
         ----------
-        index :
+        index : QModelIndex
         role : int
         """
         if role == QtCore.Qt.DisplayRole:
@@ -61,8 +61,8 @@ class PoioProject(QtCore.QAbstractListModel):
 
         Parameters
         ----------
-        index :
-        value :
+        index : QModelIndex
+        value : QVariant
         role : int
         """
         if role == QtCore.Qt.EditRole:
@@ -81,10 +81,11 @@ class PoioProject(QtCore.QAbstractListModel):
 
         Parameters
         ----------
-        section :
-        orientation :
+        section : int
+        orientation : enum
         role : int
         """
+        print orientation
         if role == QtCore.Qt.DisplayRole:
             return "File path"
         
