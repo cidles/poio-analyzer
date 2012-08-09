@@ -145,7 +145,7 @@ class PoioGRAID(QtGui.QMainWindow):
         """
         deleted_id = self.ui.textedit.delete_current_element()
         if deleted_id:
-            self.annotation_tree.remove_element_with_id(deleted_id)
+            self.annotation_tree.remove_element(deleted_id)
 
     def insert_utterance_before(self):
         """

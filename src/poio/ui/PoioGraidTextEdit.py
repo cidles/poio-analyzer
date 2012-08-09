@@ -145,7 +145,9 @@ class PoioGraidTextEdit(QtGui.QTextEdit):
                     new_column_pos = c + c_span
                 else:
                     c += 1
+                table.splitCell(0,0,1,1)
                 table.insertColumns(new_column_pos, 1)
+                table.mergeCells(0,0,8,1)
                 # set text format to normal text and add id
                 for row in range(table.rows()):
                     new_cell = table.cellAt(row, new_column_pos)
