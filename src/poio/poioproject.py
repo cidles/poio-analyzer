@@ -160,7 +160,7 @@ class PoioProject(QtCore.QAbstractListModel):
 
     def addFilePaths(self, poiofilepaths):
         """
-        Add multiple files to the project
+        Add one or multiple files to the project
         ...
 
         Parameters

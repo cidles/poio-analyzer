@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'MainAnalyzerQML.ui'
 #
-# Created: Thu Aug 09 14:07:42 2012
+# Created: Fri Aug 10 16:29:26 2012
 #      by: PyQt4 UI code generator 4.9.4
 #
 # WARNING! All changes made in this file will be lost!

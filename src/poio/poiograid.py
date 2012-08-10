@@ -7,9 +7,12 @@
 # URL: <http://www.cidles.eu/ltll/poio>
 # For license information, see LICENSE.TXT
 
+import os.path
 import re
 import pickle
 from PyQt4 import QtCore, QtGui
+from PyQt4.QtCore import SIGNAL
+from PyQt4.QtGui import QListWidgetItem
 
 import pyannotation.annotationtree
 import pyannotation.data
@@ -19,6 +22,7 @@ from poio.ui.Ui_MainWindowGRAID import Ui_MainWindow
 from poio.ui.Ui_NewFileGraid import Ui_NewFileGraid
 from poio.ui.FindReplaceDialog import FindReplaceDialog
 from poio.ui.FindDialog import FindDialog
+from poioproject import PoioProject
 
 
 class PoioGRAID(QtGui.QMainWindow):
@@ -39,6 +43,10 @@ class PoioGRAID(QtGui.QMainWindow):
         self.init_settings()
 
         self.init = 0
+
+        self.project = PoioProject(os.getcwd())
+
+        self.ui.projectManager.setShown(False)
 
         self.ui.textedit.append_title(
             self.tr("Please create or open a file..."))
@@ -107,6 +115,24 @@ class PoioGRAID(QtGui.QMainWindow):
         self.ui.actionFindAndReplace.triggered.connect(
             self.find_and_replace)
         self.ui.actionFind.triggered.connect(self.find)
+
+        #Poio Project
+        self.connect(self.ui.projectBtn,SIGNAL("toggled()"),self.showproject)
+        self.connect(self.ui.addfileBtn,SIGNAL("clicked()"),self.addfile)
+        self.connect(self.ui.removefileBtn,SIGNAL("clicked()"),self.removefile)
+
+    def showproject(self):
+        self.ui.projectManager.setShown(self.ui.projectBtn.isChecked())
+
+    def addfile(self):
+        filepaths = QtGui.QFileDialog.getOpenFileNames(self, self.tr("Add Files"), "", self.tr("Pickle files (*.pickle)"))
+        self.project.addFilePaths(filepaths)
+
+    def removefile(self):
+        countRemoved = 0
+        for i in self.ui.listFiles.selectedIndexes():
+            self.project.removeFilePathAt(i.row()-countRemoved)
+            countRemoved += 1
 
     def about_dialog(self):
         """
