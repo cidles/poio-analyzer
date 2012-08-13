@@ -45,7 +45,7 @@ class PoioGRAID(QtGui.QMainWindow):
         self.init = 0
 
         self.project = PoioProject(os.getcwd())
-
+        self.ui.listFiles.setModel(self.project)
         self.ui.projectManager.setShown(False)
 
         self.ui.textedit.append_title(
@@ -88,7 +88,7 @@ class PoioGRAID(QtGui.QMainWindow):
         """
 
         # Files
-        self.ui.actionOpenFile.triggered.connect(self.open_file)
+        self.ui.actionOpenFile.triggered.connect(self.addfile)
         self.ui.actionSaveFile.triggered.connect(self.save_file)
         self.ui.actionSaveFileAs.triggered.connect(self.save_file_as)
         self.ui.actionNewFile.triggered.connect(self.new_file)
@@ -116,23 +116,11 @@ class PoioGRAID(QtGui.QMainWindow):
             self.find_and_replace)
         self.ui.actionFind.triggered.connect(self.find)
 
-        #Poio Project
+        # Poio Project
+        self.ui.listFiles.activated.connect(self.open_selected_file)
         self.connect(self.ui.projectBtn,SIGNAL("toggled()"),self.showproject)
         self.connect(self.ui.addfileBtn,SIGNAL("clicked()"),self.addfile)
         self.connect(self.ui.removefileBtn,SIGNAL("clicked()"),self.removefile)
-
-    def showproject(self):
-        self.ui.projectManager.setShown(self.ui.projectBtn.isChecked())
-
-    def addfile(self):
-        filepaths = QtGui.QFileDialog.getOpenFileNames(self, self.tr("Add Files"), "", self.tr("Pickle files (*.pickle)"))
-        self.project.addFilePaths(filepaths)
-
-    def removefile(self):
-        countRemoved = 0
-        for i in self.ui.listFiles.selectedIndexes():
-            self.project.removeFilePathAt(i.row()-countRemoved)
-            countRemoved += 1
 
     def about_dialog(self):
         """
@@ -151,6 +139,32 @@ class PoioGRAID(QtGui.QMainWindow):
                               "ltll/poio\">http://www.cidles.eu/ltll/poio"
                               "</a>"))
         about.exec_()
+
+    def showproject(self):
+        self.ui.projectManager.setShown(self.ui.projectBtn.isChecked())
+
+    def addfile(self):
+        filepaths = QtGui.QFileDialog.getOpenFileNames(self, self.tr("Add Files"), "", self.tr("Pickle files (*.pickle);;All files (*.*)"))
+        self.project.addFilePaths(filepaths)
+        self.open_file(filepaths[0])
+
+    def removefile(self):
+        countRemoved = 0
+        for i in self.ui.listFiles.selectedIndexes():
+            currentrow = i.row()-countRemoved
+            project = self.project.poioFileAt(currentrow)
+            self.project.removeFilePathAt(currentrow)
+
+            if self.filepath == project.filepath:
+                self.ui.textedit.clear()
+
+            countRemoved += 1
+
+    def open_selected_file(self):
+        selected = self.ui.listFiles.selectedIndexes()
+        if len(selected) == 1:
+            project = self.project.poioFileAt(selected[0].row())
+            self.open_file(project.filepath)
 
     def update_textedit(self):
         """
@@ -278,16 +292,11 @@ class PoioGRAID(QtGui.QMainWindow):
         else:
             return
 
-    def open_file(self):
+    def open_file(self, filepath):
         """
         Display a file dialog and let the user choose a file. Load the data
         into the annotation tree and then update the text edit widget.
         """
-        filepath = QtGui.QFileDialog.getOpenFileName(
-            self,
-            self.tr("Add File"),
-            "",
-            self.tr("Pickle files (*.pickle);;All files (*.*)"))
         filepath = unicode(filepath)
         if filepath != '':
             file = open(filepath, "rb")

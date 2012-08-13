@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'MainWindowGRAID.ui'
 #
-# Created: Fri Aug 10 16:29:26 2012
+# Created: Mon Aug 13 10:57:10 2012
 #      by: PyQt4 UI code generator 4.9.4
 #
 # WARNING! All changes made in this file will be lost!
@@ -79,9 +79,6 @@ class Ui_MainWindow(object):
         self.addfileBtn = QtGui.QPushButton(self.projectManager)
         self.addfileBtn.setObjectName(_fromUtf8("addfileBtn"))
         self.gridLayout_2.addWidget(self.addfileBtn, 2, 0, 1, 1)
-        self.listFiles = QtGui.QListWidget(self.projectManager)
-        self.listFiles.setObjectName(_fromUtf8("listFiles"))
-        self.gridLayout_2.addWidget(self.listFiles, 1, 0, 1, 2)
         self.removefileBtn = QtGui.QPushButton(self.projectManager)
         self.removefileBtn.setObjectName(_fromUtf8("removefileBtn"))
         self.gridLayout_2.addWidget(self.removefileBtn, 2, 1, 1, 1)
@@ -91,6 +88,9 @@ class Ui_MainWindow(object):
         self.label.setFont(font)
         self.label.setObjectName(_fromUtf8("label"))
         self.gridLayout_2.addWidget(self.label, 0, 0, 1, 1)
+        self.listFiles = QtGui.QListView(self.projectManager)
+        self.listFiles.setObjectName(_fromUtf8("listFiles"))
+        self.gridLayout_2.addWidget(self.listFiles, 1, 0, 1, 2)
         self.gridLayout.addWidget(self.projectManager, 1, 1, 1, 1)
         MainWindow.setCentralWidget(self.centralWidget)
         self.statusBar = QtGui.QStatusBar(MainWindow)
