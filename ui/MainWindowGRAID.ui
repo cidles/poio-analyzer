@@ -19,7 +19,7 @@
   <widget class="QWidget" name="centralWidget">
    <layout class="QGridLayout" name="gridLayout">
     <property name="leftMargin">
-     <number>0</number>
+     <number>5</number>
     </property>
     <item row="1" column="2">
      <layout class="QVBoxLayout" name="verticalLayoutMain" stretch="0">
@@ -88,8 +88,14 @@ t</string>
          <property name="checkable">
           <bool>true</bool>
          </property>
+         <property name="autoDefault">
+          <bool>false</bool>
+         </property>
+         <property name="default">
+          <bool>false</bool>
+         </property>
          <property name="flat">
-          <bool>true</bool>
+          <bool>false</bool>
          </property>
         </widget>
        </item>

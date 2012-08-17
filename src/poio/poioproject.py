@@ -202,3 +202,9 @@ class PoioProject(QtCore.QAbstractListModel):
         """
         for file in self.projectfiles:
             file.setIsNew(True)
+
+    def clear(self):
+            for row in range(0,self.rowCount()):
+                self.projectfiles.pop(row)
+
+

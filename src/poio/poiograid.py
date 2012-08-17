@@ -11,8 +11,8 @@ import os.path
 import re
 import pickle
 from PyQt4 import QtCore, QtGui
-from PyQt4.QtCore import SIGNAL
-from PyQt4.QtGui import QListWidgetItem
+from PyQt4.QtCore import SIGNAL, QString
+from PyQt4.QtGui import QListWidgetItem, QPainter
 
 import pyannotation.annotationtree
 import pyannotation.data
@@ -47,6 +47,20 @@ class PoioGRAID(QtGui.QMainWindow):
         self.project = PoioProject(os.getcwd())
         self.ui.listFiles.setModel(self.project)
         self.ui.projectManager.setShown(False)
+        self.ui.projectBtn.setStyleSheet(""" QPushButton#projectBtn
+                                            {
+                                                border-style: outset;
+                                                border-width: 1px;
+                                                border-radius: 5px;
+                                                border-color: black;
+                                                padding: 1px;
+                                            }
+                                            QPushButton#projectBtn:checked
+                                            {
+                                                background-color: lightblue;
+                                                border-style: inset;
+                                                border-width: 2px;
+                                            }""")
 
         self.ui.textedit.append_title(
             self.tr("Please create or open a file..."))
@@ -88,7 +102,7 @@ class PoioGRAID(QtGui.QMainWindow):
         """
 
         # Files
-        self.ui.actionOpenFile.triggered.connect(self.addfile)
+        self.ui.actionOpenFile.triggered.connect(self.openfile)
         self.ui.actionSaveFile.triggered.connect(self.save_file)
         self.ui.actionSaveFileAs.triggered.connect(self.save_file_as)
         self.ui.actionNewFile.triggered.connect(self.new_file)
@@ -142,6 +156,13 @@ class PoioGRAID(QtGui.QMainWindow):
 
     def showproject(self):
         self.ui.projectManager.setShown(self.ui.projectBtn.isChecked())
+
+    def openfile(self):
+        filepaths = QtGui.QFileDialog.getOpenFileNames(self, self.tr("Open File"), "", self.tr("Pickle files (*.pickle);;All files (*.*)"))
+        if len(filepaths) == 1:
+            self.project.clear()
+            self.project.addFilePaths(filepaths)
+            self.open_file(filepaths[0])
 
     def addfile(self):
         filepaths = QtGui.QFileDialog.getOpenFileNames(self, self.tr("Add Files"), "", self.tr("Pickle files (*.pickle);;All files (*.*)"))

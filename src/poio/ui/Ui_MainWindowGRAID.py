@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'MainWindowGRAID.ui'
 #
-# Created: Mon Aug 13 10:57:10 2012
+# Created: Fri Aug 17 11:06:20 2012
 #      by: PyQt4 UI code generator 4.9.4
 #
 # WARNING! All changes made in this file will be lost!
@@ -22,7 +22,7 @@ class Ui_MainWindow(object):
         self.centralWidget = QtGui.QWidget(MainWindow)
         self.centralWidget.setObjectName(_fromUtf8("centralWidget"))
         self.gridLayout = QtGui.QGridLayout(self.centralWidget)
-        self.gridLayout.setContentsMargins(0, -1, -1, -1)
+        self.gridLayout.setContentsMargins(5, -1, -1, -1)
         self.gridLayout.setObjectName(_fromUtf8("gridLayout"))
         self.verticalLayoutMain = QtGui.QVBoxLayout()
         self.verticalLayoutMain.setObjectName(_fromUtf8("verticalLayoutMain"))
@@ -56,7 +56,9 @@ class Ui_MainWindow(object):
         self.projectBtn.setMaximumSize(QtCore.QSize(20, 16777215))
         self.projectBtn.setContextMenuPolicy(QtCore.Qt.NoContextMenu)
         self.projectBtn.setCheckable(True)
-        self.projectBtn.setFlat(True)
+        self.projectBtn.setAutoDefault(False)
+        self.projectBtn.setDefault(False)
+        self.projectBtn.setFlat(False)
         self.projectBtn.setObjectName(_fromUtf8("projectBtn"))
         self.verticalLayout.addWidget(self.projectBtn)
         spacerItem = QtGui.QSpacerItem(20, 40, QtGui.QSizePolicy.Minimum, QtGui.QSizePolicy.Expanding)
