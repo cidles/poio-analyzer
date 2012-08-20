@@ -24,9 +24,8 @@ try:
         __version__ = fh.read().strip()
 except NameError:
     __version__ = 'unknown (running code interactively?)'
-except IOError, ex:
-    __version__ = "unknown (%s)" % ex
-
+except IOError as ex:
+    __version__ = 'unknown (' + ex + ')'
 __doc__ += '\n@version: ' + __version__
 
 

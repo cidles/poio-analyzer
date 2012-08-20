@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'FindReplaceDialog.ui'
 #
-# Created: Fri Aug 17 11:06:21 2012
+# Created: Mon Aug 20 14:09:38 2012
 #      by: PyQt4 UI code generator 4.9.4
 #
 # WARNING! All changes made in this file will be lost!
@@ -30,4 +30,4 @@ class Ui_FindReplaceDialog(object):
     def retranslateUi(self, FindReplaceDialog):
         FindReplaceDialog.setWindowTitle(QtGui.QApplication.translate("FindReplaceDialog", "Find/Replace", None, QtGui.QApplication.UnicodeUTF8))
 
-from FindReplaceForm import FindReplaceForm
+from poio.ui.FindReplaceForm import FindReplaceForm

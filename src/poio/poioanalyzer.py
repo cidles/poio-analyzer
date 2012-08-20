@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 # (C) 2011-2012 copyright by Peter Bouda
 
+from __future__ import unicode_literals
 import os.path
 import re
 import copy
@@ -118,11 +119,11 @@ class PoioAnalyzer(QtGui.QMainWindow):
         start = time.time()
         self.update_corpus_reader()
         end = time.time()
-        print "Time elapsed = ", end - start, "seconds"
+        print("Time elapsed = ", end - start, "seconds")
         start = time.time()
         self.update_result_view()
         end = time.time()
-        print "Time elapsed = ", end - start, "seconds"
+        print("Time elapsed = ", end - start, "seconds")
 
     def update_corpus_reader(self):
         """
@@ -168,7 +169,7 @@ class PoioAnalyzer(QtGui.QMainWindow):
         html = "<html><head><meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" /></head><body>\n"
         i = 0
         for filepath, annotationtree in self.corpus.items:
-            html += u"<h1 id=\"file_{1}\">{0}</h1>\n".format(os.path.basename(filepath), i)
+            html += "<h1 id=\"file_{1}\">{0}</h1>\n".format(os.path.basename(filepath), i)
             html += annotationtree.as_html(True, False)
             i += 1
         html += "</body></html>"
@@ -245,7 +246,7 @@ class PoioAnalyzer(QtGui.QMainWindow):
         OUT  = codecs.open(export_file, "w", "utf-8")
         html = "<html><head><meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" /></head><body>\n"
         for filepath, annotationtree in self.corpus.items:
-            html += u"<h1>{0}</h1>\n".format(os.path.basename(filepath))
+            html += "<h1>{0}</h1>\n".format(os.path.basename(filepath))
             html += annotationtree.as_html(True, False)
         html += "</body></html>"
         OUT.write(html)
@@ -344,7 +345,7 @@ class PoioAnalyzer(QtGui.QMainWindow):
             #ui.layoutSearches.addLayout(layoutSearch)
 
         for childWidget in widget_search.findChildren(QtGui.QWidget):
-            if re.match(u"lineeditSearch", childWidget.objectName()):
+            if re.match("lineeditSearch", childWidget.objectName()):
                 QtCore.QObject.connect(childWidget, QtCore.SIGNAL("returnPressed()"), self.apply_filter)
             childWidget.setObjectName("%s_%i" % (childWidget.objectName(), nr_of_new_tab))
         self.ui.tabWidget.insertTab(nr_of_new_tab - 1, widget_search, "Search %i" % nr_of_new_tab)
@@ -384,7 +385,7 @@ class PoioAnalyzer(QtGui.QMainWindow):
         """
         widget = self.ui.tabWidget.currentWidget()
         for childWidget in widget.findChildren(QtGui.QWidget):
-            if re.match(u"lineeditSearch", childWidget.objectName()):
+            if re.match("lineeditSearch", childWidget.objectName()):
                 childWidget.setText("")
         self.apply_filter()
 

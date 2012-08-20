@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
 # (C) 2011 copyright by Peter Bouda
 
+from __future__ import unicode_literals
 import os
-from PyQt4 import QtCore
+from PyQt4 import QtCore, QtGui
+from PyQt4.QtGui import QMessageBox
 from poio.poiofile import PoioFile
 
 class PoioProject(QtCore.QAbstractListModel):
@@ -35,7 +37,7 @@ class PoioProject(QtCore.QAbstractListModel):
         """
         return QtCore.Qt.ItemIsSelectable | QtCore.Qt.ItemIsEnabled
 
-    
+
     def data(self, index, role = QtCore.Qt.DisplayRole):
         """
         Returns data
@@ -72,7 +74,7 @@ class PoioProject(QtCore.QAbstractListModel):
                 return True
             else:
                 return False
-            
+
     def headerData(self, section, orientation, role = QtCore.Qt.DisplayRole):
         """
         Returns the header
@@ -85,10 +87,10 @@ class PoioProject(QtCore.QAbstractListModel):
         orientation : enum
         role : int
         """
-        print orientation
+        print(orientation)
         if role == QtCore.Qt.DisplayRole:
             return "File path"
-        
+
     def rowCount(self, parent = QtCore.QModelIndex()):
         """
         Returns the number of rows
@@ -99,7 +101,7 @@ class PoioProject(QtCore.QAbstractListModel):
         parent : QModelIndex
         """
         return len(self.projectfiles)
-        
+
     def insertRows(self, row, count, parent = QtCore.QModelIndex()):
         """
         Insert rows
@@ -139,7 +141,7 @@ class PoioProject(QtCore.QAbstractListModel):
             return True
         else:
             return False
-        
+
     def addFilePath(self, poiofilepath):
         """
         Add a file to the project if it doesn't exist yet
@@ -168,7 +170,7 @@ class PoioProject(QtCore.QAbstractListModel):
         poiofilepaths : list
         """
         for filepath in poiofilepaths:
-            self.addFilePath(unicode(filepath))
+            self.addFilePath(filepath)
 
     def removeFilePathAt(self, index):
         """
@@ -180,7 +182,7 @@ class PoioProject(QtCore.QAbstractListModel):
         index : int
         """
         self.removeRows(index, 1)
-        
+
     def poioFileAt(self, row):
         """
         Returns the Poio file at the given row
@@ -204,7 +206,29 @@ class PoioProject(QtCore.QAbstractListModel):
             file.setIsNew(True)
 
     def clear(self):
-            for row in range(0,self.rowCount()):
-                self.projectfiles.pop(row)
+        for row in range(0,self.rowCount()-1):
+            self.projectfiles.pop(row)
+
+    def saveprojectas(self, savepath):
+        list = []
+        for row in range(0, len(self.projectfiles)):
+            path = self.projectfiles[row].filepath
+            list.append(path)
+        count = 0
+        for element in list:
+            line = str(list[count] + "\n")
+            file = open(savepath, "a")
+            file.write(line)
+            file.close()
+            count +=1
 
 
+
+    def saveuntitled(self):
+        msgBox = QMessageBox()
+        msgBox.setText("The document has been modified.")
+        msgBox.setInformativeText('Do you want to save your changes to "untitled.pickle"?')
+        msgBox.setStandardButtons(QMessageBox.Save | QMessageBox.Discard | QMessageBox.Cancel)
+        msgBox.setDefaultButton(QMessageBox.Save)
+        ret = msgBox.exec()
+        return ret

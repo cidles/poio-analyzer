@@ -8,7 +8,7 @@
 # For license information, see LICENSE.TXT
 
 from PyQt4 import QtCore, QtGui
-from Ui_FindReplaceForm import Ui_FindReplaceForm
+from poio.ui.Ui_FindReplaceForm import Ui_FindReplaceForm
 
 class FindReplaceForm(QtGui.QWidget):
 

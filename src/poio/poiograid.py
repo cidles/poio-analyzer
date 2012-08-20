@@ -7,12 +7,13 @@
 # URL: <http://www.cidles.eu/ltll/poio>
 # For license information, see LICENSE.TXT
 
+from __future__ import unicode_literals
 import os.path
 import re
 import pickle
 from PyQt4 import QtCore, QtGui
-from PyQt4.QtCore import SIGNAL, QString
-from PyQt4.QtGui import QListWidgetItem, QPainter
+from PyQt4.QtCore import SIGNAL
+from PyQt4.QtGui import QListWidgetItem, QPainter, QMessageBox
 
 import pyannotation.annotationtree
 import pyannotation.data
@@ -22,7 +23,8 @@ from poio.ui.Ui_MainWindowGRAID import Ui_MainWindow
 from poio.ui.Ui_NewFileGraid import Ui_NewFileGraid
 from poio.ui.FindReplaceDialog import FindReplaceDialog
 from poio.ui.FindDialog import FindDialog
-from poioproject import PoioProject
+from poio.poioproject import PoioProject
+
 
 
 class PoioGRAID(QtGui.QMainWindow):
@@ -51,7 +53,6 @@ class PoioGRAID(QtGui.QMainWindow):
                                             {
                                                 border-style: outset;
                                                 border-width: 1px;
-                                                border-radius: 5px;
                                                 border-color: black;
                                                 padding: 1px;
                                             }
@@ -84,6 +85,7 @@ class PoioGRAID(QtGui.QMainWindow):
             self.annotation_tree.structure_type_handler
 
         self.filepath = None
+        self.projectfilepath = None
         self.title = ''
 
     def init_settings(self):
@@ -105,6 +107,8 @@ class PoioGRAID(QtGui.QMainWindow):
         self.ui.actionOpenFile.triggered.connect(self.openfile)
         self.ui.actionSaveFile.triggered.connect(self.save_file)
         self.ui.actionSaveFileAs.triggered.connect(self.save_file_as)
+        self.ui.actionSave_Project.triggered.connect(self.saveproject)
+        self.ui.actionSave_Project_as.triggered.connect(self.saveprojectas)
         self.ui.actionNewFile.triggered.connect(self.new_file)
 
         # Application stuff
@@ -135,6 +139,8 @@ class PoioGRAID(QtGui.QMainWindow):
         self.connect(self.ui.projectBtn,SIGNAL("toggled()"),self.showproject)
         self.connect(self.ui.addfileBtn,SIGNAL("clicked()"),self.addfile)
         self.connect(self.ui.removefileBtn,SIGNAL("clicked()"),self.removefile)
+        self.connect(self.ui.saveprojectBtn,SIGNAL("clicked()"),self.saveproject)
+
 
     def about_dialog(self):
         """
@@ -183,6 +189,20 @@ class PoioGRAID(QtGui.QMainWindow):
 
     def open_selected_file(self):
         selected = self.ui.listFiles.selectedIndexes()
+
+        count = 0
+        for item in self.project.projectfiles:
+            if item.filepath == 'tmp\\untitled.pickle':
+                ret = self.project.saveuntitled()
+                if ret == QMessageBox.Save:
+                    path = self.save_file_as()
+                    self.project.removeFilePathAt(count)
+                    self.project.addFilePath(path)
+                elif ret == QMessageBox.Discard:
+                    self.project.removeFilePathAt(count)
+                elif ret == QMessageBox.Cancel:
+                    return
+            count +=1
         if len(selected) == 1:
             project = self.project.poioFileAt(selected[0].row())
             self.open_file(project.filepath)
@@ -273,12 +293,13 @@ class PoioGRAID(QtGui.QMainWindow):
             self.statusBar().showMessage(self.tr("Parsing text..."), 5)
             if ui.radioButtoTbStyleText.isChecked():
                 self._parse_tb_style_text(
-                    unicode(ui.textedit.document().toPlainText()))
+                    ui.textedit.document().toPlainText())
             else:
                 self._parse_plain_text(
-                    unicode(ui.textedit.document().toPlainText()))
+                    ui.textedit.document().toPlainText())
             self.statusBar().showMessage(self.tr("Parsing done."), 5)
             self.update_textedit()
+            self.project.addFilePath('tmp\\untitled.pickle')
 
     def save_file(self):
         """
@@ -304,21 +325,39 @@ class PoioGRAID(QtGui.QMainWindow):
             self.tr("Save File As"),
             "",
             self.tr("Pickle file (*.pickle);;All files (*.*)"))
-        filepath = unicode(filepath)
         if filepath != '':
             if not filepath.endswith(".pickle"):
                 filepath += ".pickle"
             self.filepath = filepath
             self.save_file()
+            return filepath
         else:
             return
 
+    def saveproject(self):
+        if not self.projectfilepath:
+            self.saveprojectas()
+        else:
+            self.save_file()
+            self.project.saveprojectas(self.projectfilepath)
+
+    def saveprojectas(self):
+        self.save_file()
+        savepath = ""
+        savepath = QtGui.QFileDialog.getSaveFileName(
+            self,
+            self.tr("Save Project As"),
+            "",
+            self.tr("Poio project file (*.poioprj);;All files (*.*)"))
+        if savepath !="":
+            self.project.saveprojectas(savepath)
+            self.projectfilepath = savepath
+
     def open_file(self, filepath):
         """
-        Display a file dialog and let the user choose a file. Load the data
-        into the annotation tree and then update the text edit widget.
+        Load the data into the annotation tree and then update the text edit widget.
         """
-        filepath = unicode(filepath)
+        filepath = filepath
         if filepath != '':
             file = open(filepath, "rb")
             self.annotation_tree.tree = pickle.load(file)
@@ -443,9 +482,9 @@ class PoioGRAID(QtGui.QMainWindow):
         block : list
         """
         element_tb = dict()
-        utterance = u""
-        translation = u""
-        comment = u""
+        utterance = ""
+        translation = ""
+        comment = ""
 
         for line in block:
             line = re.sub(" +", " ", line)
@@ -453,7 +492,7 @@ class PoioGRAID(QtGui.QMainWindow):
             line_elements = line.split(None, 1)
             if len(line_elements) < 2:
                 type = line
-                text = u""
+                text = ""
             else:
                 type = line_elements[0]
                 text = line_elements[1]
@@ -509,9 +548,9 @@ class PoioGRAID(QtGui.QMainWindow):
 
             il_elements = []
             for i in range(max(len(words), len(wfw), len(graid1))):
-                e1 = u''
-                e2 = u''
-                e3 = u''
+                e1 = ''
+                e2 = ''
+                e3 = ''
                 if i < len(words):
                     e1 = words[i]
                 if i < len(wfw):

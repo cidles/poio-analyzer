@@ -56,7 +56,7 @@ class PoioIlTextEdit(QtGui.QTextEdit):
             return
         c = self.textCursor()
         t = c.currentTable()
-        print t
+        print(t)
         if t == None or c.charFormat().fontCapitalization()==QtGui.QFont.SmallCaps:
             self.setReadOnly(True)
         else:

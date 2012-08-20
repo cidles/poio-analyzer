@@ -18,7 +18,7 @@ class MyApplication(QtGui.QApplication):
             #print event.__class__.__name__
             return QtGui.QApplication.notify(self, object, event)
         except:
-            print "some exception"
+            print("some exception")
         return False
 
 def main():
@@ -32,19 +32,19 @@ def main():
     data_dir = os.path.join(prefix, 'data')
     share_dir = os.path.join(prefix, 'share', 'poio')
 
-    print os.getcwd()
+    print(os.getcwd())
     if os.path.exists(src_dir) and os.path.exists(data_dir) \
             and not prefix.startswith('/usr'):
         # Run Kura from local source folder (not installed)
-        print >>sys.stderr, 'Using modules from', src_dir
+        print('Using modules from', src_dir, file=sys.stderr)
         sys.path.insert(0, src_dir)
-        print >>sys.stderr, 'Using resources from', data_dir
+        print('Using resources from', data_dir, file=sys.stderr)
         os.chdir(data_dir)
     elif os.path.exists(os.path.join(prefix, "bin", "WINDOWS.txt")):
-        print >>sys.stderr, 'Using resources from', data_dir
+        print('Using resources from', data_dir, file=sys.stderr)
         #os.chdir(data_dir)
     else:
-        print >>sys.stderr, 'Using resources from', share_dir
+        print('Using resources from', share_dir, file=sys.stderr)
         os.chdir(share_dir)
 
 
@@ -56,7 +56,7 @@ def main():
 
     # Loading translations
     qtTranslator = QtCore.QTranslator()
-    qtTranslator.load("qt_" + unicode(QtCore.QLocale.system().name()),
+    qtTranslator.load("qt_" + QtCore.QLocale.system().name(),
         os.path.join(data_dir, "translations"))
     app.installTranslator(qtTranslator)
 

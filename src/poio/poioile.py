@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 # (C) 2009 copyright by Peter Bouda
 
+from __future__ import unicode_literals
 import sys, os.path, re
 from PyQt4 import QtCore, QtGui
 
@@ -260,11 +261,11 @@ class PoioILE(QtGui.QMainWindow):
 
     def init_tier_types_from_settings(self):
             settings = QtCore.QSettings()
-            arr_utterance_tier_types = unicode(settings.value("Ann/UttTierTypeRefs",  QtCore.QVariant(u"utterance|utterances|Äußerung|Äußerungen")).toString()).split("|")
-            arr_word_tier_types = unicode(settings.value("Ann/WordTierTypeRefs",  QtCore.QVariant(u"words|word|Wort|Worte|Wörter")).toString()).split("|")
-            arr_morpheme_tier_types = unicode(settings.value("Ann/MorphTierTypeRefs",  QtCore.QVariant(u"morpheme|morphemes|Morphem|Morpheme")).toString()).split("|")
-            arr_gloss_tier_types = unicode(settings.value("Ann/GlossTierTypeRefs",  QtCore.QVariant(u"glosses|gloss|Glossen|Gloss|Glosse")).toString()).split("|")
-            arr_translation_tier_types = unicode(settings.value("Ann/TransTierTypeRefs",  QtCore.QVariant(u"translation|translations|Übersetzung|Übersetzungen")).toString()).split("|")
+            arr_utterance_tier_types = unicode(settings.value("Ann/UttTierTypeRefs",  QtCore.QVariant("utterance|utterances|Äußerung|Äußerungen")).toString()).split("|")
+            arr_word_tier_types = unicode(settings.value("Ann/WordTierTypeRefs",  QtCore.QVariant("words|word|Wort|Worte|Wörter")).toString()).split("|")
+            arr_morpheme_tier_types = unicode(settings.value("Ann/MorphTierTypeRefs",  QtCore.QVariant("morpheme|morphemes|Morphem|Morpheme")).toString()).split("|")
+            arr_gloss_tier_types = unicode(settings.value("Ann/GlossTierTypeRefs",  QtCore.QVariant("glosses|gloss|Glossen|Gloss|Glosse")).toString()).split("|")
+            arr_translation_tier_types = unicode(settings.value("Ann/TransTierTypeRefs",  QtCore.QVariant("translation|translations|Übersetzung|Übersetzungen")).toString()).split("|")
             self.eaf_tree.tier_handler.set_utterancetier_type(arr_utterance_tier_types)
             #print arrUtteranceTierTypes
             self.eaf_tree.tier_handler.set_wordtier_type(arr_word_tier_types)

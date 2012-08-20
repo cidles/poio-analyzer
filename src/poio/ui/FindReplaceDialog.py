@@ -8,7 +8,7 @@
 # For license information, see LICENSE.TXT
 
 from PyQt4 import QtCore, QtGui
-from Ui_FindReplaceDialog import Ui_FindReplaceDialog
+from poio.ui.Ui_FindReplaceDialog import Ui_FindReplaceDialog
 
 class FindReplaceDialog(QtGui.QDialog):
 

@@ -7,6 +7,7 @@
 # URL: <http://www.cidles.eu/ltll/poio>
 # For license information, see LICENSE.TXT
 
+from __future__ import unicode_literals
 import re
 from PyQt4 import QtCore, QtGui
 from PyQt4.QtGui import QFont, QApplication
@@ -89,7 +90,7 @@ class PoioGraidTextEdit(QtGui.QTextEdit):
         ----------
         source : QMimeData
         """
-        text = unicode(source.text())
+        text = source.text()
         text = re.sub(r"[\r\n\a]", "", text)
         self.insertPlainText(text)
         #QtGui.QTextEdit.insertFromMimeData(self, source)
@@ -154,7 +155,7 @@ class PoioGraidTextEdit(QtGui.QTextEdit):
                     f = new_cell.format()
                     f.setFontCapitalization(QtGui.QFont.MixedCase)
                     f.setForeground(QtGui.QBrush("black"))
-                    f.setAnchorNames([unicode(id)])
+                    f.setAnchorNames([str(id)])
                     new_cell.setFormat(f)
                     id += 1
 
@@ -458,7 +459,7 @@ class PoioGraidTextEdit(QtGui.QTextEdit):
         c = table.cellAt(row, column)
         c.firstCursorPosition().insertText(e['annotation'])
         f = c.format()
-        f.setAnchorNames([unicode(e['id'])])
+        f.setAnchorNames(str([e['id']]))
         c.setFormat(f)
 
     def annotation_tree_from_document(self):
@@ -539,7 +540,7 @@ class PoioGraidTextEdit(QtGui.QTextEdit):
         c = table.cellAt(row, column)
         start = int(c.firstCursorPosition().position())
         end = int(c.lastCursorPosition().position())
-        element['id'] = int(unicode(c.format().anchorNames()[0]))
+        element['id'] = c.format().anchorNames()[0]
         element['annotation'] = \
-            unicode(self.document().toPlainText())[start:end]
+            self.document().toPlainText()[start:end]
         return element
