@@ -222,13 +222,21 @@ class PoioProject(QtCore.QAbstractListModel):
             file.close()
             count +=1
 
-
-
     def saveuntitled(self):
         msgBox = QMessageBox()
         msgBox.setText("The document has been modified.")
         msgBox.setInformativeText('Do you want to save your changes to "untitled.pickle"?')
         msgBox.setStandardButtons(QMessageBox.Save | QMessageBox.Discard | QMessageBox.Cancel)
         msgBox.setDefaultButton(QMessageBox.Save)
-        ret = msgBox.exec()
+        ret = msgBox.exec_()
         return ret
+
+    def openproject(self, path):
+        prjfile = open(path, "r")
+        prj = prjfile.readlines()
+        projectlist = []
+        for line in prj:
+            filepath = line[:-1]
+            projectlist.append(filepath)
+        self.addFilePaths(projectlist)
+

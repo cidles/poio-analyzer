@@ -11,6 +11,7 @@ from __future__ import unicode_literals
 import os.path
 import re
 import pickle
+
 from PyQt4 import QtCore, QtGui
 from PyQt4.QtCore import SIGNAL
 from PyQt4.QtGui import QListWidgetItem, QPainter, QMessageBox
@@ -107,6 +108,7 @@ class PoioGRAID(QtGui.QMainWindow):
         self.ui.actionOpenFile.triggered.connect(self.openfile)
         self.ui.actionSaveFile.triggered.connect(self.save_file)
         self.ui.actionSaveFileAs.triggered.connect(self.save_file_as)
+        self.ui.actionOpen_Project.triggered.connect(self.openproject)
         self.ui.actionSave_Project.triggered.connect(self.saveproject)
         self.ui.actionSave_Project_as.triggered.connect(self.saveprojectas)
         self.ui.actionNewFile.triggered.connect(self.new_file)
@@ -140,6 +142,7 @@ class PoioGRAID(QtGui.QMainWindow):
         self.connect(self.ui.addfileBtn,SIGNAL("clicked()"),self.addfile)
         self.connect(self.ui.removefileBtn,SIGNAL("clicked()"),self.removefile)
         self.connect(self.ui.saveprojectBtn,SIGNAL("clicked()"),self.saveproject)
+        self.connect(self.ui.openprojectBtn,SIGNAL("clicked()"),self.openproject)
 
 
     def about_dialog(self):
@@ -161,21 +164,49 @@ class PoioGRAID(QtGui.QMainWindow):
         about.exec_()
 
     def showproject(self):
+        """
+        Show or hide the project manager.
+        """
         self.ui.projectManager.setShown(self.ui.projectBtn.isChecked())
 
     def openfile(self):
+        """
+        Prompt the user for a file, add it to the project and open it.
+        """
         filepaths = QtGui.QFileDialog.getOpenFileNames(self, self.tr("Open File"), "", self.tr("Pickle files (*.pickle);;All files (*.*)"))
         if len(filepaths) == 1:
             self.project.clear()
             self.project.addFilePaths(filepaths)
             self.open_file(filepaths[0])
 
+    def openproject(self):
+        """
+        Prompt the user for a project, clear previous project and screen and open the project in the manager.
+        """
+        path = QtGui.QFileDialog.getOpenFileNames(
+            self,
+            self.tr("Open Project"),
+            "",
+            self.tr("Poio project file (*.poioprj);;All files (*.*)"))
+        if len(path) > 0:
+            self.project.clear()
+            self.annotation_tree.tree = []
+            self.update_textedit()
+            self.projectfilepath = path[0]
+            self.project.openproject(path[0])
+
     def addfile(self):
+        """
+        Add a file to the current project
+        """
         filepaths = QtGui.QFileDialog.getOpenFileNames(self, self.tr("Add Files"), "", self.tr("Pickle files (*.pickle);;All files (*.*)"))
         self.project.addFilePaths(filepaths)
         self.open_file(filepaths[0])
 
     def removefile(self):
+        """
+        Remove the selected file from the current project
+        """
         countRemoved = 0
         for i in self.ui.listFiles.selectedIndexes():
             currentrow = i.row()-countRemoved
@@ -188,8 +219,10 @@ class PoioGRAID(QtGui.QMainWindow):
             countRemoved += 1
 
     def open_selected_file(self):
+        """
+        Open the selected file in the manager to the TextEdit Screen
+        """
         selected = self.ui.listFiles.selectedIndexes()
-
         count = 0
         for item in self.project.projectfiles:
             if item.filepath == 'tmp\\untitled.pickle':
@@ -357,7 +390,6 @@ class PoioGRAID(QtGui.QMainWindow):
         """
         Load the data into the annotation tree and then update the text edit widget.
         """
-        filepath = filepath
         if filepath != '':
             file = open(filepath, "rb")
             self.annotation_tree.tree = pickle.load(file)

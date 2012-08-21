@@ -142,6 +142,18 @@ t</string>
        <property name="horizontalSpacing">
         <number>6</number>
        </property>
+       <item row="2" column="1">
+        <widget class="QPushButton" name="removefileBtn">
+         <property name="text">
+          <string>Remove File</string>
+         </property>
+         <property name="icon">
+          <iconset>
+           <normalon>:/images/pixmaps/delete.png</normalon>
+          </iconset>
+         </property>
+        </widget>
+       </item>
        <item row="2" column="0">
         <widget class="QPushButton" name="addfileBtn">
          <property name="text">
@@ -169,7 +181,7 @@ t</string>
        <item row="1" column="0" colspan="2">
         <widget class="QListView" name="listFiles"/>
        </item>
-       <item row="3" column="0" colspan="2">
+       <item row="4" column="0" colspan="2">
         <widget class="QPushButton" name="saveprojectBtn">
          <property name="text">
           <string>Save Project</string>
@@ -181,14 +193,14 @@ t</string>
          </property>
         </widget>
        </item>
-       <item row="2" column="1">
-        <widget class="QPushButton" name="removefileBtn">
+       <item row="3" column="0" colspan="2">
+        <widget class="QPushButton" name="openprojectBtn">
          <property name="text">
-          <string>Remove File</string>
+          <string>Open Project</string>
          </property>
          <property name="icon">
           <iconset>
-           <normalon>:/images/pixmaps/delete.png</normalon>
+           <normalon>:/images/pixmaps/fileopen.png</normalon>
           </iconset>
          </property>
         </widget>

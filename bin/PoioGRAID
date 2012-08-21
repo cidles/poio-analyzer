@@ -2,7 +2,10 @@
 # -*- coding: utf-8 -*-
 # (C) 2009 copyright by Peter Bouda
 
+from __future__ import print_function
 import sys, os.path
+import sip
+sip.setapi('QString', 2)
 from PyQt4 import QtCore, QtGui
 
 class MyApplication(QtGui.QApplication):
