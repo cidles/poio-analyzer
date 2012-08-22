@@ -188,7 +188,7 @@ class PoioGraidTextEdit(QtGui.QTextEdit):
         if table:
             cell = table.cellAt(cursor)
             if cell.row() >= PoioGraidTextEdit.FIRST_DATA_COLUMN \
-                and cell.column() >= PoioGraidTextEdit.FIRST_DATA_COLUMN:
+                and cell.column() > PoioGraidTextEdit.FIRST_DATA_COLUMN:
                 #print cell.column()
                 #print cell.columnSpan()
                 for i in range(cell.columnSpan()):
