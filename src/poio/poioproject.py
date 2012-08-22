@@ -206,10 +206,22 @@ class PoioProject(QtCore.QAbstractListModel):
             file.setIsNew(True)
 
     def clear(self):
+        """
+        Clear the project manager (delete all entries in the list)
+        """
         for row in range(0,self.rowCount()-1):
             self.projectfiles.pop(row)
 
     def saveprojectas(self, savepath):
+        """
+        Write the project to the savepath
+
+        ...
+
+        Parameters
+        ----------
+        savepath: str
+        """
         list = []
         for row in range(0, len(self.projectfiles)):
             path = self.projectfiles[row].filepath
@@ -223,6 +235,9 @@ class PoioProject(QtCore.QAbstractListModel):
             count +=1
 
     def saveuntitled(self):
+        """
+        Prompt if the user wants to save the new file that was added to the project
+        """
         msgBox = QMessageBox()
         msgBox.setText("The document has been modified.")
         msgBox.setInformativeText('Do you want to save your changes to "untitled.pickle"?')
@@ -232,11 +247,25 @@ class PoioProject(QtCore.QAbstractListModel):
         return ret
 
     def openproject(self, path):
+        """
+        Load the project file and add all the files to the project list.
+
+        ...
+
+        Parameters
+        ----------
+        path: str
+        """
         prjfile = open(path, "r")
         prj = prjfile.readlines()
         projectlist = []
         for line in prj:
             filepath = line[:-1]
-            projectlist.append(filepath)
+            if os.path.exists(filepath):
+                projectlist.append(filepath)
+            else:
+                mess = QMessageBox()
+                mess.setText("File not found:\n" + filepath);
+                mess.exec_();
         self.addFilePaths(projectlist)
 

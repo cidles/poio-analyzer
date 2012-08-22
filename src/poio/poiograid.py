@@ -368,6 +368,10 @@ class PoioGRAID(QtGui.QMainWindow):
             return
 
     def saveproject(self):
+        """
+        Save the current project in the manager.
+        Prompt for a path if the current project didn't exist yet
+        """
         if not self.projectfilepath:
             self.saveprojectas()
         else:
@@ -375,6 +379,9 @@ class PoioGRAID(QtGui.QMainWindow):
             self.project.saveprojectas(self.projectfilepath)
 
     def saveprojectas(self):
+        """
+        Prompt for a path and save the current project to it
+        """
         self.save_file()
         savepath = ""
         savepath = QtGui.QFileDialog.getSaveFileName(
@@ -389,6 +396,12 @@ class PoioGRAID(QtGui.QMainWindow):
     def open_file(self, filepath):
         """
         Load the data into the annotation tree and then update the text edit widget.
+
+        ...
+
+        Parameters
+        ----------
+        filepath: str
         """
         if filepath != '':
             file = open(filepath, "rb")

@@ -496,11 +496,11 @@ t</string>
   <customwidget>
    <class>PoioGraidTextEdit</class>
    <extends>QTextEdit</extends>
-   <header>PoioGraidTextEdit.h</header>
+   <header>poio.ui.PoioGraidTextEdit.h</header>
   </customwidget>
  </customwidgets>
  <resources>
-  <include location="poio.qrc"/>
+  <include location="poio.ui.poio.qrc"/>
  </resources>
  <connections>
   <connection>
