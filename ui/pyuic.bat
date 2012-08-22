@@ -11,5 +11,5 @@ call %PYQTTOOLSDIR%\pyuic4 NewTier.ui > %DIALOGSDIR%\Ui_NewTier.py
 call %PYQTTOOLSDIR%\pyuic4 NewFileGraid.ui > %DIALOGSDIR%\Ui_NewFileGraid.py
 call %PYQTTOOLSDIR%\pyuic4 FindReplaceForm.ui > %DIALOGSDIR%\Ui_FindReplaceForm.py
 call %PYQTTOOLSDIR%\pyuic4 FindReplaceDialog.ui > %DIALOGSDIR%\Ui_FindReplaceDialog.py
-call %PYQTTOOLSDIR%\pyrcc4 poio.qrc > %DIALOGSDIR%\poio_rc.py -py3
-call %PYQTTOOLSDIR%\pyrcc4 poioanalyzer.qrc > %DIALOGSDIR%\poioanalyzer_rc.py
+call %PYQTTOOLSDIR%\pyrcc4 poio.ui.poio.qrc > %DIALOGSDIR%\poio_rc.py -py3
+call %PYQTTOOLSDIR%\pyrcc4 poio.ui.poioanalyzer.qrc > %DIALOGSDIR%\poioanalyzer_rc.py -py3

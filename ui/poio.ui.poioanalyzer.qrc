@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/images">
+        <file>pixmaps/aligncenter.png</file>
+        <file>pixmaps/alignleft.png</file>
+    </qresource>
+</RCC>

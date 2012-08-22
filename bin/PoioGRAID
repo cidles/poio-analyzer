@@ -45,7 +45,7 @@ def main():
         os.chdir(data_dir)
     elif os.path.exists(os.path.join(prefix, "bin", "WINDOWS.txt")):
         print('Using resources from', data_dir, file=sys.stderr)
-        #os.chdir(data_dir)
+        os.chdir(data_dir)
     else:
         print('Using resources from', share_dir, file=sys.stderr)
         os.chdir(share_dir)

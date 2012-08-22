@@ -3,12 +3,13 @@
 
 from __future__ import unicode_literals
 import os.path
+import sys
 import re
 import copy
 import codecs
 import time
 from PyQt4 import QtCore, QtGui
-from PyQt4.QtCore import QSettings, QString
+from PyQt4.QtCore import QSettings
 from PyQt4.QtGui import QPrinter, QPrintDialog, QAbstractPrintDialog, QTextDocument, QPageSetupDialog, QDialog
 
 import pyannotation.corpus
@@ -165,11 +166,10 @@ class PoioAnalyzer(QtGui.QMainWindow):
         Updates the view screen with the refreshed data and zoom settings
         """
         settings = QtCore.QSettings()
-        zoom = str(settings.value("FontZoom").toInt()[0])
         html = "<html><head><meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" /></head><body>\n"
         i = 0
         for filepath, annotationtree in self.corpus.items:
-            html += "<h1 id=\"file_{1}\">{0}</h1>\n".format(os.path.basename(filepath), i)
+            html += "<h1 id=\"file_{1}\">{0}</h1>\n".format(os.path.basename(str(filepath)), i)
             html += annotationtree.as_html(True, False)
             i += 1
         html += "</body></html>"
@@ -177,10 +177,18 @@ class PoioAnalyzer(QtGui.QMainWindow):
         #    QtCore.QUrl(":/css/css/resultview.css")) #.setStyleSheet("td { border: 1px solid black; }")
 
         #stylesheet_url = QtCore.QUrl.fromLocalFile("h:/ProjectsWin/git-github/Poio/ui/css/resultview.css")
-        css = QtCore.QByteArray("td { font-size: " + zoom + "%; border: 1px solid black; }\ntable { margin-top: 10px; }\ntd.element_id { margin-left: 10px; margin-right: 10px; font-weight:bold; }\ntd.ann_type { margin-left: 10px; margin-right: 10px; font-variant:small-caps; }\nbody { font-size: " + zoom + "%; }")
+
+        css = QtCore.QByteArray("td { border: 1px solid black; }\ntable { margin-top: 10px; }\ntd.element_id { margin-left: 10px; margin-right: 10px; font-weight:bold; }\ntd.ann_type { margin-left: 10px; margin-right: 10px; font-variant:small-caps; }\nbody {}")
+        if sys.version_info < (3, 0):
+            zoom = str(settings.value("FontZoom").toInt()[0])
+            css = QtCore.QByteArray("td { font-size: " + zoom + "%; border: 1px solid black; }\ntable { margin-top: 10px; }\ntd.element_id { margin-left: 10px; margin-right: 10px; font-weight:bold; }\ntd.ann_type { margin-left: 10px; margin-right: 10px; font-variant:small-caps; }\nbody { font-size: " + zoom + "%; }")
+        else:
+            zoom = str(settings.value("FontZoom"))
+            self.ui.webviewResult.setTextSizeMultiplier(int(zoom) / 100)
+
         self.ui.webviewResult.settings().setUserStyleSheetUrl(
             QtCore.QUrl("data:text/css;charset=utf-8;base64,"
-            + unicode(css.toBase64())))
+            + str(css.toBase64())))
         self.ui.webviewResult.setHtml(html)
 
 
@@ -190,9 +198,12 @@ class PoioAnalyzer(QtGui.QMainWindow):
         until the 200% zoom limit is reached
         """
         settings = QtCore.QSettings()
-        currentzoom = settings.value("FontZoom").toInt()
-        if currentzoom[0] < 200:
-            zoom = currentzoom[0] + 10
+        if sys.version_info < (3, 0):
+            currentzoom = settings.value("FontZoom").toInt()[0]
+        else:
+            currentzoom = settings.value("FontZoom")
+        if currentzoom < 200:
+            zoom = currentzoom + 10
             settings.setValue("FontZoom", zoom)
             self.update_result_view()
 
@@ -203,9 +214,12 @@ class PoioAnalyzer(QtGui.QMainWindow):
         until the 50% zoom limit is reached
         """
         settings = QtCore.QSettings()
-        currentzoom = settings.value("FontZoom").toInt()
-        if currentzoom[0] > 50:
-            zoom = currentzoom[0] - 10
+        if sys.version_info < (3, 0):
+            currentzoom = settings.value("FontZoom").toInt()[0]
+        else:
+            currentzoom = settings.value("FontZoom")
+        if currentzoom > 50:
+            zoom = currentzoom - 10
             settings.setValue("FontZoom", zoom)
             self.update_result_view()
 
@@ -226,11 +240,11 @@ class PoioAnalyzer(QtGui.QMainWindow):
         printer = QPrinter()
 
         setup = QPageSetupDialog(printer)
-        setup.setWindowTitle(QString("Print - Page Settings"))
+        setup.setWindowTitle("Print - Page Settings")
 
         if setup.exec_() == QDialog.Accepted:
             dialog = QPrintDialog(printer, self)
-            dialog.setWindowTitle(QString("Print Document"))
+            dialog.setWindowTitle("Print Document")
 
             if dialog.exec_() == QDialog.Accepted:
                 self.ui.webviewResult.print_(printer)
@@ -242,7 +256,7 @@ class PoioAnalyzer(QtGui.QMainWindow):
         """
 
         export_file =  QtGui.QFileDialog.getSaveFileName(self, self.tr("Export Search Result"), "", self.tr("HTML file (*.html)"))
-        export_file = unicode(export_file)
+        export_file = str(export_file)
         OUT  = codecs.open(export_file, "w", "utf-8")
         html = "<html><head><meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" /></head><body>\n"
         for filepath, annotationtree in self.corpus.items:
@@ -272,7 +286,7 @@ class PoioAnalyzer(QtGui.QMainWindow):
             currentFilter = pyannotation.annotationtree.AnnotationTreeFilter(self.data_structure_type)
             for ann_type in self.data_structure_type.flat_data_hierarchy:
                 inputfield = self.ui.tabWidget.findChild(QtGui.QLineEdit, "lineedit_{0}_{1}".format(ann_type, i+1))
-                currentFilter.set_filter_for_type(ann_type, unicode(inputfield.text()))
+                currentFilter.set_filter_for_type(ann_type, str(inputfield.text()))
 
             checkbox = self.ui.tabWidget.findChild(QtGui.QCheckBox, "checkboxInvert_%i"%(i+1))
             currentFilter.set_inverted_filter(checkbox.isChecked())

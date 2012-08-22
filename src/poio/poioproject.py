@@ -51,7 +51,7 @@ class PoioProject(QtCore.QAbstractListModel):
         """
         if role == QtCore.Qt.DisplayRole:
             if index.row() < len(self.projectfiles):
-                return os.path.basename(self.projectfiles[index.row()].filepath)
+                return os.path.basename(str(self.projectfiles[index.row()].filepath))
             else:
                 return QtCore.QVariant()
 

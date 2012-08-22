@@ -152,7 +152,7 @@ class PoioGRAID(QtGui.QMainWindow):
         about = QtGui.QMessageBox(self)
         about.setTextFormat(QtCore.Qt.RichText)
         about.setWindowTitle(self.tr("About PoioGRAID"))
-        about.setText(self.tr("<b>PoioGRAID 0.1.0</b><br/>Poio GRAID Editor "
+        about.setText(self.tr("<b>PoioGRAID 0.1.1</b><br/>Poio GRAID Editor "
                               "by the <a href=\"http://www.cidles.eu\">"
                               "Interdisciplinary Centre for Social and "
                               "Language Documentation</a>.<br/><br/>All "

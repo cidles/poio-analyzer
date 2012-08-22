@@ -423,7 +423,7 @@
   <tabstop>lineeditQuickSearch</tabstop>
  </tabstops>
  <resources>
-  <include location="poioanalyzer.qrc"/>
+  <include location="poio.ui.poioanalyzer.qrc"/>
  </resources>
  <connections/>
 </ui>

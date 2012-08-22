@@ -5,6 +5,7 @@
 # http://www.cidles.eu/ltll
 #
 
+from __future__ import print_function
 import sys, os.path
 from PyQt4 import QtCore, QtGui
 
@@ -20,16 +21,16 @@ def main(argv):
     share_dir = os.path.join(prefix, 'share', 'poio')
 
     if os.path.exists(os.path.join(poio_dir, "WINDOWS.txt")):
-        print >>sys.stderr, 'Using resources from', data_dir
+        print('Using resources from', data_dir, file=sys.stderr)
         os.chdir(data_dir)
     elif os.path.exists(src_dir) and os.path.exists(data_dir) and not prefix.startswith('/usr'):
         # Run Kura from local source folder (not installed)
-        print >>sys.stderr, 'Using modules from', src_dir
+        print('Using modules from', src_dir, file=sys.stderr)
         sys.path.insert(0, src_dir)
-        print >>sys.stderr, 'Using resources from', data_dir
+        print('Using resources from', data_dir, file=sys.stderr)
         os.chdir(data_dir)
     else:
-        print >>sys.stderr, "Using resources from", share_dir
+        print("Using resources from", share_dir, file=sys.stderr)
         os.chdir(share_dir)
 
     # now load the main class
@@ -39,7 +40,7 @@ def main(argv):
 
     # Loading translations
     qtTranslator = QtCore.QTranslator()
-    qtTranslator.load("qt_" + unicode(QtCore.QLocale.system().name()),
+    qtTranslator.load("qt_" + str(QtCore.QLocale.system().name()),
         QtCore.QLibraryInfo.location(QtCore.QLibraryInfo.TranslationsPath))
     app.installTranslator(qtTranslator)
 

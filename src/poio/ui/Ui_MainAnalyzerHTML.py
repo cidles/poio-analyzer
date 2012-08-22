@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'MainAnalyzerHTML.ui'
 #
-# Created: Wed Aug 22 09:40:34 2012
+# Created: Wed Aug 22 11:39:32 2012
 #      by: PyQt4 UI code generator 4.9.4
 #
 # WARNING! All changes made in this file will be lost!
@@ -270,4 +270,4 @@ class Ui_MainWindow(object):
         self.actionPrint.setShortcut(QtGui.QApplication.translate("MainWindow", "Ctrl+P", None, QtGui.QApplication.UnicodeUTF8))
 
 from PyQt4 import QtWebKit
-import poioanalyzer_rc
+import poio.ui.poioanalyzer_rc
