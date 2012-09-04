@@ -12,8 +12,8 @@ from PyQt4 import QtCore, QtGui
 from PyQt4.QtCore import QSettings
 from PyQt4.QtGui import QPrinter, QPrintDialog, QAbstractPrintDialog, QTextDocument, QPageSetupDialog, QDialog
 
-import pyannotation.corpus
-import pyannotation.annotationtree
+import poioapi.corpus
+import poioapi.annotationtree
 
 from poio.ui.Ui_MainAnalyzerHTML import Ui_MainWindow
 from poio.ui.Ui_TabWidgetSearch import Ui_TabWidgetSearch
@@ -29,7 +29,7 @@ class PoioAnalyzer(QtGui.QMainWindow):
         """
         QtGui.QMainWindow.__init__(self, *args)
 
-        self.data_structure_type = pyannotation.data.DataStructureTypeGraid()
+        self.data_structure_type = poioapi.data.DataStructureTypeGraid()
         self.vertical_position_of_file = {}
 
         self.ui = Ui_MainWindow()
@@ -48,7 +48,7 @@ class PoioAnalyzer(QtGui.QMainWindow):
         Initializes an empty corpus.
         """
         #print sys.path
-        self.corpus = pyannotation.corpus.CorpusTrees(self.data_structure_type)
+        self.corpus = poioapi.corpus.CorpusTrees(self.data_structure_type)
 
     def init_connects(self):
         """
@@ -138,7 +138,7 @@ class PoioAnalyzer(QtGui.QMainWindow):
             poiofile = self.project.poioFileAt(i)
             if poiofile.isNew:
                 #print poiofile.filepath
-                self.corpus.add_item(poiofile.filepath, pyannotation.data.TREEPICKLE)
+                self.corpus.add_item(poiofile.filepath, poioapi.data.TREEPICKLE)
                 poiofile.setIsNew(False)
             if progress.wasCanceled():
                 self.init_corpus()
@@ -283,7 +283,7 @@ class PoioAnalyzer(QtGui.QMainWindow):
         """
         filterChain = []
         for i in range(0, self.ui.tabWidget.currentIndex()+1):
-            currentFilter = pyannotation.annotationtree.AnnotationTreeFilter(self.data_structure_type)
+            currentFilter = poioapi.annotationtree.AnnotationTreeFilter(self.data_structure_type)
             for ann_type in self.data_structure_type.flat_data_hierarchy:
                 inputfield = self.ui.tabWidget.findChild(QtGui.QLineEdit, "lineedit_{0}_{1}".format(ann_type, i+1))
                 currentFilter.set_filter_for_type(ann_type, str(inputfield.text()))
@@ -296,9 +296,9 @@ class PoioAnalyzer(QtGui.QMainWindow):
             radiobuttonAnd = self.ui.tabWidget.findChild(QtGui.QRadioButton, "radiobuttonAnd_%i"%(i+1))
             radiobuttonOr = self.ui.tabWidget.findChild(QtGui.QRadioButton, "radiobuttonOr_%i"%(i+1))
             if radiobuttonAnd.isChecked():
-                currentFilter.set_boolean_operation(pyannotation.annotationtree.AnnotationTreeFilter.AND)
+                currentFilter.set_boolean_operation(poioapi.annotationtree.AnnotationTreeFilter.AND)
             elif radiobuttonOr.isChecked():
-                currentFilter.set_boolean_operation(pyannotation.annotationtree.AnnotationTreeFilter.OR)
+                currentFilter.set_boolean_operation(poioapi.annotationtree.AnnotationTreeFilter.OR)
             filterChain.append(currentFilter)
 
         for _, annotationtree in self.corpus.items:

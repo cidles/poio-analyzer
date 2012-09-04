@@ -5,8 +5,8 @@ from __future__ import unicode_literals
 import sys, os.path, re
 from PyQt4 import QtCore, QtGui
 
-#from pyannotation.elan.data import EafAnnotationFileObject
-import pyannotation.annotationtree
+#from poioapi.elan.data import EafAnnotationFileObject
+import poioapi.annotationtree
 
 import poio
 from poio.ui.PoioIlTextEdit import PoioIlTextEdit
@@ -214,9 +214,9 @@ class PoioILE(QtGui.QMainWindow):
             #self.annotation_file_object = EafAnnotationFileObject(filepath)
             #self.annotationTierHandler = self.annotationFileObject.createTierHandler()
             #self.annotationParser = self.annotationFileObject.createParserMorphsynt()
-            self.eaf_tree = pyannotation.annotationtree.AnnotationTree(
-                pyannotation.data.EAF,
-                pyannotation.data.MORPHSYNT,
+            self.eaf_tree = poioapi.annotationtree.AnnotationTree(
+                poioapi.data.EAF,
+                poioapi.data.MORPHSYNT,
                 filepath
             )
             self.init_tier_types_from_settings()

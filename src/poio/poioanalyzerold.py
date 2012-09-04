@@ -5,12 +5,12 @@ import sys, os.path, re, copy
 import time
 from PyQt4 import QtCore, QtGui
 
-from pyannotation.toolbox.data import ToolboxAnnotationFileObject
-from pyannotation.elan.data import EafAnnotationFileObject
-from pyannotation.data import AnnotationTree, AnnotationTreeFilter
-import pyannotation.data
+from poioapi.toolbox.data import ToolboxAnnotationFileObject
+from poioapi.elan.data import EafAnnotationFileObject
+from poioapi.data import AnnotationTree, AnnotationTreeFilter
+import poioapi.data
 
-from pyannotation.corpusreader import GlossCorpusReader
+from poioapi.corpusreader import GlossCorpusReader
 
 from poio.ui.Ui_MainAnalyzer import Ui_MainWindow
 from poio.ui.PoioIlTextEdit import PoioIlTextEdit

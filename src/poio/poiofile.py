@@ -2,7 +2,7 @@
 # (C) 2011 copyright by Peter Bouda
 
 import re
-import pyannotation.data
+import poioapi.data
 
 class PoioFile(object):
 
@@ -23,14 +23,14 @@ class PoioFile(object):
             f = open(filepath)
             data = f.read()
             if re.search("LINGUISTIC_TYPE_ID=\"ref\"", data) and re.search("LINGUISTIC_TYPE_ID=\"tx\"", data) and re.search("LINGUISTIC_TYPE_ID=\"ft\"", data):
-                self.type = pyannotation.data.EAFFROMTOOLBOX
+                self.type = poioapi.data.EAFFROMTOOLBOX
             else:
-                self.type = pyannotation.data.EAF
+                self.type = poioapi.data.EAF
             f.close()
         elif re.search(r"\.txt$", filepath):
-            self.type = pyannotation.data.TOOLBOX
+            self.type = poioapi.data.TOOLBOX
         elif re.search(r"\.txt$", filepath):
-            self.type = pyannotation.data.KURA
+            self.type = poioapi.data.KURA
 
     def setIsNew(self, value = True):
         """

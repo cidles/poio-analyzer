@@ -33,11 +33,11 @@ How to start with PyCharm
 =========================
 
 1. Clone Poio from Github (https://github.com/cidles/Poio);
-2. Clone Pyannotation from Github (https://github.com/cidles/pyannotation);
+2. Clone PoioAPI from Github (https://github.com/cidles/poio-api);
 3. Start PyCharm;
 4. Choose "File" -> "Open Directory" in menu and open Poio directory;
 5. Choose "File" -> "Settings" and set the "Project Interpreter" to Python 2.7;
-6. Choose "File" -> "Settings" and in the "Project Structure" add a "Content Root" that points to the PyAnnotation directory; set the PyAnnotation "src" directory as the "Sources";
+6. Choose "File" -> "Settings" and in the "Project Structure" add a "Content Root" that points to the PoioAPI directory; set the PoioAPI "src" directory as the "Sources";
 7. * Choose "Run" -> "Edit Configurations" and add a new configuration;
    * Select "Python" configuration;
    * Give it a name;
@@ -52,7 +52,7 @@ In order to develop Poio you need to install the folowing programs/libraries:
 - Python 2.7: `http://www.python.org/download/ <http://www.python.org/download/>`_ ;
 - Regex: `http://pypi.python.org/pypi/regex/ <http://pypi.python.org/pypi/regex/>`_ ;
 - PyQt: `http://www.riverbankcomputing.co.uk/software/pyqt/download <http://www.riverbankcomputing.co.uk/software/pyqt/download>`_ ;
-- PyAnnotation: `https://github.com/cidles/pyannotation <https://github.com/cidles/pyannotation>`_ ;
+- PoioAPI: `https://github.com/cidles/poio-api <https://github.com/cidles/poio-api>`_ ;
 
 
 Donating

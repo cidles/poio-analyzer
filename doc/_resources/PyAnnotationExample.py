@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
-# (C) 2012 copyright by António Lopes, CIDLeS
+# (C) 2012 copyright by Antï¿½nio Lopes, CIDLeS
 
-from pyannotation import annotationtree
-from pyannotation import data
+from poioapi import annotationtree
+from poioapi import data
 
 import pickle
 

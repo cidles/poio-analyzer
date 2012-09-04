@@ -16,8 +16,8 @@ from PyQt4 import QtCore, QtGui
 from PyQt4.QtCore import SIGNAL
 from PyQt4.QtGui import QListWidgetItem, QPainter, QMessageBox
 
-import pyannotation.annotationtree
-import pyannotation.data
+import poioapi.annotationtree
+import poioapi.data
 
 #from poio.ui.PoioGraidTextEdit import PoioGraidTextEdit
 from poio.ui.Ui_MainWindowGRAID import Ui_MainWindow
@@ -80,8 +80,8 @@ class PoioGRAID(QtGui.QMainWindow):
         Initializes several attributes of the application, for example
         creates an empty annotation tree and a data structure type.
         """
-        self.annotation_tree = pyannotation.annotationtree.AnnotationTree(
-            pyannotation.data.GRAID)
+        self.annotation_tree = poioapi.annotationtree.AnnotationTree(
+            poioapi.data.GRAID)
         self.ui.textedit.structure_type_handler = \
             self.annotation_tree.structure_type_handler
 
@@ -320,8 +320,8 @@ class PoioGRAID(QtGui.QMainWindow):
         ui.setupUi(dialog)
         ret = dialog.exec_()
         if ret == QtGui.QDialog.Accepted:
-            self.annotation_tree = pyannotation.annotationtree.AnnotationTree(
-                pyannotation.data.GRAID)
+            self.annotation_tree = poioapi.annotationtree.AnnotationTree(
+                poioapi.data.GRAID)
             self.title = ""
             self.statusBar().showMessage(self.tr("Parsing text..."), 5)
             if ui.radioButtoTbStyleText.isChecked():
