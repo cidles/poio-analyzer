@@ -23,8 +23,8 @@ annotated data. Poio tools are written in Python and are based on PyQt.
 
 Documentation
 -------------
-You can find the documentation for Poio on the `Github Pages
-<http://cidles.github.com/Poio/>`_.
+You can find the documentation for Poio on Read The Docs
+<http://poio.readthedocs.org>`_.
 
 Develop
 -------

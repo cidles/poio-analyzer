@@ -14,6 +14,7 @@ Welcome to Poio's documentation!
 
    poiograid
    tutorials
+   development
    
 Indices and tables
 ==================
