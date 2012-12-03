@@ -410,7 +410,7 @@ class PoioAnalyzer(QtGui.QMainWindow):
         """
         QtGui.QMessageBox.about(self,
             "Poio Analyzer",
-            """<b>Poio Analyzer v0.1.1</b><br><br>
+            """<b>Poio Analyzer v0.2.0</b><br><br>
                 Linguistic Analyzation Tool for interlinear data,
                 developed by Peter Bouda at the<br>
                 <b><a href=\"http://www.cidles.eu/ltll/poio\">
