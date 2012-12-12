@@ -49,3 +49,25 @@ h2. General stories
 * It is possible to search define word lists and search for word lists
 * It is possible to extract word lists from Toolbox lexicon (and other source data like wordlists from fieldwork; maybe Copy&Paste is enough for the latter...)
 * It is possible to do some analysis on the ft tier (POS, syntactic tree, morphemes with glosses, ...) and to search that additional information (for example, after morpho-syntactical tagging of the english translation it is possible to search for comparatives)
+
+20 Oktober 2009 - Treffen mit Helmrecht
+PeterBouda, 8 November 2009 (created 8 November 2009)
+
+* Suche nach Morphemen / Glossen, Anzeige der Umgebung
+* Wie sieht die Nominalphrase aus? N _ _ DET
+* Suche nach Nomen / Klassen von Nomen (aus dem Lexikon) und ihre Umgebung
+* Bsp. Numeralia vor oder nach dem DET, Numeralia nur im Lexikon markiert
+* Gibt es kopflose Nominalphrasen? Zumindest bei Relativsätzen...
+* Relativsätze sind nominalsiert, wie sieht hier die Nominalphrase aus?
+* Wie findet man Relativsätze? (Hocank mit "internal head" oder auch nicht) N [ N (N) .. V Def]; kann man evtl. in der Übersetzung suchen?
+* Wie findet man Satzstrukturen? (Hocank: V am Schluss als Hinweis; aber: Verbserien)
+* Mit welchen Satzstrukturen sind Fragepronomen verknüpft?
+* Wie findet man interne Struktur von Wörtern? z.B. (Verb)Klitika oder nicht? Reihenfolge der Pre- und Suffixe?
+* Wie sucht man mit Toolbox und Elan (z.B. die Wortstrukturen)?
+* Valenz von Verben? Wie kann man da (semi-)automatisch was machen?
+* Satztypen: modal, Frage, Nebensätze (wie findet man Komplementsätze (vs. Adverbialsätze, Juxtapunktionen, Kosubordination)? "hearsay"-Marker, aber nicht nur bei Komplementsätzen)...; * Wortstellung? -> Suche nach Verben (also wieder nach Klassen von Wörtern); Suche nach Übersetzung (nach "weil" etc. für Adverbialsätze)
+* Wie findet man pragmatisch markierte Sätze? -> Cleft-Strukturen in der engl./dt. Übersetzung
+* Wie untersucht man Fokus? Wie ist der Fokus verteilt, welche Formen? Ohne Form: evtl. Übersetzung
+* allg.: Distributionen: z.B. von Demonstrativpronomen, Verben mit Hilfsverben, Eigennamen (gibt's spezielle Kasusmarkierungen? Im Hocank gibts Markierung für Eigennamen; Wie verhalten die sich syntaktisch, wie und wann werden sie benutzt (S, A, O oder gar nicht)?)
+* Welche morphophonologischen Verfahren mit welchen Morphemen/Worten? e -> a im Hocank unter Bedingungen
+* Wie findet man Verbkonjugationen?

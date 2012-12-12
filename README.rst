@@ -4,7 +4,7 @@ Poio Tools for Linguists
 
 Website
 -------
-http://ltll.cidles.eu/poio/
+http://media.cidles.eu/poio/
 
 Authors
 -------
@@ -23,8 +23,9 @@ annotated data. Poio tools are written in Python and are based on PyQt.
 
 Documentation
 -------------
-You can find the documentation for Poio on Read The Docs
-<http://poio.readthedocs.org>`_.
+You can find the documentation for Poio on Read The Docs:
+
+http://poio.readthedocs.org
 
 Develop
 -------
