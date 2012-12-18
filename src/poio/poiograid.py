@@ -4,10 +4,11 @@
 #
 # Copyright (C) 2001-2012 Poio Project
 # Author: Peter Bouda <pbouda@cidles.eu>
-# URL: <http://www.cidles.eu/ltll/poio>
+# URL: <http://media.cidles.eu/poio/>
 # For license information, see LICENSE.TXT
 
 from __future__ import unicode_literals
+
 import os.path
 import re
 import pickle
@@ -16,7 +17,7 @@ from PyQt4 import QtCore, QtGui
 from PyQt4.QtCore import SIGNAL
 from PyQt4.QtGui import QListWidgetItem, QPainter, QMessageBox
 
-import poioapi.annotationtree
+import poioapi.annotationgraph
 import poioapi.data
 
 #from poio.ui.PoioGraidTextEdit import PoioGraidTextEdit
@@ -80,10 +81,10 @@ class PoioGRAID(QtGui.QMainWindow):
         Initializes several attributes of the application, for example
         creates an empty annotation tree and a data structure type.
         """
-        self.annotation_tree = poioapi.annotationtree.AnnotationTree(
+        self.annotation_graph = poioapi.annotationgraph.AnnotationGraph(
             poioapi.data.GRAID)
         self.ui.textedit.structure_type_handler = \
-            self.annotation_tree.structure_type_handler
+            self.annotation_graph.structure_type_handler
 
         self.filepath = None
         self.projectfilepath = None
@@ -105,7 +106,7 @@ class PoioGRAID(QtGui.QMainWindow):
         """
 
         # Files
-        self.ui.actionOpenFile.triggered.connect(self.openfile)
+        self.ui.actionOpenFile.triggered.connect(self.open_file)
         self.ui.actionSaveFile.triggered.connect(self.save_file)
         self.ui.actionSaveFileAs.triggered.connect(self.save_file_as)
         self.ui.actionOpen_Project.triggered.connect(self.openproject)
@@ -169,15 +170,29 @@ class PoioGRAID(QtGui.QMainWindow):
         """
         self.ui.projectManager.setShown(self.ui.projectBtn.isChecked())
 
-    def openfile(self):
+    def open_file(self):
         """
         Prompt the user for a file, add it to the project and open it.
         """
-        filepaths = QtGui.QFileDialog.getOpenFileNames(self, self.tr("Open File"), "", self.tr("Pickle files (*.pickle);;All files (*.*)"))
+        filepaths = QtGui.QFileDialog.getOpenFileNames(self, self.tr("Open File"), "", self.tr("Pickle files (*.hdr);;All files (*.*)"))
         if len(filepaths) == 1:
             self.project.clear()
             self.project.addFilePaths(filepaths)
-            self.open_file(filepaths[0])
+            self.open_file_from_path(filepaths[0])
+
+    def open_file_from_path(self, filepath):
+        """
+        Load the data into the annotation tree and then update the text edit widget.
+
+        Parameters
+        ----------
+        filepath: str
+        """
+        if filepath != '':
+            self.annotation_graph.load_graph_from_graf(filepath)
+            print(self.annotation_graph.graf)
+            self.update_textedit()
+            self.filepath = filepath
 
     def openproject(self):
         """
@@ -190,7 +205,7 @@ class PoioGRAID(QtGui.QMainWindow):
             self.tr("Poio project file (*.poioprj);;All files (*.*)"))
         if len(path) > 0:
             self.project.clear()
-            self.annotation_tree.tree = []
+            self.annotation_graph.graf = None
             self.update_textedit()
             self.projectfilepath = path[0]
             self.project.openproject(path[0])
@@ -201,7 +216,7 @@ class PoioGRAID(QtGui.QMainWindow):
         """
         filepaths = QtGui.QFileDialog.getOpenFileNames(self, self.tr("Add Files"), "", self.tr("Pickle files (*.pickle);;All files (*.*)"))
         self.project.addFilePaths(filepaths)
-        self.open_file(filepaths[0])
+        self.open_file_from_path(filepaths[0])
 
     def removefile(self):
         """
@@ -247,8 +262,9 @@ class PoioGRAID(QtGui.QMainWindow):
         self.ui.textedit.clear()
         self.ui.textedit.append_title(self.title)
 
-        for element in self.annotation_tree.elements():
-            self.ui.textedit.append_element(element)
+        for element in self.annotation_graph.elements():
+            #self.ui.textedit.append_element(element)
+            pass
 
         self.ui.textedit.scrollToAnchor("title")
 
@@ -259,27 +275,27 @@ class PoioGRAID(QtGui.QMainWindow):
         """
         deleted_id = self.ui.textedit.delete_current_element()
         if deleted_id:
-            self.annotation_tree.remove_element(deleted_id)
+            self.annotation_graph.remove_element(deleted_id)
 
     def insert_utterance_before(self):
         """
         Insert an utteranance *before* the currently edited utterance in the
         text view. Then adds the utterance to the annotation tree.
         """
-        element = self.annotation_tree.empty_element()
+        element = self.annotation_graph.empty_element()
         current_id = self.ui.textedit.insert_element(element)
         if current_id:
-            self.annotation_tree.insert_element(element, current_id)
+            self.annotation_graph.insert_element(element, current_id)
 
     def insert_utterance_after(self):
         """
         Insert an utteranance *after* the currently edited utterance in the
         text view. Then adds the utterance to the annotation tree.
         """
-        element = self.annotation_tree.empty_element()
+        element = self.annotation_graph.empty_element()
         current_id = self.ui.textedit.insert_element(element, True)
         if current_id:
-            self.annotation_tree.insert_element(element, current_id, True)
+            self.annotation_graph.insert_element(element, current_id, True)
 
     def delete_column(self):
         """
@@ -296,8 +312,8 @@ class PoioGRAID(QtGui.QMainWindow):
         tree.
         """
         next_id = self.ui.textedit.insert_column_at_cursor(
-            self.annotation_tree.next_annotation_id, False)
-        self.annotation_tree.next_annotation_id = next_id
+            self.annotation_graph.next_annotation_id, False)
+        self.annotation_graph.next_annotation_id = next_id
 
     def insert_column_after(self):
         """
@@ -306,8 +322,8 @@ class PoioGRAID(QtGui.QMainWindow):
         tree.
         """
         next_id = self.ui.textedit.insert_column_at_cursor(
-            self.annotation_tree.next_annotation_id, True)
-        self.annotation_tree.next_annotation_id = next_id
+            self.annotation_graph.next_annotation_id, True)
+        self.annotation_graph.next_annotation_id = next_id
 
     def new_file(self):
         """
@@ -392,23 +408,6 @@ class PoioGRAID(QtGui.QMainWindow):
         if savepath !="":
             self.project.saveprojectas(savepath)
             self.projectfilepath = savepath
-
-    def open_file(self, filepath):
-        """
-        Load the data into the annotation tree and then update the text edit widget.
-
-        ...
-
-        Parameters
-        ----------
-        filepath: str
-        """
-        if filepath != '':
-            file = open(filepath, "rb")
-            self.annotation_tree.tree = pickle.load(file)
-            file.close()
-            self.update_textedit()
-            self.filepath = filepath
 
     def find_and_replace(self):
         """
