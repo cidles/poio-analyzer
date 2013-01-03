@@ -187,14 +187,15 @@ class PoioGraidTextEdit(QtGui.QTextEdit):
         table = cursor.currentTable()
         if table:
             cell = table.cellAt(cursor)
-            if cell.row() >= PoioGraidTextEdit.FIRST_DATA_COLUMN \
-                and cell.column() > PoioGraidTextEdit.FIRST_DATA_COLUMN:
-                #print cell.column()
-                #print cell.columnSpan()
+            print(PoioGraidTextEdit.FIRST_DATA_COLUMN)
+            if cell.row() >= PoioGraidTextEdit.FIRST_DATA_COLUMN - 1 \
+                and cell.column() >= PoioGraidTextEdit.FIRST_DATA_COLUMN:
+
                 for i in range(cell.columnSpan()):
                     table.removeColumns(cell.column(), 1)
                 #table.removeColumns(cell.column(), cell.columnSpan() + 1)
-                #print unicode(table.document().toPlainText()).encode("utf-8")
+                #print(unicode(table.document().toPlainText()).encode("utf-8"))
+        #TODO Bug Fix ID 55
 
     def delete_current_cell(self, merge_cells = False):
         """
