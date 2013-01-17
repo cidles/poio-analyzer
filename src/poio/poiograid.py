@@ -259,6 +259,7 @@ class PoioGRAID(QtGui.QMainWindow):
         """
         Updates the text edit view with the data from the annotation tree.
         """
+        self.ui.textedit.blockSignals(True)
         self.ui.textedit.clear()
         self.ui.textedit.append_title(self.title)
 
@@ -267,6 +268,7 @@ class PoioGRAID(QtGui.QMainWindow):
             pass
 
         self.ui.textedit.scrollToAnchor("title")
+        self.ui.textedit.blockSignals(False)
 
     def delete_utterance(self):
         """
