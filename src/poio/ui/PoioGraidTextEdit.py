@@ -101,9 +101,10 @@ class PoioGraidTextEdit(QtGui.QTextEdit):
         """
         c = self.textCursor()
         t = c.currentTable()
-
+        print("check")
         if not t or \
                 c.charFormat().fontCapitalization() == QtGui.QFont.SmallCaps:
+            print("no")
             self.setCursorWidth(0)
         else:
             self.setCursorWidth(1)
@@ -140,7 +141,8 @@ class PoioGraidTextEdit(QtGui.QTextEdit):
                         index(s):
                     return id
 
-            if r >  0 and c > 0:
+            if r > 0 and c >= PoioGraidTextEdit.FIRST_DATA_COLUMN:
+                print("ok")
                 new_column_pos = c
                 if after:
                     new_column_pos = c + c_span
@@ -184,15 +186,25 @@ class PoioGraidTextEdit(QtGui.QTextEdit):
         Removes the column with the current cursor.
         """
         cursor = self.textCursor()
+        current_position = cursor.position()
         table = cursor.currentTable()
         if table:
             cell = table.cellAt(cursor)
-            if cell.row() >= PoioGraidTextEdit.FIRST_DATA_COLUMN \
-                and cell.column() > PoioGraidTextEdit.FIRST_DATA_COLUMN:
+            current_column = cell.column()
+            current_row = cell.row()
+            if cell.column() >= PoioGraidTextEdit.FIRST_DATA_COLUMN:
                 #print cell.column()
                 #print cell.columnSpan()
-                for i in range(cell.columnSpan()):
-                    table.removeColumns(cell.column(), 1)
+                if current_column != 2 or \
+                        (current_column + cell.columnSpan() < table.columns()):
+                    for i in range(cell.columnSpan()):
+                        table.removeColumns(cell.column(), 1)
+                    # TODO: check why we cannot set the cursor to the first column
+                    if current_column == 2:
+                        new_cursor_cell = table.cellAt(2, current_row)
+                        cursor.setPosition(
+                            new_cursor_cell.firstCursorPosition().position())
+                #cursor.setPosition(current_position)
                 #table.removeColumns(cell.column(), cell.columnSpan() + 1)
                 #print unicode(table.document().toPlainText()).encode("utf-8")
 
