@@ -89,7 +89,7 @@ Section "Uninstall"
   Delete "$SMPROGRAMS\Poio Analyzer\*.*"
 
   ; Remove directories used
-  RMDir "$SMPROGRAMS\PoioAnalyzer"
+  RMDir "$SMPROGRAMS\Poio Analyzer"
   RMDir "$INSTDIR\bin"
   RMDir "$INSTDIR\data\examples"
   RMDir "$INSTDIR\data\qml"

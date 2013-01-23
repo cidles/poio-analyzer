@@ -22,7 +22,8 @@ To compile and create the "setup.exe":
 1) Call "cxfreeze_poiograid.bat" in Poio's main directory. This will compile everything and create a "dist_win" folder, with a "bin" sub-folder.
 2) Create an empty sub-folder "data" in "dist_win". This will be used to ship files with Poio.
 3) Create an empty file "WINDOWS.txt" in "dist_win/bin". This is used to check whether Poio runs on Windows.
-4) Compile "poiograid.nsi" in Poio's main folder with NSIS. This will create a file "setup-poiograid.exe".
+4) Copy a version of "msvcr100.dll" to the directory "dist_win/bin".
+5) Compile "poiograid.nsi" in Poio's main folder with NSIS. This will create a file "setup-poiograid.exe".
 
 Test
 ----
