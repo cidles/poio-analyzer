@@ -49,6 +49,13 @@
         </spacer>
        </item>
        <item>
+        <widget class="QLabel" name="label">
+         <property name="text">
+          <string>Data Structure Type:</string>
+         </property>
+        </widget>
+       </item>
+       <item>
         <widget class="QComboBox" name="comboDataStructureType">
          <item>
           <property name="text">

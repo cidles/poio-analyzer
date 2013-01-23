@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'NewFileGraid.ui'
 #
-# Created: Wed Jan 23 09:51:04 2013
+# Created: Wed Jan 23 12:30:40 2013
 #      by: PyQt4 UI code generator 4.9.6
 #
 # WARNING! All changes made in this file will be lost!
@@ -42,6 +42,9 @@ class Ui_NewFileGraid(object):
         self.horizontalLayout_2.addWidget(self.radioButtoTbStyleText)
         spacerItem = QtGui.QSpacerItem(40, 20, QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Minimum)
         self.horizontalLayout_2.addItem(spacerItem)
+        self.label = QtGui.QLabel(NewFileGraid)
+        self.label.setObjectName(_fromUtf8("label"))
+        self.horizontalLayout_2.addWidget(self.label)
         self.comboDataStructureType = QtGui.QComboBox(NewFileGraid)
         self.comboDataStructureType.setObjectName(_fromUtf8("comboDataStructureType"))
         self.comboDataStructureType.addItem(_fromUtf8(""))
@@ -67,6 +70,7 @@ class Ui_NewFileGraid(object):
         NewFileGraid.setWindowTitle(_translate("NewFileGraid", "Create a new file", None))
         self.radiobuttonPlainText.setText(_translate("NewFileGraid", "Plain Text", None))
         self.radioButtoTbStyleText.setText(_translate("NewFileGraid", "Toolbox-Style Text", None))
+        self.label.setText(_translate("NewFileGraid", "Data Structure Type:", None))
         self.comboDataStructureType.setItemText(0, _translate("NewFileGraid", "GRAID", None))
         self.comboDataStructureType.setItemText(1, _translate("NewFileGraid", "GRAID2 (Diana)", None))
 
