@@ -59,9 +59,9 @@ SectionEnd
 ; Optional section (can be disabled by the user)
 Section "Start Menu Shortcuts"
 
-  CreateDirectory "$SMPROGRAMS\PoioAnalyzer"
-  CreateShortCut "$SMPROGRAMS\PoioAnalyzer\Uninstall.lnk" "$INSTDIR\uninstall.exe" "" "$INSTDIR\uninstall.exe" 0
-  CreateShortCut "$SMPROGRAMS\PoioAnalyzer\PoioAnalyzer.lnk" "$INSTDIR\bin\PoioAnalyzer.exe" "" "$INSTDIR\bin\PoioAnalyzer.exe" 0
+  CreateDirectory "$SMPROGRAMS\Poio Analyzer"
+  CreateShortCut "$SMPROGRAMS\Poio Analyzer\Uninstall.lnk" "$INSTDIR\uninstall.exe" "" "$INSTDIR\uninstall.exe" 0
+  CreateShortCut "$SMPROGRAMS\Poio Analyzer\PoioAnalyzer.lnk" "$INSTDIR\bin\PoioAnalyzer.exe" "" "$INSTDIR\bin\PoioAnalyzer.exe" 0
   
 SectionEnd
 
@@ -84,7 +84,9 @@ Section "Uninstall"
   ;Delete $INSTDIR\uninstall.exe
 
   ; Remove shortcuts, if any
-  Delete "$SMPROGRAMS\PoioAnalyzer\*.*"
+  Delete "$SMPROGRAMS\Poio Analyzer\Uninstall.lnk"
+  Delete "$SMPROGRAMS\Poio Analyzer\Poio GRAID.lnk"
+  Delete "$SMPROGRAMS\Poio Analyzer\*.*"
 
   ; Remove directories used
   RMDir "$SMPROGRAMS\PoioAnalyzer"
