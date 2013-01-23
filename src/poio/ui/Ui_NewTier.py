@@ -2,8 +2,8 @@
 
 # Form implementation generated from reading ui file 'NewTier.ui'
 #
-# Created: Wed Aug 22 11:39:32 2012
-#      by: PyQt4 UI code generator 4.9.4
+# Created: Wed Jan 23 09:51:04 2013
+#      by: PyQt4 UI code generator 4.9.6
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -12,7 +12,16 @@ from PyQt4 import QtCore, QtGui
 try:
     _fromUtf8 = QtCore.QString.fromUtf8
 except AttributeError:
-    _fromUtf8 = lambda s: s
+    def _fromUtf8(s):
+        return s
+
+try:
+    _encoding = QtGui.QApplication.UnicodeUTF8
+    def _translate(context, text, disambig):
+        return QtGui.QApplication.translate(context, text, disambig, _encoding)
+except AttributeError:
+    def _translate(context, text, disambig):
+        return QtGui.QApplication.translate(context, text, disambig)
 
 class Ui_DialogNewTier(object):
     def setupUi(self, DialogNewTier):
@@ -68,10 +77,10 @@ class Ui_DialogNewTier(object):
         QtCore.QMetaObject.connectSlotsByName(DialogNewTier)
 
     def retranslateUi(self, DialogNewTier):
-        DialogNewTier.setWindowTitle(QtGui.QApplication.translate("DialogNewTier", "Create a new tier", None, QtGui.QApplication.UnicodeUTF8))
-        self.label_2.setText(QtGui.QApplication.translate("DialogNewTier", "Tier ID:", None, QtGui.QApplication.UnicodeUTF8))
-        self.label_3.setText(QtGui.QApplication.translate("DialogNewTier", "Tier type:", None, QtGui.QApplication.UnicodeUTF8))
-        self.label.setText(QtGui.QApplication.translate("DialogNewTier", "Parent tier:", None, QtGui.QApplication.UnicodeUTF8))
-        self.label_4.setText(QtGui.QApplication.translate("DialogNewTier", "Default locale:", None, QtGui.QApplication.UnicodeUTF8))
-        self.label_5.setText(QtGui.QApplication.translate("DialogNewTier", "Participant:", None, QtGui.QApplication.UnicodeUTF8))
+        DialogNewTier.setWindowTitle(_translate("DialogNewTier", "Create a new tier", None))
+        self.label_2.setText(_translate("DialogNewTier", "Tier ID:", None))
+        self.label_3.setText(_translate("DialogNewTier", "Tier type:", None))
+        self.label.setText(_translate("DialogNewTier", "Parent tier:", None))
+        self.label_4.setText(_translate("DialogNewTier", "Default locale:", None))
+        self.label_5.setText(_translate("DialogNewTier", "Participant:", None))
 

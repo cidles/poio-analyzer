@@ -101,10 +101,9 @@ class PoioGraidTextEdit(QtGui.QTextEdit):
         """
         c = self.textCursor()
         t = c.currentTable()
-        print("check")
+
         if not t or \
                 c.charFormat().fontCapitalization() == QtGui.QFont.SmallCaps:
-            print("no")
             self.setCursorWidth(0)
         else:
             self.setCursorWidth(1)
@@ -142,7 +141,6 @@ class PoioGraidTextEdit(QtGui.QTextEdit):
                     return id
 
             if r > 0 and c >= PoioGraidTextEdit.FIRST_DATA_COLUMN:
-                print("ok")
                 new_column_pos = c
                 if after:
                     new_column_pos = c + c_span

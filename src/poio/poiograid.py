@@ -105,12 +105,12 @@ class PoioGRAID(QtGui.QMainWindow):
         """
 
         # Files
-        self.ui.actionOpenFile.triggered.connect(self.openfile)
+        self.ui.actionOpenFile.triggered.connect(self.open_file)
         self.ui.actionSaveFile.triggered.connect(self.save_file)
         self.ui.actionSaveFileAs.triggered.connect(self.save_file_as)
-        self.ui.actionOpen_Project.triggered.connect(self.openproject)
-        self.ui.actionSave_Project.triggered.connect(self.saveproject)
-        self.ui.actionSave_Project_as.triggered.connect(self.saveprojectas)
+        self.ui.actionOpen_Project.triggered.connect(self.open_project)
+        self.ui.actionSave_Project.triggered.connect(self.save_project)
+        self.ui.actionSave_Project_as.triggered.connect(self.save_project_as)
         self.ui.actionNewFile.triggered.connect(self.new_file)
 
         # Application stuff
@@ -138,11 +138,11 @@ class PoioGRAID(QtGui.QMainWindow):
 
         # Poio Project
         self.ui.listFiles.activated.connect(self.open_selected_file)
-        self.connect(self.ui.projectBtn,SIGNAL("toggled()"),self.showproject)
-        self.connect(self.ui.addfileBtn,SIGNAL("clicked()"),self.addfile)
-        self.connect(self.ui.removefileBtn,SIGNAL("clicked()"),self.removefile)
-        self.connect(self.ui.saveprojectBtn,SIGNAL("clicked()"),self.saveproject)
-        self.connect(self.ui.openprojectBtn,SIGNAL("clicked()"),self.openproject)
+        self.connect(self.ui.projectBtn,SIGNAL("toggled()"),self.show_project)
+        self.connect(self.ui.addfileBtn,SIGNAL("clicked()"),self.add_file)
+        self.connect(self.ui.removefileBtn,SIGNAL("clicked()"),self.remove_file)
+        self.connect(self.ui.saveprojectBtn,SIGNAL("clicked()"),self.save_project)
+        self.connect(self.ui.openprojectBtn,SIGNAL("clicked()"),self.open_project)
 
 
     def about_dialog(self):
@@ -163,13 +163,13 @@ class PoioGRAID(QtGui.QMainWindow):
                               "</a>"))
         about.exec_()
 
-    def showproject(self):
+    def show_project(self):
         """
         Show or hide the project manager.
         """
         self.ui.projectManager.setShown(self.ui.projectBtn.isChecked())
 
-    def openfile(self):
+    def open_file(self):
         """
         Prompt the user for a file, add it to the project and open it.
         """
@@ -177,9 +177,9 @@ class PoioGRAID(QtGui.QMainWindow):
         if len(filepaths) == 1:
             self.project.clear()
             self.project.addFilePaths(filepaths)
-            self.open_file(filepaths[0])
+            self.open_file_at_path(filepaths[0])
 
-    def openproject(self):
+    def open_project(self):
         """
         Prompt the user for a project, clear previous project and screen and open the project in the manager.
         """
@@ -195,15 +195,15 @@ class PoioGRAID(QtGui.QMainWindow):
             self.projectfilepath = path[0]
             self.project.openproject(path[0])
 
-    def addfile(self):
+    def add_file(self):
         """
         Add a file to the current project
         """
         filepaths = QtGui.QFileDialog.getOpenFileNames(self, self.tr("Add Files"), "", self.tr("Pickle files (*.pickle);;All files (*.*)"))
         self.project.addFilePaths(filepaths)
-        self.open_file(filepaths[0])
+        self.open_file_at_path(filepaths[0])
 
-    def removefile(self):
+    def remove_file(self):
         """
         Remove the selected file from the current project
         """
@@ -238,7 +238,7 @@ class PoioGRAID(QtGui.QMainWindow):
             count +=1
         if len(selected) == 1:
             project = self.project.poioFileAt(selected[0].row())
-            self.open_file(project.filepath)
+            self.open_file_at_path(project.filepath)
 
     def update_textedit(self):
         """
@@ -322,8 +322,16 @@ class PoioGRAID(QtGui.QMainWindow):
         ui.setupUi(dialog)
         ret = dialog.exec_()
         if ret == QtGui.QDialog.Accepted:
+            # get the data structure type that the user chose
+            combo_data_structure_type = ui.comboDataStructureType.currentText()
+            data_structure_type = poioapi.data.GRAID
+            if combo_data_structure_type == "GRAID2 (Diana)":
+                data_structure_type = poioapi.data.GRAIDDIANA
+
             self.annotation_tree = poioapi.annotationtree.AnnotationTree(
-                poioapi.data.GRAID)
+                data_structure_type)
+            self.ui.textedit.structure_type_handler =\
+                self.annotation_tree.structure_type_handler
             self.title = ""
             self.statusBar().showMessage(self.tr("Parsing text..."), 5)
             if ui.radioButtoTbStyleText.isChecked():
@@ -369,18 +377,18 @@ class PoioGRAID(QtGui.QMainWindow):
         else:
             return
 
-    def saveproject(self):
+    def save_project(self):
         """
         Save the current project in the manager.
         Prompt for a path if the current project didn't exist yet
         """
         if not self.projectfilepath:
-            self.saveprojectas()
+            self.save_project_as()
         else:
             self.save_file()
             self.project.saveprojectas(self.projectfilepath)
 
-    def saveprojectas(self):
+    def save_project_as(self):
         """
         Prompt for a path and save the current project to it
         """
@@ -395,7 +403,7 @@ class PoioGRAID(QtGui.QMainWindow):
             self.project.saveprojectas(savepath)
             self.projectfilepath = savepath
 
-    def open_file(self, filepath):
+    def open_file_at_path(self, filepath):
         """
         Load the data into the annotation tree and then update the text edit widget.
 
@@ -451,15 +459,36 @@ class PoioGRAID(QtGui.QMainWindow):
 
             il_elements = list()
             for w in words:
-                il_elements.append([
-                        { 'id' : self.annotation_tree.next_annotation_id,
-                          'annotation' :  w },
-                        { 'id' : self.annotation_tree.next_annotation_id,
-                          'annotation' : '' },
-                        { 'id' : self.annotation_tree.next_annotation_id,
-                          'annotation' : '' }])
+                if self.annotation_tree.data_structure_type == \
+                        poioapi.data.GRAID:
+                    il_elements.append([
+                            { 'id' : self.annotation_tree.next_annotation_id,
+                              'annotation' :  w },
+                            { 'id' : self.annotation_tree.next_annotation_id,
+                              'annotation' : '' },
+                            { 'id' : self.annotation_tree.next_annotation_id,
+                              'annotation' : '' }])
+                elif self.annotation_tree.data_structure_type ==\
+                                        poioapi.data.GRAIDDIANA:
+                    il_elements.append([
+                            { 'id' : self.annotation_tree.next_annotation_id,
+                              'annotation' :  w },
+                            # morphemes
+                            [
+                            [
+                            { 'id' : self.annotation_tree.next_annotation_id,
+                              'annotation' : '' },
+                            { 'id' : self.annotation_tree.next_annotation_id,
+                              'annotation' : '' }
+                            ]
+                            ],
+                            # graid1, graid 3
+                            { 'id' : self.annotation_tree.next_annotation_id,
+                              'annotation' : '' },
+                            { 'id' : self.annotation_tree.next_annotation_id,
+                              'annotation' : '' }])
 
-            elements = [ [
+                elements = [ [
                 { 'id' : self.annotation_tree.next_annotation_id,
                   'annotation' : clause_unit },
                 il_elements,
@@ -473,6 +502,11 @@ class PoioGRAID(QtGui.QMainWindow):
                             'annotation' : '' },
                           { 'id' : self.annotation_tree.next_annotation_id,
                             'annotation' : '' } ]
+            if self.annotation_tree.data_structure_type ==\
+               poioapi.data.GRAIDDIANA:
+                utterance.append(
+                        { 'id' : self.annotation_tree.next_annotation_id,
+                          'annotation' : '' })
 
             self.annotation_tree.append_element(utterance)
             if (progress.wasCanceled()):

@@ -2,8 +2,8 @@
 
 # Form implementation generated from reading ui file 'NewFileGraid.ui'
 #
-# Created: Wed Aug 22 11:39:33 2012
-#      by: PyQt4 UI code generator 4.9.4
+# Created: Wed Jan 23 09:51:04 2013
+#      by: PyQt4 UI code generator 4.9.6
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -12,7 +12,16 @@ from PyQt4 import QtCore, QtGui
 try:
     _fromUtf8 = QtCore.QString.fromUtf8
 except AttributeError:
-    _fromUtf8 = lambda s: s
+    def _fromUtf8(s):
+        return s
+
+try:
+    _encoding = QtGui.QApplication.UnicodeUTF8
+    def _translate(context, text, disambig):
+        return QtGui.QApplication.translate(context, text, disambig, _encoding)
+except AttributeError:
+    def _translate(context, text, disambig):
+        return QtGui.QApplication.translate(context, text, disambig)
 
 class Ui_NewFileGraid(object):
     def setupUi(self, NewFileGraid):
@@ -33,6 +42,11 @@ class Ui_NewFileGraid(object):
         self.horizontalLayout_2.addWidget(self.radioButtoTbStyleText)
         spacerItem = QtGui.QSpacerItem(40, 20, QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Minimum)
         self.horizontalLayout_2.addItem(spacerItem)
+        self.comboDataStructureType = QtGui.QComboBox(NewFileGraid)
+        self.comboDataStructureType.setObjectName(_fromUtf8("comboDataStructureType"))
+        self.comboDataStructureType.addItem(_fromUtf8(""))
+        self.comboDataStructureType.addItem(_fromUtf8(""))
+        self.horizontalLayout_2.addWidget(self.comboDataStructureType)
         self.verticalLayout.addLayout(self.horizontalLayout_2)
         self.textedit = QtGui.QPlainTextEdit(NewFileGraid)
         self.textedit.setObjectName(_fromUtf8("textedit"))
@@ -50,7 +64,9 @@ class Ui_NewFileGraid(object):
         QtCore.QMetaObject.connectSlotsByName(NewFileGraid)
 
     def retranslateUi(self, NewFileGraid):
-        NewFileGraid.setWindowTitle(QtGui.QApplication.translate("NewFileGraid", "Create a new file", None, QtGui.QApplication.UnicodeUTF8))
-        self.radiobuttonPlainText.setText(QtGui.QApplication.translate("NewFileGraid", "Plain Text", None, QtGui.QApplication.UnicodeUTF8))
-        self.radioButtoTbStyleText.setText(QtGui.QApplication.translate("NewFileGraid", "Toolbox-Style Text", None, QtGui.QApplication.UnicodeUTF8))
+        NewFileGraid.setWindowTitle(_translate("NewFileGraid", "Create a new file", None))
+        self.radiobuttonPlainText.setText(_translate("NewFileGraid", "Plain Text", None))
+        self.radioButtoTbStyleText.setText(_translate("NewFileGraid", "Toolbox-Style Text", None))
+        self.comboDataStructureType.setItemText(0, _translate("NewFileGraid", "GRAID", None))
+        self.comboDataStructureType.setItemText(1, _translate("NewFileGraid", "GRAID2 (Diana)", None))
 

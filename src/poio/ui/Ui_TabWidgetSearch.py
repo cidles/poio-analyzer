@@ -2,8 +2,8 @@
 
 # Form implementation generated from reading ui file 'TabWidgetSearch.ui'
 #
-# Created: Wed Aug 22 11:39:32 2012
-#      by: PyQt4 UI code generator 4.9.4
+# Created: Wed Jan 23 09:51:04 2013
+#      by: PyQt4 UI code generator 4.9.6
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -12,7 +12,16 @@ from PyQt4 import QtCore, QtGui
 try:
     _fromUtf8 = QtCore.QString.fromUtf8
 except AttributeError:
-    _fromUtf8 = lambda s: s
+    def _fromUtf8(s):
+        return s
+
+try:
+    _encoding = QtGui.QApplication.UnicodeUTF8
+    def _translate(context, text, disambig):
+        return QtGui.QApplication.translate(context, text, disambig, _encoding)
+except AttributeError:
+    def _translate(context, text, disambig):
+        return QtGui.QApplication.translate(context, text, disambig)
 
 class Ui_TabWidgetSearch(object):
     def setupUi(self, TabWidgetSearch):
@@ -60,10 +69,10 @@ class Ui_TabWidgetSearch(object):
         QtCore.QMetaObject.connectSlotsByName(TabWidgetSearch)
 
     def retranslateUi(self, TabWidgetSearch):
-        TabWidgetSearch.setWindowTitle(QtGui.QApplication.translate("TabWidgetSearch", "Form", None, QtGui.QApplication.UnicodeUTF8))
-        self.groupBox.setTitle(QtGui.QApplication.translate("TabWidgetSearch", "Search Options", None, QtGui.QApplication.UnicodeUTF8))
-        self.radiobuttonAnd.setText(QtGui.QApplication.translate("TabWidgetSearch", "AND", None, QtGui.QApplication.UnicodeUTF8))
-        self.radiobuttonOr.setText(QtGui.QApplication.translate("TabWidgetSearch", "OR", None, QtGui.QApplication.UnicodeUTF8))
-        self.checkboxInvert.setText(QtGui.QApplication.translate("TabWidgetSearch", "NOT", None, QtGui.QApplication.UnicodeUTF8))
-        self.checkboxContained.setText(QtGui.QApplication.translate("TabWidgetSearch", "contained matches", None, QtGui.QApplication.UnicodeUTF8))
+        TabWidgetSearch.setWindowTitle(_translate("TabWidgetSearch", "Form", None))
+        self.groupBox.setTitle(_translate("TabWidgetSearch", "Search Options", None))
+        self.radiobuttonAnd.setText(_translate("TabWidgetSearch", "AND", None))
+        self.radiobuttonOr.setText(_translate("TabWidgetSearch", "OR", None))
+        self.checkboxInvert.setText(_translate("TabWidgetSearch", "NOT", None))
+        self.checkboxContained.setText(_translate("TabWidgetSearch", "contained matches", None))
 

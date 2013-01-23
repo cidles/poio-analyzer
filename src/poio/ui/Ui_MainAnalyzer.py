@@ -2,8 +2,8 @@
 
 # Form implementation generated from reading ui file 'MainAnalyzer.ui'
 #
-# Created: Wed Aug 22 11:39:31 2012
-#      by: PyQt4 UI code generator 4.9.4
+# Created: Wed Jan 23 09:51:03 2013
+#      by: PyQt4 UI code generator 4.9.6
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -12,7 +12,16 @@ from PyQt4 import QtCore, QtGui
 try:
     _fromUtf8 = QtCore.QString.fromUtf8
 except AttributeError:
-    _fromUtf8 = lambda s: s
+    def _fromUtf8(s):
+        return s
+
+try:
+    _encoding = QtGui.QApplication.UnicodeUTF8
+    def _translate(context, text, disambig):
+        return QtGui.QApplication.translate(context, text, disambig, _encoding)
+except AttributeError:
+    def _translate(context, text, disambig):
+        return QtGui.QApplication.translate(context, text, disambig)
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -351,44 +360,44 @@ class Ui_MainWindow(object):
         MainWindow.setTabOrder(self.buttonRemoveFiles, self.lineeditQuickSearch)
 
     def retranslateUi(self, MainWindow):
-        MainWindow.setWindowTitle(QtGui.QApplication.translate("MainWindow", "PoioAnalyzer", None, QtGui.QApplication.UnicodeUTF8))
-        self.label_7.setText(QtGui.QApplication.translate("MainWindow", "Files:", None, QtGui.QApplication.UnicodeUTF8))
-        self.buttonAddFiles.setText(QtGui.QApplication.translate("MainWindow", "Add files...", None, QtGui.QApplication.UnicodeUTF8))
-        self.buttonRemoveFiles.setText(QtGui.QApplication.translate("MainWindow", "Remove files", None, QtGui.QApplication.UnicodeUTF8))
-        self.buttonClearAllSearches.setText(QtGui.QApplication.translate("MainWindow", "Clear All Searches", None, QtGui.QApplication.UnicodeUTF8))
-        self.buttonSearch.setText(QtGui.QApplication.translate("MainWindow", "Search", None, QtGui.QApplication.UnicodeUTF8))
-        self.buttonSaveSearches.setText(QtGui.QApplication.translate("MainWindow", "Save Searches...", None, QtGui.QApplication.UnicodeUTF8))
-        self.label_8.setText(QtGui.QApplication.translate("MainWindow", "Result:", None, QtGui.QApplication.UnicodeUTF8))
-        self.label_9.setText(QtGui.QApplication.translate("MainWindow", "Quick Search:", None, QtGui.QApplication.UnicodeUTF8))
-        self.label_2.setText(QtGui.QApplication.translate("MainWindow", "Utterances:", None, QtGui.QApplication.UnicodeUTF8))
-        self.label_3.setText(QtGui.QApplication.translate("MainWindow", "Words:", None, QtGui.QApplication.UnicodeUTF8))
-        self.label_4.setText(QtGui.QApplication.translate("MainWindow", "Morphemes:", None, QtGui.QApplication.UnicodeUTF8))
-        self.label_5.setText(QtGui.QApplication.translate("MainWindow", "Glosses:", None, QtGui.QApplication.UnicodeUTF8))
-        self.label_6.setText(QtGui.QApplication.translate("MainWindow", "Translations:", None, QtGui.QApplication.UnicodeUTF8))
-        self.groupBox.setTitle(QtGui.QApplication.translate("MainWindow", "Search Options", None, QtGui.QApplication.UnicodeUTF8))
-        self.radiobuttonAnd.setText(QtGui.QApplication.translate("MainWindow", "AND", None, QtGui.QApplication.UnicodeUTF8))
-        self.radiobuttonOr.setText(QtGui.QApplication.translate("MainWindow", "OR", None, QtGui.QApplication.UnicodeUTF8))
-        self.checkboxInvert.setText(QtGui.QApplication.translate("MainWindow", "NOT", None, QtGui.QApplication.UnicodeUTF8))
-        self.checkboxContained.setText(QtGui.QApplication.translate("MainWindow", "contained matches", None, QtGui.QApplication.UnicodeUTF8))
-        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab), QtGui.QApplication.translate("MainWindow", "Search 1", None, QtGui.QApplication.UnicodeUTF8))
-        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_2), QtGui.QApplication.translate("MainWindow", "New Search...", None, QtGui.QApplication.UnicodeUTF8))
-        self.buttonAlignCenter.setText(QtGui.QApplication.translate("MainWindow", "...", None, QtGui.QApplication.UnicodeUTF8))
-        self.buttonAlignLeft.setText(QtGui.QApplication.translate("MainWindow", "...", None, QtGui.QApplication.UnicodeUTF8))
-        self.buttonClearThisSearch.setText(QtGui.QApplication.translate("MainWindow", "Clear This Search", None, QtGui.QApplication.UnicodeUTF8))
-        self.menuFiel.setTitle(QtGui.QApplication.translate("MainWindow", "File", None, QtGui.QApplication.UnicodeUTF8))
-        self.menuEdit.setTitle(QtGui.QApplication.translate("MainWindow", "Edit", None, QtGui.QApplication.UnicodeUTF8))
-        self.menuAbout.setTitle(QtGui.QApplication.translate("MainWindow", "About", None, QtGui.QApplication.UnicodeUTF8))
-        self.actionQuit.setText(QtGui.QApplication.translate("MainWindow", "Quit", None, QtGui.QApplication.UnicodeUTF8))
-        self.actionAddFiles.setText(QtGui.QApplication.translate("MainWindow", "Add Files...", None, QtGui.QApplication.UnicodeUTF8))
-        self.actionRemoveFiles.setText(QtGui.QApplication.translate("MainWindow", "Remove Files", None, QtGui.QApplication.UnicodeUTF8))
-        self.actionNewProject.setText(QtGui.QApplication.translate("MainWindow", "New Project", None, QtGui.QApplication.UnicodeUTF8))
-        self.actionSaveProject.setText(QtGui.QApplication.translate("MainWindow", "Save Project", None, QtGui.QApplication.UnicodeUTF8))
-        self.actionSaveProjectAs.setText(QtGui.QApplication.translate("MainWindow", "Save Project As...", None, QtGui.QApplication.UnicodeUTF8))
-        self.actionEditWordClasses.setText(QtGui.QApplication.translate("MainWindow", "Edit Word Classes...", None, QtGui.QApplication.UnicodeUTF8))
-        self.actionSearches.setText(QtGui.QApplication.translate("MainWindow", "Searches...", None, QtGui.QApplication.UnicodeUTF8))
-        self.actionAboutPoioAnalyzer.setText(QtGui.QApplication.translate("MainWindow", "About PoioAnalyzer...", None, QtGui.QApplication.UnicodeUTF8))
-        self.actionQuickSearch.setText(QtGui.QApplication.translate("MainWindow", "Quick Search", None, QtGui.QApplication.UnicodeUTF8))
-        self.actionQuickSearch.setShortcut(QtGui.QApplication.translate("MainWindow", "Ctrl+F", None, QtGui.QApplication.UnicodeUTF8))
+        MainWindow.setWindowTitle(_translate("MainWindow", "PoioAnalyzer", None))
+        self.label_7.setText(_translate("MainWindow", "Files:", None))
+        self.buttonAddFiles.setText(_translate("MainWindow", "Add files...", None))
+        self.buttonRemoveFiles.setText(_translate("MainWindow", "Remove files", None))
+        self.buttonClearAllSearches.setText(_translate("MainWindow", "Clear All Searches", None))
+        self.buttonSearch.setText(_translate("MainWindow", "Search", None))
+        self.buttonSaveSearches.setText(_translate("MainWindow", "Save Searches...", None))
+        self.label_8.setText(_translate("MainWindow", "Result:", None))
+        self.label_9.setText(_translate("MainWindow", "Quick Search:", None))
+        self.label_2.setText(_translate("MainWindow", "Utterances:", None))
+        self.label_3.setText(_translate("MainWindow", "Words:", None))
+        self.label_4.setText(_translate("MainWindow", "Morphemes:", None))
+        self.label_5.setText(_translate("MainWindow", "Glosses:", None))
+        self.label_6.setText(_translate("MainWindow", "Translations:", None))
+        self.groupBox.setTitle(_translate("MainWindow", "Search Options", None))
+        self.radiobuttonAnd.setText(_translate("MainWindow", "AND", None))
+        self.radiobuttonOr.setText(_translate("MainWindow", "OR", None))
+        self.checkboxInvert.setText(_translate("MainWindow", "NOT", None))
+        self.checkboxContained.setText(_translate("MainWindow", "contained matches", None))
+        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab), _translate("MainWindow", "Search 1", None))
+        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_2), _translate("MainWindow", "New Search...", None))
+        self.buttonAlignCenter.setText(_translate("MainWindow", "...", None))
+        self.buttonAlignLeft.setText(_translate("MainWindow", "...", None))
+        self.buttonClearThisSearch.setText(_translate("MainWindow", "Clear This Search", None))
+        self.menuFiel.setTitle(_translate("MainWindow", "File", None))
+        self.menuEdit.setTitle(_translate("MainWindow", "Edit", None))
+        self.menuAbout.setTitle(_translate("MainWindow", "About", None))
+        self.actionQuit.setText(_translate("MainWindow", "Quit", None))
+        self.actionAddFiles.setText(_translate("MainWindow", "Add Files...", None))
+        self.actionRemoveFiles.setText(_translate("MainWindow", "Remove Files", None))
+        self.actionNewProject.setText(_translate("MainWindow", "New Project", None))
+        self.actionSaveProject.setText(_translate("MainWindow", "Save Project", None))
+        self.actionSaveProjectAs.setText(_translate("MainWindow", "Save Project As...", None))
+        self.actionEditWordClasses.setText(_translate("MainWindow", "Edit Word Classes...", None))
+        self.actionSearches.setText(_translate("MainWindow", "Searches...", None))
+        self.actionAboutPoioAnalyzer.setText(_translate("MainWindow", "About PoioAnalyzer...", None))
+        self.actionQuickSearch.setText(_translate("MainWindow", "Quick Search", None))
+        self.actionQuickSearch.setShortcut(_translate("MainWindow", "Ctrl+F", None))
 
 from PoioIlTextEdit import PoioIlTextEdit
 import poioanalyzer_rc

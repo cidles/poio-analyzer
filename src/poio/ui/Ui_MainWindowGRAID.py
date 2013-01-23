@@ -2,8 +2,8 @@
 
 # Form implementation generated from reading ui file 'MainWindowGRAID.ui'
 #
-# Created: Wed Aug 22 11:39:31 2012
-#      by: PyQt4 UI code generator 4.9.4
+# Created: Wed Jan 23 09:51:03 2013
+#      by: PyQt4 UI code generator 4.9.6
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -12,7 +12,16 @@ from PyQt4 import QtCore, QtGui
 try:
     _fromUtf8 = QtCore.QString.fromUtf8
 except AttributeError:
-    _fromUtf8 = lambda s: s
+    def _fromUtf8(s):
+        return s
+
+try:
+    _encoding = QtGui.QApplication.UnicodeUTF8
+    def _translate(context, text, disambig):
+        return QtGui.QApplication.translate(context, text, disambig, _encoding)
+except AttributeError:
+    def _translate(context, text, disambig):
+        return QtGui.QApplication.translate(context, text, disambig)
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -45,7 +54,6 @@ class Ui_MainWindow(object):
         self.verticalLayout.setSpacing(0)
         self.verticalLayout.setSizeConstraint(QtGui.QLayout.SetMinAndMaxSize)
         self.verticalLayout.setMargin(0)
-        self.verticalLayout.setMargin(0)
         self.verticalLayout.setObjectName(_fromUtf8("verticalLayout"))
         self.projectBtn = QtGui.QPushButton(self.openProject)
         sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Fixed, QtGui.QSizePolicy.Preferred)
@@ -74,7 +82,6 @@ class Ui_MainWindow(object):
         self.projectManager.setMaximumSize(QtCore.QSize(250, 16777215))
         self.projectManager.setObjectName(_fromUtf8("projectManager"))
         self.gridLayout_2 = QtGui.QGridLayout(self.projectManager)
-        self.gridLayout_2.setMargin(0)
         self.gridLayout_2.setMargin(0)
         self.gridLayout_2.setHorizontalSpacing(6)
         self.gridLayout_2.setObjectName(_fromUtf8("gridLayout_2"))
@@ -244,59 +251,59 @@ class Ui_MainWindow(object):
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def retranslateUi(self, MainWindow):
-        MainWindow.setWindowTitle(QtGui.QApplication.translate("MainWindow", "PoioGRAID", None, QtGui.QApplication.UnicodeUTF8))
-        self.projectBtn.setToolTip(QtGui.QApplication.translate("MainWindow", "Show/hide Project Manager", None, QtGui.QApplication.UnicodeUTF8))
-        self.projectBtn.setText(QtGui.QApplication.translate("MainWindow", "P\n"
+        MainWindow.setWindowTitle(_translate("MainWindow", "PoioGRAID", None))
+        self.projectBtn.setToolTip(_translate("MainWindow", "Show/hide Project Manager", None))
+        self.projectBtn.setText(_translate("MainWindow", "P\n"
 "r\n"
 "o\n"
 "j\n"
 "e\n"
 "c\n"
-"t", None, QtGui.QApplication.UnicodeUTF8))
-        self.removefileBtn.setText(QtGui.QApplication.translate("MainWindow", "Remove File", None, QtGui.QApplication.UnicodeUTF8))
-        self.addfileBtn.setText(QtGui.QApplication.translate("MainWindow", "Add File", None, QtGui.QApplication.UnicodeUTF8))
-        self.label.setText(QtGui.QApplication.translate("MainWindow", "    Files:", None, QtGui.QApplication.UnicodeUTF8))
-        self.saveprojectBtn.setText(QtGui.QApplication.translate("MainWindow", "Save Project", None, QtGui.QApplication.UnicodeUTF8))
-        self.openprojectBtn.setText(QtGui.QApplication.translate("MainWindow", "Open Project", None, QtGui.QApplication.UnicodeUTF8))
-        self.menuFile.setTitle(QtGui.QApplication.translate("MainWindow", "File", None, QtGui.QApplication.UnicodeUTF8))
-        self.menuEdit.setTitle(QtGui.QApplication.translate("MainWindow", "Edit", None, QtGui.QApplication.UnicodeUTF8))
-        self.menuAbout.setTitle(QtGui.QApplication.translate("MainWindow", "About", None, QtGui.QApplication.UnicodeUTF8))
-        self.toolBar.setWindowTitle(QtGui.QApplication.translate("MainWindow", "toolBar", None, QtGui.QApplication.UnicodeUTF8))
-        self.actionOpenFile.setText(QtGui.QApplication.translate("MainWindow", "Open File...", None, QtGui.QApplication.UnicodeUTF8))
-        self.actionOpenFile.setToolTip(QtGui.QApplication.translate("MainWindow", "Open File", None, QtGui.QApplication.UnicodeUTF8))
-        self.actionOpenFile.setShortcut(QtGui.QApplication.translate("MainWindow", "Ctrl+O", None, QtGui.QApplication.UnicodeUTF8))
-        self.actionSaveFile.setText(QtGui.QApplication.translate("MainWindow", "Save File", None, QtGui.QApplication.UnicodeUTF8))
-        self.actionSaveFile.setToolTip(QtGui.QApplication.translate("MainWindow", "Save File", None, QtGui.QApplication.UnicodeUTF8))
-        self.actionSaveFile.setShortcut(QtGui.QApplication.translate("MainWindow", "Ctrl+S", None, QtGui.QApplication.UnicodeUTF8))
-        self.actionSaveFileAs.setText(QtGui.QApplication.translate("MainWindow", "Save File as...", None, QtGui.QApplication.UnicodeUTF8))
-        self.actionSaveFileAs.setToolTip(QtGui.QApplication.translate("MainWindow", "Save File As", None, QtGui.QApplication.UnicodeUTF8))
-        self.actionSaveFileAs.setShortcut(QtGui.QApplication.translate("MainWindow", "Ctrl+Alt+S", None, QtGui.QApplication.UnicodeUTF8))
-        self.actionQuit.setText(QtGui.QApplication.translate("MainWindow", "Quit", None, QtGui.QApplication.UnicodeUTF8))
-        self.actionQuit.setShortcut(QtGui.QApplication.translate("MainWindow", "Ctrl+Q", None, QtGui.QApplication.UnicodeUTF8))
-        self.actionNewFile.setText(QtGui.QApplication.translate("MainWindow", "New File...", None, QtGui.QApplication.UnicodeUTF8))
-        self.actionNewFile.setToolTip(QtGui.QApplication.translate("MainWindow", "Create a new annotation file", None, QtGui.QApplication.UnicodeUTF8))
-        self.actionNewFile.setShortcut(QtGui.QApplication.translate("MainWindow", "Ctrl+N", None, QtGui.QApplication.UnicodeUTF8))
-        self.actionDeleteUtterance.setText(QtGui.QApplication.translate("MainWindow", "Delete utterance", None, QtGui.QApplication.UnicodeUTF8))
-        self.actionCopyUtterance.setText(QtGui.QApplication.translate("MainWindow", "Copy utterance", None, QtGui.QApplication.UnicodeUTF8))
-        self.actionCopyUtterance.setShortcut(QtGui.QApplication.translate("MainWindow", "Ctrl+C", None, QtGui.QApplication.UnicodeUTF8))
-        self.actionDeleteColumn.setText(QtGui.QApplication.translate("MainWindow", "Delete column", None, QtGui.QApplication.UnicodeUTF8))
-        self.actionDeleteColumn.setToolTip(QtGui.QApplication.translate("MainWindow", "Delete column", None, QtGui.QApplication.UnicodeUTF8))
-        self.actionDeleteColumn.setShortcut(QtGui.QApplication.translate("MainWindow", "Ctrl+D", None, QtGui.QApplication.UnicodeUTF8))
-        self.actionAboutPoioGRAID.setText(QtGui.QApplication.translate("MainWindow", "About PoioGRAID...", None, QtGui.QApplication.UnicodeUTF8))
-        self.actionAboutPoioGRAID.setToolTip(QtGui.QApplication.translate("MainWindow", "About PoioGRAID", None, QtGui.QApplication.UnicodeUTF8))
-        self.actionOptions.setText(QtGui.QApplication.translate("MainWindow", "Options...", None, QtGui.QApplication.UnicodeUTF8))
-        self.actionInsertColumnBefore.setText(QtGui.QApplication.translate("MainWindow", "Insert empty column before", None, QtGui.QApplication.UnicodeUTF8))
-        self.actionInsertColumnAfter.setText(QtGui.QApplication.translate("MainWindow", "Insert empty column after", None, QtGui.QApplication.UnicodeUTF8))
-        self.actionInsertUtteranceBefore.setText(QtGui.QApplication.translate("MainWindow", "Insert empty utterance before", None, QtGui.QApplication.UnicodeUTF8))
-        self.actionInsertUtteranceBefore.setToolTip(QtGui.QApplication.translate("MainWindow", "Insert utterance before", None, QtGui.QApplication.UnicodeUTF8))
-        self.actionInsertUtteranceAfter.setText(QtGui.QApplication.translate("MainWindow", "Insert empty utterance after", None, QtGui.QApplication.UnicodeUTF8))
-        self.actionFind.setText(QtGui.QApplication.translate("MainWindow", "Find...", None, QtGui.QApplication.UnicodeUTF8))
-        self.actionFind.setShortcut(QtGui.QApplication.translate("MainWindow", "Ctrl+F", None, QtGui.QApplication.UnicodeUTF8))
-        self.actionFindAndReplace.setText(QtGui.QApplication.translate("MainWindow", "Find and Replace...", None, QtGui.QApplication.UnicodeUTF8))
-        self.actionFindAndReplace.setShortcut(QtGui.QApplication.translate("MainWindow", "Ctrl+R", None, QtGui.QApplication.UnicodeUTF8))
-        self.actionSave_Project.setText(QtGui.QApplication.translate("MainWindow", "Save Project", None, QtGui.QApplication.UnicodeUTF8))
-        self.actionSave_Project_as.setText(QtGui.QApplication.translate("MainWindow", "Save Project as...", None, QtGui.QApplication.UnicodeUTF8))
-        self.actionOpen_Project.setText(QtGui.QApplication.translate("MainWindow", "Open Project", None, QtGui.QApplication.UnicodeUTF8))
+"t", None))
+        self.removefileBtn.setText(_translate("MainWindow", "Remove File", None))
+        self.addfileBtn.setText(_translate("MainWindow", "Add File", None))
+        self.label.setText(_translate("MainWindow", "    Files:", None))
+        self.saveprojectBtn.setText(_translate("MainWindow", "Save Project", None))
+        self.openprojectBtn.setText(_translate("MainWindow", "Open Project", None))
+        self.menuFile.setTitle(_translate("MainWindow", "File", None))
+        self.menuEdit.setTitle(_translate("MainWindow", "Edit", None))
+        self.menuAbout.setTitle(_translate("MainWindow", "About", None))
+        self.toolBar.setWindowTitle(_translate("MainWindow", "toolBar", None))
+        self.actionOpenFile.setText(_translate("MainWindow", "Open File...", None))
+        self.actionOpenFile.setToolTip(_translate("MainWindow", "Open File", None))
+        self.actionOpenFile.setShortcut(_translate("MainWindow", "Ctrl+O", None))
+        self.actionSaveFile.setText(_translate("MainWindow", "Save File", None))
+        self.actionSaveFile.setToolTip(_translate("MainWindow", "Save File", None))
+        self.actionSaveFile.setShortcut(_translate("MainWindow", "Ctrl+S", None))
+        self.actionSaveFileAs.setText(_translate("MainWindow", "Save File as...", None))
+        self.actionSaveFileAs.setToolTip(_translate("MainWindow", "Save File As", None))
+        self.actionSaveFileAs.setShortcut(_translate("MainWindow", "Ctrl+Alt+S", None))
+        self.actionQuit.setText(_translate("MainWindow", "Quit", None))
+        self.actionQuit.setShortcut(_translate("MainWindow", "Ctrl+Q", None))
+        self.actionNewFile.setText(_translate("MainWindow", "New File...", None))
+        self.actionNewFile.setToolTip(_translate("MainWindow", "Create a new annotation file", None))
+        self.actionNewFile.setShortcut(_translate("MainWindow", "Ctrl+N", None))
+        self.actionDeleteUtterance.setText(_translate("MainWindow", "Delete utterance", None))
+        self.actionCopyUtterance.setText(_translate("MainWindow", "Copy utterance", None))
+        self.actionCopyUtterance.setShortcut(_translate("MainWindow", "Ctrl+C", None))
+        self.actionDeleteColumn.setText(_translate("MainWindow", "Delete column", None))
+        self.actionDeleteColumn.setToolTip(_translate("MainWindow", "Delete column", None))
+        self.actionDeleteColumn.setShortcut(_translate("MainWindow", "Ctrl+D", None))
+        self.actionAboutPoioGRAID.setText(_translate("MainWindow", "About PoioGRAID...", None))
+        self.actionAboutPoioGRAID.setToolTip(_translate("MainWindow", "About PoioGRAID", None))
+        self.actionOptions.setText(_translate("MainWindow", "Options...", None))
+        self.actionInsertColumnBefore.setText(_translate("MainWindow", "Insert empty column before", None))
+        self.actionInsertColumnAfter.setText(_translate("MainWindow", "Insert empty column after", None))
+        self.actionInsertUtteranceBefore.setText(_translate("MainWindow", "Insert empty utterance before", None))
+        self.actionInsertUtteranceBefore.setToolTip(_translate("MainWindow", "Insert utterance before", None))
+        self.actionInsertUtteranceAfter.setText(_translate("MainWindow", "Insert empty utterance after", None))
+        self.actionFind.setText(_translate("MainWindow", "Find...", None))
+        self.actionFind.setShortcut(_translate("MainWindow", "Ctrl+F", None))
+        self.actionFindAndReplace.setText(_translate("MainWindow", "Find and Replace...", None))
+        self.actionFindAndReplace.setShortcut(_translate("MainWindow", "Ctrl+R", None))
+        self.actionSave_Project.setText(_translate("MainWindow", "Save Project", None))
+        self.actionSave_Project_as.setText(_translate("MainWindow", "Save Project as...", None))
+        self.actionOpen_Project.setText(_translate("MainWindow", "Open Project", None))
 
 from poio.ui.PoioGraidTextEdit import PoioGraidTextEdit
 import poio.ui.poio_rc

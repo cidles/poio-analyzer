@@ -48,6 +48,20 @@
          </property>
         </spacer>
        </item>
+       <item>
+        <widget class="QComboBox" name="comboDataStructureType">
+         <item>
+          <property name="text">
+           <string>GRAID</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>GRAID2 (Diana)</string>
+          </property>
+         </item>
+        </widget>
+       </item>
       </layout>
      </item>
      <item>

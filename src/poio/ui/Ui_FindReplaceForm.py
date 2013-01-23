@@ -2,8 +2,8 @@
 
 # Form implementation generated from reading ui file 'FindReplaceForm.ui'
 #
-# Created: Wed Aug 22 11:39:33 2012
-#      by: PyQt4 UI code generator 4.9.4
+# Created: Wed Jan 23 09:51:04 2013
+#      by: PyQt4 UI code generator 4.9.6
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -12,7 +12,16 @@ from PyQt4 import QtCore, QtGui
 try:
     _fromUtf8 = QtCore.QString.fromUtf8
 except AttributeError:
-    _fromUtf8 = lambda s: s
+    def _fromUtf8(s):
+        return s
+
+try:
+    _encoding = QtGui.QApplication.UnicodeUTF8
+    def _translate(context, text, disambig):
+        return QtGui.QApplication.translate(context, text, disambig, _encoding)
+except AttributeError:
+    def _translate(context, text, disambig):
+        return QtGui.QApplication.translate(context, text, disambig)
 
 class Ui_FindReplaceForm(object):
     def setupUi(self, FindReplaceForm):
@@ -109,27 +118,27 @@ class Ui_FindReplaceForm(object):
         FindReplaceForm.setTabOrder(self.findButton, self.closeButton)
 
     def retranslateUi(self, FindReplaceForm):
-        FindReplaceForm.setWindowTitle(QtGui.QApplication.translate("FindReplaceForm", "Form", None, QtGui.QApplication.UnicodeUTF8))
-        self.label.setText(QtGui.QApplication.translate("FindReplaceForm", "&Find:", None, QtGui.QApplication.UnicodeUTF8))
-        self.replaceLabel.setText(QtGui.QApplication.translate("FindReplaceForm", "R&eplace with:", None, QtGui.QApplication.UnicodeUTF8))
-        self.errorLabel.setText(QtGui.QApplication.translate("FindReplaceForm", "errorLabel", None, QtGui.QApplication.UnicodeUTF8))
-        self.groupBox.setTitle(QtGui.QApplication.translate("FindReplaceForm", "D&irection", None, QtGui.QApplication.UnicodeUTF8))
-        self.downRadioButton.setText(QtGui.QApplication.translate("FindReplaceForm", "&Down", None, QtGui.QApplication.UnicodeUTF8))
-        self.upRadioButton.setText(QtGui.QApplication.translate("FindReplaceForm", "&Up", None, QtGui.QApplication.UnicodeUTF8))
-        self.groupBox_2.setTitle(QtGui.QApplication.translate("FindReplaceForm", "&Options", None, QtGui.QApplication.UnicodeUTF8))
-        self.caseCheckBox.setText(QtGui.QApplication.translate("FindReplaceForm", "&Case sensitive", None, QtGui.QApplication.UnicodeUTF8))
-        self.wholeCheckBox.setText(QtGui.QApplication.translate("FindReplaceForm", "&Whole words only", None, QtGui.QApplication.UnicodeUTF8))
-        self.regexCheckBox.setToolTip(QtGui.QApplication.translate("FindReplaceForm", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
+        FindReplaceForm.setWindowTitle(_translate("FindReplaceForm", "Form", None))
+        self.label.setText(_translate("FindReplaceForm", "&Find:", None))
+        self.replaceLabel.setText(_translate("FindReplaceForm", "R&eplace with:", None))
+        self.errorLabel.setText(_translate("FindReplaceForm", "errorLabel", None))
+        self.groupBox.setTitle(_translate("FindReplaceForm", "D&irection", None))
+        self.downRadioButton.setText(_translate("FindReplaceForm", "&Down", None))
+        self.upRadioButton.setText(_translate("FindReplaceForm", "&Up", None))
+        self.groupBox_2.setTitle(_translate("FindReplaceForm", "&Options", None))
+        self.caseCheckBox.setText(_translate("FindReplaceForm", "&Case sensitive", None))
+        self.wholeCheckBox.setText(_translate("FindReplaceForm", "&Whole words only", None))
+        self.regexCheckBox.setToolTip(_translate("FindReplaceForm", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:\'Sans\'; font-size:10pt; font-weight:400; font-style:normal;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">whether the text to search should be interpreted as a regular expression.</p>\n"
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"></p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">You may want to take a look at the syntax of regular expressions:</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><a href=\"http://doc.trolltech.com/qregexp.html\"><span style=\" text-decoration: underline; color:#0000ff;\">http://doc.trolltech.com/qregexp.html</span></a></p></body></html>", None, QtGui.QApplication.UnicodeUTF8))
-        self.regexCheckBox.setText(QtGui.QApplication.translate("FindReplaceForm", "R&egular Expression", None, QtGui.QApplication.UnicodeUTF8))
-        self.findButton.setText(QtGui.QApplication.translate("FindReplaceForm", "&Find", None, QtGui.QApplication.UnicodeUTF8))
-        self.closeButton.setText(QtGui.QApplication.translate("FindReplaceForm", "&Close", None, QtGui.QApplication.UnicodeUTF8))
-        self.replaceButton.setText(QtGui.QApplication.translate("FindReplaceForm", "&Replace", None, QtGui.QApplication.UnicodeUTF8))
-        self.replaceAllButton.setText(QtGui.QApplication.translate("FindReplaceForm", "Replace &All", None, QtGui.QApplication.UnicodeUTF8))
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><a href=\"http://doc.trolltech.com/qregexp.html\"><span style=\" text-decoration: underline; color:#0000ff;\">http://doc.trolltech.com/qregexp.html</span></a></p></body></html>", None))
+        self.regexCheckBox.setText(_translate("FindReplaceForm", "R&egular Expression", None))
+        self.findButton.setText(_translate("FindReplaceForm", "&Find", None))
+        self.closeButton.setText(_translate("FindReplaceForm", "&Close", None))
+        self.replaceButton.setText(_translate("FindReplaceForm", "&Replace", None))
+        self.replaceAllButton.setText(_translate("FindReplaceForm", "Replace &All", None))
 
