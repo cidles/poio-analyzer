@@ -29,7 +29,7 @@ class PoioAnalyzer(QtGui.QMainWindow):
         """
         QtGui.QMainWindow.__init__(self, *args)
 
-        self.data_structure_type = poioapi.data.DataStructureTypeGraid()
+        self.reset_data_structure_type(poioapi.data.GRAID)
         self.vertical_position_of_file = {}
 
         self.ui = Ui_MainWindow()
@@ -93,6 +93,14 @@ class PoioAnalyzer(QtGui.QMainWindow):
         settings = QtCore.QSettings()
         settings.setValue("FontZoom", 100)
 
+    def reset_data_structure_type(self, data_structure_type):
+        self.data_structure_type = data_structure_type
+        if data_structure_type == poioapi.data.GRAID:
+            self.structure_type_handler = poioapi.data.DataStructureTypeGraid()
+        elif data_structure_type == poioapi.data.GRAIDDIANA:
+            self.structure_type_handler = \
+                poioapi.data.DataStructureTypeGraidDiana()
+
     def remove_files(self):
         """
         Remove files from the "Added files list"
@@ -133,17 +141,31 @@ class PoioAnalyzer(QtGui.QMainWindow):
         itemsCount = self.project.rowCount()
         progress = QtGui.QProgressDialog(self.tr("Loading Files..."), self.tr("Abort"), 0, itemsCount, self.parent())
         progress.setWindowModality(QtCore.Qt.WindowModal)
+        incompatible_files = []
         for i in range(itemsCount):
             progress.setValue(i)
             poiofile = self.project.poioFileAt(i)
             if poiofile.isNew:
                 #print poiofile.filepath
-                self.corpus.add_item(poiofile.filepath, poioapi.data.TREEPICKLE)
+                try:
+                    self.corpus.add_item(poiofile.filepath, poioapi.data.TREEPICKLE)
+                except poioapi.data.DataStructureTypeNotCompatible:
+                    incompatible_files.append(poiofile.filepath)
                 poiofile.setIsNew(False)
             if progress.wasCanceled():
                 self.init_corpus()
                 break
         progress.setValue(itemsCount)
+        if len(incompatible_files) > 0:
+            QtGui.QMessageBox.warning(self,
+                "Cannot add files",
+                "The following files could not be added to the project:"
+                "<br/><br/><b>" + ", ".join(incompatible_files) + "</b><br/><br/>"
+                "The data str structure in the files is not compatible. This "
+                "happens for example when the tier hierarchy on the file is "
+                "different to the hierarchy in the search user interface.<br/>"
+                "<br/><b>The file will not be diplayed in the search result "
+                "view</b>.")
         #self.updateCorpusReaderFilter()
 
     def set_current_file_in_result_view(self, modelIndex):
@@ -284,7 +306,7 @@ class PoioAnalyzer(QtGui.QMainWindow):
         filterChain = []
         for i in range(0, self.ui.tabWidget.currentIndex()+1):
             currentFilter = poioapi.annotationtree.AnnotationTreeFilter(self.data_structure_type)
-            for ann_type in self.data_structure_type.flat_data_hierarchy:
+            for ann_type in self.structure_type_handler.flat_data_hierarchy:
                 inputfield = self.ui.tabWidget.findChild(QtGui.QLineEdit, "lineedit_{0}_{1}".format(ann_type, i+1))
                 currentFilter.set_filter_for_type(ann_type, str(inputfield.text()))
 
@@ -336,7 +358,7 @@ class PoioAnalyzer(QtGui.QMainWindow):
         ui.setupUi(widget_search)
         widget_search.setObjectName("%s_%i" % (widget_search.objectName(), nr_of_new_tab))
 
-        for i, ann_type in enumerate(self.data_structure_type.flat_data_hierarchy):
+        for i, ann_type in enumerate(self.structure_type_handler.flat_data_hierarchy):
             #layoutSearch = QtGui.QHBoxLayout(self)
             label = QtGui.QLabel(widget_search)
             sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Minimum, QtGui.QSizePolicy.Preferred)
@@ -409,13 +431,28 @@ class PoioAnalyzer(QtGui.QMainWindow):
         of Poio Analyser
         """
         QtGui.QMessageBox.about(self,
-            "Poio Analyzer",
-            """<b>Poio Analyzer v0.2.0</b><br><br>
-                Linguistic Analyzation Tool for interlinear data,
-                developed by Peter Bouda at the<br>
-                <b><a href=\"http://www.cidles.eu/ltll/poio\">
-                Interdisciplinary Centre for Social and Language Documentation</a></b><br><br>
-                Please send bug reports and comments to <b><a href=\"mailto:pbouda@cidles.eu\">
-                pbouda@cidles.eu</a></b>."""
+            "About Poio Analyzer",
+            """<b>Poio Analyzer v0.2.1</b>
+               <br/><br/>
+               Poio Analyzer is an analysis tool for linguists
+               to analyze interlinear data. It is developed by
+               Peter Bouda at the
+               <b><a href=\"http://www.cidles.eu\">
+                  Interdisciplinary Centre for Social and Language
+                  Documentation</a>
+                </b>
+                <br/><br/>
+                Please send bug reports and
+                comments to <b><a href=\"mailto:pbouda@cidles.eu\">
+                pbouda@cidles.eu</a></b>.
+                <br/><br/>
+                For more information visit the website of the project:
+                <br/>
+                <b><a href="http://media.cidles.eu/poio/">
+                    http://media.cidles.eu/poio/
+                </a></b>
+                <br/><br/>
+                All rights reserved. See LICENSE file for details.
+                """
         )
     

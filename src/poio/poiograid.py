@@ -80,10 +80,7 @@ class PoioGRAID(QtGui.QMainWindow):
         Initializes several attributes of the application, for example
         creates an empty annotation tree and a data structure type.
         """
-        self.annotation_tree = poioapi.annotationtree.AnnotationTree(
-            poioapi.data.GRAID)
-        self.ui.textedit.structure_type_handler = \
-            self.annotation_tree.structure_type_handler
+        self.reset_data_structure_type(poioapi.data.GRAID)
 
         self.filepath = None
         self.projectfilepath = None
@@ -152,16 +149,22 @@ class PoioGRAID(QtGui.QMainWindow):
         about = QtGui.QMessageBox(self)
         about.setTextFormat(QtCore.Qt.RichText)
         about.setWindowTitle(self.tr("About PoioGRAID"))
-        about.setText(self.tr("<b>PoioGRAID 0.2.0</b><br/>Poio GRAID Editor "
+        about.setText(self.tr("<b>PoioGRAID 0.2.1</b><br/>Poio GRAID Editor "
                               "by the <a href=\"http://www.cidles.eu\">"
                               "Interdisciplinary Centre for Social and "
                               "Language Documentation</a>.<br/><br/>All "
                               "rights reserved. See LICENSE file for details."
                               "<br/><br/>For more information visit the "
-                              "website:<br/><a href=\"http://www.cidles.eu/"
-                              "ltll/poio\">http://www.cidles.eu/ltll/poio"
+                              "website:<br/><a href=\"http://media.cidles.eu"
+                              "/poio/\">http://media.cidles.eu/poio/"
                               "</a>"))
         about.exec_()
+
+    def reset_data_structure_type(self, data_structure_type):
+        self.annotation_tree = poioapi.annotationtree.AnnotationTree(
+            data_structure_type)
+        self.ui.textedit.structure_type_handler =\
+            self.annotation_tree.structure_type_handler
 
     def show_project(self):
         """
@@ -178,6 +181,34 @@ class PoioGRAID(QtGui.QMainWindow):
             self.project.clear()
             self.project.addFilePaths(filepaths)
             self.open_file_at_path(filepaths[0])
+
+    def open_file_at_path(self, filepath):
+        """
+        Load the data into the annotation tree and then update the text edit widget.
+
+        ...
+
+        Parameters
+        ----------
+        filepath: str
+        """
+        if filepath != '':
+            self.annotation_tree.load_tree_from_pickle(filepath)
+            self.ui.textedit.structure_type_handler =\
+                self.annotation_tree.structure_type_handler
+
+        #file = open(filepath, "rb")
+            #data = pickle.load(file)
+            #if data[0] == 'poio_pickle_v2':
+            #    self.reset_data_structure_type(data[1])
+            #    self.annotation_tree.tree = data[2]
+            #else:
+            #    file.seek(0)
+            #    self.reset_data_structure_type(poioapi.data.GRAID)
+            #    self.annotation_tree.tree = pickle.load(file)
+            #file.close()
+            self.update_textedit()
+            self.filepath = filepath
 
     def open_project(self):
         """
@@ -328,10 +359,8 @@ class PoioGRAID(QtGui.QMainWindow):
             if combo_data_structure_type == "GRAID2 (Diana)":
                 data_structure_type = poioapi.data.GRAIDDIANA
 
-            self.annotation_tree = poioapi.annotationtree.AnnotationTree(
-                data_structure_type)
-            self.ui.textedit.structure_type_handler =\
-                self.annotation_tree.structure_type_handler
+            self.reset_data_structure_type(data_structure_type)
+
             self.title = ""
             self.statusBar().showMessage(self.tr("Parsing text..."), 5)
             if ui.radioButtoTbStyleText.isChecked():
@@ -353,8 +382,11 @@ class PoioGRAID(QtGui.QMainWindow):
             self.save_file_as()
         else:
             tree = self.ui.textedit.annotation_tree_from_document()
+            self.annotation_tree.tree = tree
             file = open(self.filepath, "wb")
-            pickle.dump(tree, file)
+            pickle.dump(['poio_pickle_v2',
+                         self.annotation_tree.data_structure_type,
+                         self.annotation_tree.tree], file)
             file.close()
             self.statusBar().showMessage(self.tr("File saved."), 5)
 
@@ -402,23 +434,6 @@ class PoioGRAID(QtGui.QMainWindow):
         if savepath !="":
             self.project.saveprojectas(savepath)
             self.projectfilepath = savepath
-
-    def open_file_at_path(self, filepath):
-        """
-        Load the data into the annotation tree and then update the text edit widget.
-
-        ...
-
-        Parameters
-        ----------
-        filepath: str
-        """
-        if filepath != '':
-            file = open(filepath, "rb")
-            self.annotation_tree.tree = pickle.load(file)
-            file.close()
-            self.update_textedit()
-            self.filepath = filepath
 
     def find_and_replace(self):
         """
