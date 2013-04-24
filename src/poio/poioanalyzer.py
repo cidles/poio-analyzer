@@ -29,7 +29,7 @@ class PoioAnalyzer(QtGui.QMainWindow):
         """
         QtGui.QMainWindow.__init__(self, *args)
 
-        self.reset_data_structure_type(poioapi.data.GRAID)
+        #self.reset_data_structure_type(poioapi.data.GRAID)
         self.vertical_position_of_file = {}
 
         self.ui = Ui_MainWindow()
@@ -48,7 +48,7 @@ class PoioAnalyzer(QtGui.QMainWindow):
         Initializes an empty corpus.
         """
         #print sys.path
-        self.corpus = poioapi.corpus.CorpusTrees(self.data_structure_type)
+        self.corpus = poioapi.corpus.CorpusGraphs()
 
     def init_connects(self):
         """
@@ -93,13 +93,11 @@ class PoioAnalyzer(QtGui.QMainWindow):
         settings = QtCore.QSettings()
         settings.setValue("FontZoom", 100)
 
-    def reset_data_structure_type(self, data_structure_type):
-        self.data_structure_type = data_structure_type
-        if data_structure_type == poioapi.data.GRAID:
-            self.structure_type_handler = poioapi.data.DataStructureTypeGraid()
-        elif data_structure_type == poioapi.data.GRAIDDIANA:
-            self.structure_type_handler = \
-                poioapi.data.DataStructureTypeGraidDiana()
+    #def reset_data_structure_type(self, data_structure_type):
+    #    self.data_structure_type = data_structure_type
+    #    self.structure_type_handler = poioapi.data.data_structure_handler_for_type(
+    #        data_structure_type
+    #    )
 
     def remove_files(self):
         """
@@ -122,7 +120,7 @@ class PoioAnalyzer(QtGui.QMainWindow):
         # PySide version
         #filepaths, types = QtGui.QFileDialog.getOpenFileNames(self, self.tr("Add Files"), "", self.tr("Elan files (*.eaf);;Toolbox files (*.txt);;All files (*.*)"))
         # PyQt version
-        filepaths = QtGui.QFileDialog.getOpenFileNames(self, self.tr("Add Files"), "", self.tr("Pickle files (*.pickle)"))
+        filepaths = QtGui.QFileDialog.getOpenFileNames(self, self.tr("Add Files"), "", self.tr("Pickle files (*.pickle);;Elan files (*.eaf);;Typecraft files (*.xml)"))
         #filepaths = QtGui.QFileDialog.getOpenFileNames(self, self.tr("Add Files"), "", self.tr("Elan files (*.eaf);;Toolbox files (*.txt);;Kura files (*.xml);;All files (*.*)"))
         self.project.addFilePaths(filepaths)
         start = time.time()
@@ -145,13 +143,13 @@ class PoioAnalyzer(QtGui.QMainWindow):
         for i in range(itemsCount):
             progress.setValue(i)
             poiofile = self.project.poioFileAt(i)
-            if poiofile.isNew:
+            if poiofile.is_new:
                 #print poiofile.filepath
                 try:
-                    self.corpus.add_item(poiofile.filepath, poioapi.data.TREEPICKLE)
+                    self.corpus.add_item(poiofile.filepath, poiofile.type)
                 except poioapi.data.DataStructureTypeNotCompatible:
                     incompatible_files.append(poiofile.filepath)
-                poiofile.setIsNew(False)
+                poiofile.is_new = False
             if progress.wasCanceled():
                 self.init_corpus()
                 break
@@ -161,7 +159,7 @@ class PoioAnalyzer(QtGui.QMainWindow):
                 "Cannot add files",
                 "The following files could not be added to the project:"
                 "<br/><br/><b>" + ", ".join(incompatible_files) + "</b><br/><br/>"
-                "The data str structure in the files is not compatible. This "
+                "The data structure in the files is not compatible. This "
                 "happens for example when the tier hierarchy on the file is "
                 "different to the hierarchy in the search user interface.<br/>"
                 "<br/><b>The file will not be diplayed in the search result "
@@ -190,11 +188,12 @@ class PoioAnalyzer(QtGui.QMainWindow):
         settings = QtCore.QSettings()
         html = "<html><head><meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" /></head><body>\n"
         i = 0
-        for filepath, annotationtree in self.corpus.items:
+        for filepath, annotationgraph in self.corpus.items:
             html += "<h1 id=\"file_{1}\">{0}</h1>\n".format(os.path.basename(str(filepath)), i)
-            html += annotationtree.as_html(True, False)
+            html += annotationgraph.as_html_table(True, False)
             i += 1
         html += "</body></html>"
+
         #self.ui.webviewResult.settings().setUserStyleSheetUrl(
         #    QtCore.QUrl(":/css/css/resultview.css")) #.setStyleSheet("td { border: 1px solid black; }")
 
@@ -305,7 +304,7 @@ class PoioAnalyzer(QtGui.QMainWindow):
         """
         filterChain = []
         for i in range(0, self.ui.tabWidget.currentIndex()+1):
-            currentFilter = poioapi.annotationtree.AnnotationTreeFilter(self.data_structure_type)
+            currentFilter = poioapi.annotationgraph.AnnotationGraphFilter(None)
             for ann_type in self.structure_type_handler.flat_data_hierarchy:
                 inputfield = self.ui.tabWidget.findChild(QtGui.QLineEdit, "lineedit_{0}_{1}".format(ann_type, i+1))
                 currentFilter.set_filter_for_type(ann_type, str(inputfield.text()))
@@ -358,7 +357,7 @@ class PoioAnalyzer(QtGui.QMainWindow):
         ui.setupUi(widget_search)
         widget_search.setObjectName("%s_%i" % (widget_search.objectName(), nr_of_new_tab))
 
-        for i, ann_type in enumerate(self.structure_type_handler.flat_data_hierarchy):
+        for i, ann_type in enumerate(self.corpus.tier_names):
             #layoutSearch = QtGui.QHBoxLayout(self)
             label = QtGui.QLabel(widget_search)
             sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Minimum, QtGui.QSizePolicy.Preferred)

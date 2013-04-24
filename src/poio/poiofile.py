@@ -17,7 +17,7 @@ class PoioFile(object):
         filepath : str
         """
         self.filepath = filepath
-        self.isNew = True
+        self.is_new = True
         self.type = None
         if re.search(r"\.eaf$", filepath):
             f = open(filepath)
@@ -31,16 +31,4 @@ class PoioFile(object):
             self.type = poioapi.data.TOOLBOX
         elif re.search(r"\.txt$", filepath):
             self.type = poioapi.data.KURA
-
-    def setIsNew(self, value = True):
-        """
-        Defines isNew
-
-        ...
-
-        Parameters
-        ----------
-        value : bool
-        """
-        self.isNew = value
 
