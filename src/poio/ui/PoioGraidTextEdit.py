@@ -550,10 +550,10 @@ class PoioGraidTextEdit(QtGui.QTextEdit):
         c = table.cellAt(row, column)
         start = int(c.firstCursorPosition().position())
         end = int(c.lastCursorPosition().position())
-        try:
-            element['id'] = c.format().anchorNames()[0]
-        except:
-            element['id'] = '['
+        #try:
+        element['id'] = c.format().anchorNames()[0]
+        #except:
+        #    element['id'] = '['
         element['annotation'] = \
             self.document().toPlainText()[start:end]
         return element

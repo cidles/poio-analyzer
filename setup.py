@@ -11,6 +11,7 @@ import sys
 import os
 import glob
 from distutils.core import setup
+from cx_Freeze import setup, Executable
 
 # build targets
 (DEFAULT, WINDOWS) = range(2)
@@ -28,6 +29,9 @@ if 'TARGET' in os.environ:
     if os.environ['TARGET'].strip().lower() == 'windows':
         target = WINDOWS
 
+base = None
+if sys.platform == "win32":
+    base = "Win32GUI"
 
 # files to install
 inst_desktop = [ 'data/poioile.desktop', 'data/poioanalyzer.desktop' ]
@@ -72,7 +76,8 @@ setup(
     packages         = packages,
     scripts          = glob.glob('bin/*'),
     data_files       = data_files,
-    install_requires = ['PyQt']
+    install_requires = ['PyQt', 'poio-api', 'graf-python'],
+    executables = [Executable("bin/PoioGRAID", base=base), Executable("bin/PoioAnalyzer", base=base)]
 )
 
 

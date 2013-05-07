@@ -147,7 +147,7 @@ class PoioAnalyzer(QtGui.QMainWindow):
                 #print poiofile.filepath
                 try:
                     self.corpus.add_item(poiofile.filepath, poiofile.type)
-                except poioapi.data.DataStructureTypeNotCompatible:
+                except poioapi.data.UnknownFileFormatError:
                     incompatible_files.append(poiofile.filepath)
                 poiofile.is_new = False
             if progress.wasCanceled():
@@ -158,12 +158,10 @@ class PoioAnalyzer(QtGui.QMainWindow):
             QtGui.QMessageBox.warning(self,
                 "Cannot add files",
                 "The following files could not be added to the project:"
-                "<br/><br/><b>" + ", ".join(incompatible_files) + "</b><br/><br/>"
-                "The data structure in the files is not compatible. This "
-                "happens for example when the tier hierarchy on the file is "
-                "different to the hierarchy in the search user interface.<br/>"
-                "<br/><b>The file will not be diplayed in the search result "
-                "view</b>.")
+                "<br/><br/><b>{0}</b><br/><br/>The file format was not "
+                "recognized.<br/><b>The file will not be diplayed in the "
+                "search result view</b>.".format(
+                    ", ".join(incompatible_files)))
         #self.updateCorpusReaderFilter()
 
     def set_current_file_in_result_view(self, modelIndex):
@@ -280,9 +278,9 @@ class PoioAnalyzer(QtGui.QMainWindow):
         export_file = str(export_file)
         OUT  = codecs.open(export_file, "w", "utf-8")
         html = "<html><head><meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" /></head><body>\n"
-        for filepath, annotationtree in self.corpus.items:
+        for filepath, annotation_graph in self.corpus.items:
             html += "<h1>{0}</h1>\n".format(os.path.basename(filepath))
-            html += annotationtree.as_html(True, False)
+            html += annotation_graph.as_html_table(True, False)
         html += "</body></html>"
         OUT.write(html)
         OUT.close()
@@ -302,30 +300,32 @@ class PoioAnalyzer(QtGui.QMainWindow):
         """
         Check for the search options and update the resul view
         """
-        filterChain = []
+        filter_chain = []
         for i in range(0, self.ui.tabWidget.currentIndex()+1):
-            currentFilter = poioapi.annotationgraph.AnnotationGraphFilter(None)
-            for ann_type in self.structure_type_handler.flat_data_hierarchy:
-                inputfield = self.ui.tabWidget.findChild(QtGui.QLineEdit, "lineedit_{0}_{1}".format(ann_type, i+1))
-                currentFilter.set_filter_for_type(ann_type, str(inputfield.text()))
+            search_terms = dict()
+            for tier in self.corpus.tier_names:
+                inputfield = self.ui.tabWidget.findChild(QtGui.QLineEdit, "lineedit_{0}_{1}".format(tier, i+1))
+                if inputfield:
+                    search_terms[tier] = str(inputfield.text())
+                #currentFilter.set_filter_for_type(ann_type, str(inputfield.text()))
 
             checkbox = self.ui.tabWidget.findChild(QtGui.QCheckBox, "checkboxInvert_%i"%(i+1))
-            currentFilter.set_inverted_filter(checkbox.isChecked())
+            is_inverted = checkbox.isChecked()
             checkbox = self.ui.tabWidget.findChild(QtGui.QCheckBox, "checkboxContained_%i"%(i+1))
-            currentFilter.set_contained_matches(checkbox.isChecked())
+            is_contained = checkbox.isChecked()
 
-            radiobuttonAnd = self.ui.tabWidget.findChild(QtGui.QRadioButton, "radiobuttonAnd_%i"%(i+1))
-            radiobuttonOr = self.ui.tabWidget.findChild(QtGui.QRadioButton, "radiobuttonOr_%i"%(i+1))
-            if radiobuttonAnd.isChecked():
-                currentFilter.set_boolean_operation(poioapi.annotationtree.AnnotationTreeFilter.AND)
-            elif radiobuttonOr.isChecked():
-                currentFilter.set_boolean_operation(poioapi.annotationtree.AnnotationTreeFilter.OR)
-            filterChain.append(currentFilter)
+            radiobutton_or = self.ui.tabWidget.findChild(QtGui.QRadioButton, "radiobuttonOr_%i"%(i+1))
+            boolean_op = poioapi.annotationtree.AnnotationTreeFilter.AND
+            if radiobutton_or.isChecked():
+                boolean_op = poioapi.annotationtree.AnnotationTreeFilter.OR
 
-        for _, annotationtree in self.corpus.items:
-            annotationtree.init_filters()
-            for filter in filterChain:
-                annotationtree.append_filter(copy.deepcopy(filter))
+            for _, annotation_graph in self.corpus.items:
+                annotation_graph.init_filters()
+                filter = annotation_graph.create_filter_for_dict(search_terms)
+                filter.inverted = is_inverted
+                filter.contained_matches = is_contained
+                filter.booleab_operation = boolean_op
+                annotation_graph.append_filter(copy.deepcopy(filter))
 
         #self.updateCorpusReaderFilter()
         self.update_result_view()
@@ -357,7 +357,7 @@ class PoioAnalyzer(QtGui.QMainWindow):
         ui.setupUi(widget_search)
         widget_search.setObjectName("%s_%i" % (widget_search.objectName(), nr_of_new_tab))
 
-        for i, ann_type in enumerate(self.corpus.tier_names):
+        for i, tier in enumerate(self.corpus.tier_names):
             #layoutSearch = QtGui.QHBoxLayout(self)
             label = QtGui.QLabel(widget_search)
             sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Minimum, QtGui.QSizePolicy.Preferred)
@@ -366,13 +366,13 @@ class PoioAnalyzer(QtGui.QMainWindow):
             sizePolicy.setHeightForWidth(label.sizePolicy().hasHeightForWidth())
             label.setSizePolicy(sizePolicy)
             label.setSizeIncrement(QtCore.QSize(1, 0))
-            label.setText(QtGui.QApplication.translate("TabWidgetSearch", "{0}:".format(ann_type), None, QtGui.QApplication.UnicodeUTF8))
+            label.setText(QtGui.QApplication.translate("TabWidgetSearch", "{0}:".format(tier), None, QtGui.QApplication.UnicodeUTF8))
             label.setAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignLeft|QtCore.Qt.AlignVCenter)
             ui.layoutLabels.addWidget(label)
 
             lineedit = QtGui.QLineEdit(self.ui.tabWidget)
             lineedit.setSizeIncrement(QtCore.QSize(2, 0))
-            lineedit.setObjectName("lineedit_{0}".format(ann_type))
+            lineedit.setObjectName("lineedit_{0}".format(tier))
             ui.layoutLineedits.addWidget(lineedit)
 
             lineedit.returnPressed.connect(self.apply_filter)
@@ -431,7 +431,7 @@ class PoioAnalyzer(QtGui.QMainWindow):
         """
         QtGui.QMessageBox.about(self,
             "About Poio Analyzer",
-            """<b>Poio Analyzer v0.2.1</b>
+            """<b>Poio Analyzer v0.3.0</b>
                <br/><br/>
                Poio Analyzer is an analysis tool for linguists
                to analyze interlinear data. It is developed by
