@@ -325,7 +325,7 @@ class PoioAnalyzer(QtGui.QMainWindow):
                 filter.inverted = is_inverted
                 filter.contained_matches = is_contained
                 filter.booleab_operation = boolean_op
-                annotation_graph.append_filter(copy.deepcopy(filter))
+                annotation_graph.append_filter(filter)
 
         #self.updateCorpusReaderFilter()
         self.update_result_view()
