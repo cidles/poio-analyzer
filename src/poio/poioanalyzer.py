@@ -1,5 +1,11 @@
 # -*- coding: utf-8 -*-
-# (C) 2011-2012 copyright by Peter Bouda
+#
+# Poio Tools for Linguists
+#
+# Copyright (C) 2009-2013 Poio Project
+# Author: Peter Bouda <pbouda@cidles.eu>
+# URL: <http://media.cidles.eu/poio/>
+# For license information, see LICENSE.TXT
 
 from __future__ import unicode_literals
 import os.path
@@ -120,7 +126,7 @@ class PoioAnalyzer(QtGui.QMainWindow):
         # PySide version
         #filepaths, types = QtGui.QFileDialog.getOpenFileNames(self, self.tr("Add Files"), "", self.tr("Elan files (*.eaf);;Toolbox files (*.txt);;All files (*.*)"))
         # PyQt version
-        filepaths = QtGui.QFileDialog.getOpenFileNames(self, self.tr("Add Files"), "", self.tr("Pickle files (*.pickle);;Elan files (*.eaf);;Typecraft files (*.xml)"))
+        filepaths = QtGui.QFileDialog.getOpenFileNames(self, self.tr("Add Files"), "", self.tr("Elan files (*.eaf);;Pickle files (*.pickle);;Typecraft files (*.xml)"))
         #filepaths = QtGui.QFileDialog.getOpenFileNames(self, self.tr("Add Files"), "", self.tr("Elan files (*.eaf);;Toolbox files (*.txt);;Kura files (*.xml);;All files (*.*)"))
         self.project.addFilePaths(filepaths)
         start = time.time()
@@ -132,6 +138,7 @@ class PoioAnalyzer(QtGui.QMainWindow):
         end = time.time()
         print("Time elapsed = ", end - start, "seconds")
         self.update_search_tabs_with_tier_names()
+        self.apply_filter()
 
     def update_corpus_reader(self):
         """
@@ -163,7 +170,6 @@ class PoioAnalyzer(QtGui.QMainWindow):
                 "recognized.<br/><b>The file will not be diplayed in the "
                 "search result view</b>.".format(
                     ", ".join(incompatible_files)))
-        #self.updateCorpusReaderFilter()
 
     def set_current_file_in_result_view(self, modelIndex):
         """
@@ -301,7 +307,9 @@ class PoioAnalyzer(QtGui.QMainWindow):
         """
         Check for the search options and update the resul view
         """
-        filter_chain = []
+        for _, annotation_graph in self.corpus.items:
+            annotation_graph.init_filters()
+
         for i in range(0, self.ui.tabWidget.currentIndex()+1):
             search_terms = dict()
             for tier in self.corpus.tier_names:
@@ -321,14 +329,13 @@ class PoioAnalyzer(QtGui.QMainWindow):
                 boolean_op = poioapi.annotationtree.AnnotationTreeFilter.OR
 
             for _, annotation_graph in self.corpus.items:
-                annotation_graph.init_filters()
+                #annotation_graph.init_filters()
                 filter = annotation_graph.create_filter_for_dict(search_terms)
                 filter.inverted = is_inverted
                 filter.contained_matches = is_contained
                 filter.booleab_operation = boolean_op
                 annotation_graph.append_filter(filter)
 
-        #self.updateCorpusReaderFilter()
         self.update_result_view()
 
     def search_tab_changed(self, index):
@@ -379,7 +386,7 @@ class PoioAnalyzer(QtGui.QMainWindow):
         widget_search.setObjectName("%s_%i" % (widget_search.objectName(), nr_of_new_tab))
 
         for i, tier in enumerate(self.corpus.tier_names):
-            self._add_search_box_to_widget(widget_search, nr_of_new_tab+1, tier)
+            self._add_search_box_to_widget(widget_search, nr_of_new_tab, tier)
 
         # update names of checkboxes and radiobuttons in search
         for child_widget in widget_search.findChildren(QtGui.QWidget):

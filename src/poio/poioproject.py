@@ -1,5 +1,11 @@
 # -*- coding: utf-8 -*-
-# (C) 2011 copyright by Peter Bouda
+#
+# Poio Tools for Linguists
+#
+# Copyright (C) 2009-2013 Poio Project
+# Author: Peter Bouda <pbouda@cidles.eu>
+# URL: <http://media.cidles.eu/poio/>
+# For license information, see LICENSE.TXT
 
 from __future__ import unicode_literals
 import os

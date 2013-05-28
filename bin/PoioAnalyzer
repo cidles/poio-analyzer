@@ -1,9 +1,11 @@
-#!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# (C) 2010-2012 copyright by Peter Bouda
 #
-# http://www.cidles.eu/ltll
+# Poio Tools for Linguists
 #
+# Copyright (C) 2009-2013 Poio Project
+# Author: Peter Bouda <pbouda@cidles.eu>
+# URL: <http://media.cidles.eu/poio/>
+# For license information, see LICENSE.TXT
 
 from __future__ import print_function
 import sys, os.path
