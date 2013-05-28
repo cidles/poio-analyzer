@@ -131,6 +131,7 @@ class PoioAnalyzer(QtGui.QMainWindow):
         self.update_result_view()
         end = time.time()
         print("Time elapsed = ", end - start, "seconds")
+        self.update_search_tabs_with_tier_names()
 
     def update_corpus_reader(self):
         """
@@ -347,44 +348,68 @@ class PoioAnalyzer(QtGui.QMainWindow):
         else:
             self.apply_filter()
 
-    def add_search_tab(self):
-        """
-        Add a search tab
-        """
-        nr_of_new_tab = self.ui.tabWidget.count()
-        widget_search = QtGui.QWidget()
-        ui = Ui_TabWidgetSearch()
-        ui.setupUi(widget_search)
-        widget_search.setObjectName("%s_%i" % (widget_search.objectName(), nr_of_new_tab))
-
-        for i, tier in enumerate(self.corpus.tier_names):
-            #layoutSearch = QtGui.QHBoxLayout(self)
-            label = QtGui.QLabel(widget_search)
+    def _add_search_box_to_widget(self, widget, nr_of_tab, tier_name):
+            label = QtGui.QLabel(widget)
             sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Minimum, QtGui.QSizePolicy.Preferred)
             sizePolicy.setHorizontalStretch(0)
             sizePolicy.setVerticalStretch(0)
             sizePolicy.setHeightForWidth(label.sizePolicy().hasHeightForWidth())
             label.setSizePolicy(sizePolicy)
             label.setSizeIncrement(QtCore.QSize(1, 0))
-            label.setText(QtGui.QApplication.translate("TabWidgetSearch", "{0}:".format(tier), None, QtGui.QApplication.UnicodeUTF8))
+            label.setText(QtGui.QApplication.translate("TabWidgetSearch", "{0}:".format(tier_name), None, QtGui.QApplication.UnicodeUTF8))
             label.setAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignLeft|QtCore.Qt.AlignVCenter)
-            ui.layoutLabels.addWidget(label)
+            widget.ui.layoutLabels.addWidget(label)
 
             lineedit = QtGui.QLineEdit(self.ui.tabWidget)
             lineedit.setSizeIncrement(QtCore.QSize(2, 0))
-            lineedit.setObjectName("lineedit_{0}".format(tier))
-            ui.layoutLineedits.addWidget(lineedit)
-
+            sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Fixed)
+            lineedit.setSizePolicy(sizePolicy)
+            lineedit.setObjectName("lineedit_{0}_{1}".format(tier_name, nr_of_tab))
+            widget.ui.layoutLineedits.addWidget(lineedit)
             lineedit.returnPressed.connect(self.apply_filter)
 
-            #ui.layoutSearches.addLayout(layoutSearch)
+    def add_search_tab(self):
+        """
+        Add a search tab
+        """
+        nr_of_new_tab = self.ui.tabWidget.count()
+        widget_search = QtGui.QWidget()
+        widget_search.ui = Ui_TabWidgetSearch()
+        widget_search.ui.setupUi(widget_search)
+        widget_search.setObjectName("%s_%i" % (widget_search.objectName(), nr_of_new_tab))
 
-        for childWidget in widget_search.findChildren(QtGui.QWidget):
-            if re.match("lineeditSearch", childWidget.objectName()):
-                QtCore.QObject.connect(childWidget, QtCore.SIGNAL("returnPressed()"), self.apply_filter)
-            childWidget.setObjectName("%s_%i" % (childWidget.objectName(), nr_of_new_tab))
+        for i, tier in enumerate(self.corpus.tier_names):
+            self._add_search_box_to_widget(widget_search, nr_of_new_tab+1, tier)
+
+        # update names of checkboxes and radiobuttons in search
+        for child_widget in widget_search.findChildren(QtGui.QWidget):
+            child_name = child_widget.objectName()
+            if child_name.startswith("checkbox") or \
+                    child_name.startswith("radiobutton"):
+                child_widget.setObjectName("%s_%i" % (child_name, nr_of_new_tab))
+
         self.ui.tabWidget.insertTab(nr_of_new_tab - 1, widget_search, "Search %i" % nr_of_new_tab)
         self.ui.tabWidget.setCurrentIndex(nr_of_new_tab - 1)
+
+    def update_search_tabs_with_tier_names(self):
+        for i in range(0, self.ui.tabWidget.count()-1):
+            widget = self.ui.tabWidget.widget(i)
+
+            # remove search boxes for non-existent tiers
+            existing_searches = []
+            for child_widget in widget.findChildren(QtGui.QWidget):
+                if child_widget.objectName().startswith("lineedit_"):
+                    prefix, suffix = child_widget.objectName().split("_")
+                    if suffix not in self.corpus.tier_names:
+                        child_widget.hide()
+                        child_widget.deleteLater()
+                        del child_widget
+                    existing_searches.append(suffix)
+
+            # add new tiers
+            for tier in self.corpus.tier_names:
+                if tier not in existing_searches:
+                    self._add_search_box_to_widget(widget, i+1, tier)
 
     def update_search_tab_widget_names(self):
         """
@@ -420,7 +445,7 @@ class PoioAnalyzer(QtGui.QMainWindow):
         """
         widget = self.ui.tabWidget.currentWidget()
         for childWidget in widget.findChildren(QtGui.QWidget):
-            if re.match("lineeditSearch", childWidget.objectName()):
+            if childWidget.objectName().startswith("lineedit_"):
                 childWidget.setText("")
         self.apply_filter()
 

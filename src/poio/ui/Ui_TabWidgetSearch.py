@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'TabWidgetSearch.ui'
 #
-# Created: Wed Jan 23 12:30:40 2013
+# Created: Tue May 28 11:30:41 2013
 #      by: PyQt4 UI code generator 4.9.6
 #
 # WARNING! All changes made in this file will be lost!
@@ -31,6 +31,11 @@ class Ui_TabWidgetSearch(object):
         self.verticalLayout.setObjectName(_fromUtf8("verticalLayout"))
         self.horizontalLayout = QtGui.QHBoxLayout()
         self.horizontalLayout.setObjectName(_fromUtf8("horizontalLayout"))
+        self.horizontalLayout_2 = QtGui.QHBoxLayout()
+        self.horizontalLayout_2.setObjectName(_fromUtf8("horizontalLayout_2"))
+        spacerItem = QtGui.QSpacerItem(0, 0, QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Minimum)
+        self.horizontalLayout_2.addItem(spacerItem)
+        self.horizontalLayout.addLayout(self.horizontalLayout_2)
         self.layoutLabels = QtGui.QVBoxLayout()
         self.layoutLabels.setObjectName(_fromUtf8("layoutLabels"))
         self.horizontalLayout.addLayout(self.layoutLabels)
@@ -60,9 +65,10 @@ class Ui_TabWidgetSearch(object):
         self.checkboxContained.setEnabled(False)
         self.checkboxContained.setObjectName(_fromUtf8("checkboxContained"))
         self.verticalLayout_4.addWidget(self.checkboxContained)
-        spacerItem = QtGui.QSpacerItem(20, 40, QtGui.QSizePolicy.Minimum, QtGui.QSizePolicy.Expanding)
-        self.verticalLayout_4.addItem(spacerItem)
+        spacerItem1 = QtGui.QSpacerItem(20, 40, QtGui.QSizePolicy.Minimum, QtGui.QSizePolicy.Expanding)
+        self.verticalLayout_4.addItem(spacerItem1)
         self.horizontalLayout.addWidget(self.groupBox)
+        self.horizontalLayout.setStretch(2, 1)
         self.verticalLayout.addLayout(self.horizontalLayout)
 
         self.retranslateUi(TabWidgetSearch)
