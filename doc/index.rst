@@ -13,7 +13,6 @@ Welcome to Poio's documentation!
    :maxdepth: 3
 
    poiograid
-   tutorials
    development
    
 Indices and tables
