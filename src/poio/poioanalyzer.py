@@ -193,7 +193,7 @@ class PoioAnalyzer(QtGui.QMainWindow):
         settings = QtCore.QSettings()
         html = "<html><head><meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" /></head><body>\n"
         i = 0
-        for filepath, annotationgraph in self.corpus.items:
+        for filepath, annotationgraph in self.corpus:
             html += "<h1 id=\"file_{1}\">{0}</h1>\n".format(os.path.basename(str(filepath)), i)
             html += annotationgraph.as_html_table(True, False)
             i += 1
@@ -285,7 +285,7 @@ class PoioAnalyzer(QtGui.QMainWindow):
         export_file = str(export_file)
         OUT  = codecs.open(export_file, "w", "utf-8")
         html = "<html><head><meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" /></head><body>\n"
-        for filepath, annotation_graph in self.corpus.items:
+        for filepath, annotation_graph in self.corpus:
             html += "<h1>{0}</h1>\n".format(os.path.basename(filepath))
             html += annotation_graph.as_html_table(True, False)
         html += "</body></html>"
@@ -307,7 +307,7 @@ class PoioAnalyzer(QtGui.QMainWindow):
         """
         Check for the search options and update the resul view
         """
-        for _, annotation_graph in self.corpus.items:
+        for _, annotation_graph in self.corpus:
             annotation_graph.init_filters()
 
         for i in range(0, self.ui.tabWidget.currentIndex()+1):
@@ -328,7 +328,7 @@ class PoioAnalyzer(QtGui.QMainWindow):
             if radiobutton_or.isChecked():
                 boolean_op = poioapi.annotationtree.AnnotationTreeFilter.OR
 
-            for _, annotation_graph in self.corpus.items:
+            for _, annotation_graph in self.corpus:
                 #annotation_graph.init_filters()
                 filter = annotation_graph.create_filter_for_dict(search_terms)
                 filter.inverted = is_inverted
@@ -406,8 +406,10 @@ class PoioAnalyzer(QtGui.QMainWindow):
             existing_searches = []
             for child_widget in widget.findChildren(QtGui.QWidget):
                 if child_widget.objectName().startswith("lineedit_"):
-                    prefix, suffix = child_widget.objectName().split("_")
-                    if suffix not in self.corpus.tier_names:
+                    _, suffix = child_widget.objectName().split("_", 1)
+                    tier_name, _ = suffix.rsplit("_", 1)
+                    print(tier_name)
+                    if tier_name not in self.corpus.tier_names:
                         child_widget.hide()
                         child_widget.deleteLater()
                         del child_widget
